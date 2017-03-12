@@ -15,8 +15,6 @@ import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 
-import serial.Personne;
-
 public class ObjectLoader {
 
 	private static final Logger LOG = Logger.getLogger(ObjectLoader.class
