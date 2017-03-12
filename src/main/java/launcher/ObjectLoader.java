@@ -48,34 +48,6 @@ public class ObjectLoader {
 
 			System.err.println(sb);
 
-			String s = sb.toString();
-			String[] tab = s.split(" ");
-
-			Map<String, Integer> map = new HashMap<String, Integer>();
-
-			for (String st : tab) {
-
-				if (map.get(st) == null) {
-					map.put(st, 1);
-				} else {
-					map.put(st, map.get(st) + 1);
-				}
-
-				LinkedList<Entry<String, Integer>> l = new LinkedList<Entry<String, Integer>>(
-						map.entrySet());
-
-				System.out.println();
-
-				Collections.sort(l, new WordCompare());
-
-				System.out.println();
-
-				for (int i = 0; i < l.size(); i++) {
-						System.out.println(l.get(i).getValue() + ", " + l.get(i).getKey());
-				}
-
-			}
-
 		} catch (FileNotFoundException e) {
 			LOG.error("err file not found" + e);
 		} catch (IOException e) {
