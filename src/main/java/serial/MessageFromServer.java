@@ -20,9 +20,9 @@ public class MessageFromServer implements Serializable {
 	/**
 	 * Constructor
 	 * @param nickName : Can be "server" if the message to display is a notice or an error.
-	 * @param post : The message 
+	 * @param post     : The message 
 	 * @param channels : A list of available channels
-	 * @param users : A list of connected users (to the current channel)
+	 * @param users    : A list of connected users (to the current channel)
 	 */
 	public MessageFromServer(String nickName, String post, ArrayList<String> channels, ArrayList<String> users) {
 		this.setNickName(nickName);

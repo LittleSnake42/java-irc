@@ -16,9 +16,10 @@ public class MessageToServer implements Serializable {
 	private String parameter2;
 	
 	/**
-	 * @param nickName : The nickname chosen by the user.
-	 * @param post : Can be a normal message, or a command if begins by "#".
-	 * 		Available commands : "#CONNECT serverIp nickName", "#JOIN channelName", "#QUIT", "#EXIT"
+	 * @param nickName   : The nickname chosen by the user.
+	 * @param post       : Can be a normal message, or a command if begins by "#".
+	 * 					   Available commands : "#CONNECT serverIp nickName",
+	 * 					   "#JOIN channelName", "#QUIT", "#EXIT"
 	 * @param parameter1 : If @param post begins by "#"
 	 * @param parameter2 : If @param post begins by "#"
 	 */
