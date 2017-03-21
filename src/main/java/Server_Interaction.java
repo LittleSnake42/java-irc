@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 /**
@@ -12,9 +13,10 @@ public class Server_Interaction {
 		// theses 2 variables are used to take the second work.
 		private char[] converts;
 		private StringBuilder str;
-		private String nickname ;
-		private String post = null;
-		
+		private String nickName; 
+		private String post;
+		private ArrayList<String> channels;
+		//MessagetoServer msg = null;
 		private static final Logger LOG = Logger.getLogger(Server_Interaction.class.getName());
 		public Server_Interaction(String data_Send)
 		{
@@ -44,15 +46,17 @@ public class Server_Interaction {
 						//Case 2 connect
 					case "connect":
 						post ="connect";
+
 						break;
 					//case 3 exit
 					case "exit":
 						post = "exit";
-						
+						channels = null;
 						break;
 						// case 4 quit : We need to need to quit the server we simply 
 					case "quit":
 						post = "quit";
+						channels = null;
 						break;
 						
 						//Warn the user he put a wrong command
@@ -64,7 +68,9 @@ public class Server_Interaction {
 				}
 			}
 			// I check the first letter if its a #
-			
+			else{
+			//	msg = new MessagetoServer(nick,post,channels);
+			}
 			
 		}
 }
