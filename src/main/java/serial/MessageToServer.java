@@ -7,6 +7,8 @@ package serial;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class MessageToServer extends JSONObject {
@@ -28,6 +30,24 @@ public class MessageToServer extends JSONObject {
 		this.setNickName(nickname);
 		this.setPost(post);
 		this.setArgs(args);
+	}
+	
+	public MessageToServer(String json) {
+		
+		super(json);
+
+		try {
+			String nickname = this.getString("nickname");
+			String post = this.getString("post");
+			JSONArray args = this.getJSONArray("args");
+			
+			this.setNickName(nickname);
+			this.setPost(post);
+			//this.setArgs(args.toList());
+			
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
