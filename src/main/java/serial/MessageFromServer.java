@@ -5,38 +5,48 @@
  */
 package serial;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
-public class MessageFromServer implements Serializable {
+import org.json.JSONException;
+import org.json.JSONObject;
 
-	private static final long serialVersionUID = 1L;
 
-	private String nickName; 
+public class MessageFromServer extends JSONObject{
+
+	private String nickname; 
 	private String post;
 	private ArrayList<String> channels;
 	private ArrayList<String> users;
 
 	/**
 	 * Constructor
-	 * @param nickName : Can be "server" if the message to display is a notice or an error.
+	 * @param nickname : Can be "server" if the message to display is a notice or an error.
 	 * @param post : The message 
 	 * @param channels : A list of available channels
 	 * @param users : A list of connected users (to the current channel)
 	 */
-	public MessageFromServer(String nickName, String post, ArrayList<String> channels, ArrayList<String> users) {
-		this.setNickName(nickName);
-		this.setPost(post);
-		this.setChannels(channels);
-		this.setUsers(users);
+	public MessageFromServer(String json) {
+		super(json);
+
+		try {
+			String nickname = this.getString("nickname");
+			String post = this.getString("post");
+			
+			this.setNickname(nickname);
+			this.setPost(post);
+			
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 
 	/**
-	 * @return the nickName
+	 * @return the nickname
 	 */
-	public String getNickName() {
-		return this.nickName;
+	public String getNickname() {
+		return this.nickname;
 	}
 
 
@@ -65,10 +75,10 @@ public class MessageFromServer implements Serializable {
 
 
 	/**
-	 * @param nickName the nickName to set
+	 * @param nickname the nickname to set
 	 */
-	private void setNickName(String nickName) {
-		this.nickName = nickName;
+	private void setNickname(String nickname) {
+		this.nickname = nickname;
 	}
 
 
