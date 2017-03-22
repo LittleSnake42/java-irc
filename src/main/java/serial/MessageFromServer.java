@@ -105,4 +105,12 @@ public class MessageFromServer extends JSONObject{
 		this.users = users;
 	}
 
+	/**
+	 * check if the message is from a user or from the server
+	 * if from server, needs to be treated differently
+	 * @return boolean
+	 */
+	public boolean isFromServer() {
+		return this.nickname.toLowerCase() == "server";
+	}
 }

@@ -5,6 +5,7 @@
 package serial;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.json.JSONObject;
 
@@ -13,6 +14,9 @@ public class MessageToServer extends JSONObject {
 	private String nickname;
 	private String post;
 	private ArrayList<String> args;
+	
+	// Hum need to ask how to init an ArrayList
+	private static final String[] AVAILABLE_COMMANDS = {"#CONNECT", "#JOIN", "#QUIT", "#EXIT"};
 	
 	/**
 	 * @param nickname : The nickname chosen by the user.
@@ -68,4 +72,24 @@ public class MessageToServer extends JSONObject {
 		this.put("args", this.args);
 	}
 	
+	/**
+	 * Check whether the message is a command or a simple message
+	 * @return boolean
+	 */
+	public boolean isCommand() {
+		return this.post.startsWith("#");
+	}
+	
+	public boolean isValidCommand() {
+		// Method 1
+		// Not possible to switch "String" type in Java before java7
+		if (this.post.toUpperCase() == "#CONNECT") {
+		
+		} else if(this.post.toUpperCase() == "#JOIN"){
+			
+		}
+		// Method 2
+		return Arrays.asList(this.AVAILABLE_COMMANDS).contains(this.post.toUpperCase());
+		
+	}
 }
