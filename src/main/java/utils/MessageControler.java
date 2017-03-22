@@ -1,9 +1,12 @@
 package utils;
 
 import java.util.ArrayList;
+import java.util.regex.Pattern;
+
+import org.apache.commons.validator.routines.InetAddressValidator;
 
 public class MessageControler {
-	
+		
 	public MessageControler() {
 		// do nothing
 	}
@@ -18,8 +21,10 @@ public class MessageControler {
 				String nickname = args.get(1);
 				
 				//check if args are OK
-				this.isIpAddress(serverIP);
-				this.isNickname(nickname);
+				boolean isValidIP = this.isValidIpAddress(serverIP);
+				boolean isNickname = this.isNickname(nickname);
+				
+				// if not maybe in wrong order?
 				
 				//if ok try to connect
 				this.connectToServer(serverIP, nickname);
@@ -50,14 +55,14 @@ public class MessageControler {
 		}
 	}
 
-	private void isIpAddress(String serverIP) throws MessageControlerException {
-		// Mettre en place une regexp pour checker que c'est une IP
-		
+	private boolean isValidIpAddress(String serverIP) {
+		InetAddressValidator validator = new InetAddressValidator();	
+		return (validator.isValidInet4Address(serverIP) || validator.isValidInet6Address(serverIP)); 
 	}
 
-	private void isNickname(String nickname) throws MessageControlerException {
+	private boolean isNickname(String nickname) {
 		// String de + de 3 caractères
-		
+		return nickname.length() > 3;
 	}
 
 	private void connectToServer(String serverIP, String nickname) throws MessageControlerException {
