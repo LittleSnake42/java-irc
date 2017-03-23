@@ -22,14 +22,14 @@ public class Window extends JFrame {
   private JPanel container = new JPanel();
   private JTextArea screen = new JTextArea();
   private JTextArea users = new JTextArea();
-  private JTextField jtf = new JTextField();
+  private JTextField textField = new JTextField();
   private JComboBox combo = new JComboBox();
   private JButton button = new JButton("Send");
 
   
   public Window() {
 	this.setTitle("Client IRC");
-	this.setSize(800, 600);
+	this.setMinimumSize(new Dimension(600, 400));
 	this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	this.setLocationRelativeTo(null);
 	
@@ -40,7 +40,7 @@ public class Window extends JFrame {
   }
   
   
- // add composants
+  // add composants
   private void initComposant(){
 	
 	// screen
@@ -75,7 +75,7 @@ public class Window extends JFrame {
    	container.setLayout(new BorderLayout());
     
     // SOUTH
-    bottom.add(jtf, BorderLayout.CENTER);
+    bottom.add(textField, BorderLayout.CENTER);
     bottom.add(buttons, BorderLayout.EAST);
     bottom.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
     
@@ -84,30 +84,50 @@ public class Window extends JFrame {
     container.add(bottom, BorderLayout.SOUTH);
   }
   
+  // class listener smiley
   class ItemAction implements ActionListener{
     public void actionPerformed(ActionEvent e) {
-    	jtf.setText(jtf.getText() + " " + combo.getSelectedItem());
+    	textField.setText(textField.getText() + " " + combo.getSelectedItem());
     	
     	// focus
-    	jtf.requestFocus();
+    	textField.requestFocus();
     }               
   }
   
-  // Classe écoutant le bouton ENVOYER
+  // class listener button SEND
   class BoutonListener implements ActionListener{
-    // Redéfinition de la méthode actionPerformed()
     public void actionPerformed(ActionEvent arg0) {
-    	// affichage du texte sur l'écran
-    	if (jtf.getText().equals("")) {
+    	// display messages on the screen
+    	if (textField.getText().equals("")) {
     		
     	} else {
-    		screen.append(jtf.getText() + "\n");
+    		screen.append(textField.getText() + "\n");
     	}
     	
-    	jtf.setText("");
-    	jtf.requestFocus();
+    	textField.setText("");
+    	textField.requestFocus();
     }
   }
+  
+  // method to display messages on the screen
+  public void displayMessage(String message) {
+	  screen.append(message + "\n");
+  }
+  
+  // method to display online users
+  public void displayUsers(String user) {
+	  users.append(user + "\n");
+  }
+  
+  // method to get message sent
+  public String getTextField() {
+	  return textField.getText();
+  }
+  
+  // method to display an error message
+  public void displayError(String message) {
+	  JOptionPane jop;
+	  jop = new JOptionPane();
+	  jop.showMessageDialog(null, message, "Erreur", JOptionPane.ERROR_MESSAGE);
+  }
 }
-
-
