@@ -21,6 +21,7 @@ public class ConnectionHandler {
 	
 	private static final int SERVER_PORT = 12345;
 	private static final String ENCODING = "UTF-8";
+	private static ConnectionHandler INSTANCE = new ConnectionHandler();
 	
 	private Socket socket = null;
 	// Write
@@ -34,9 +35,15 @@ public class ConnectionHandler {
 	
 	public boolean isConnectionOpened = false;
 
-	public ConnectionHandler() {
+	private ConnectionHandler() {
 		// TODO Auto-generated constructor stub
 	}
+	
+	public static ConnectionHandler getInstance()
+    {
+        return INSTANCE;
+    }
+	
 	
 	public void openConnection(String ip) throws ConnectionHandlerException {
 		// check if a socket is already opened

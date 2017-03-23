@@ -1,27 +1,16 @@
 package launcher;
 
-import io.ClientException;
-import io.MainClient;
-
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 
-import serial.MessageFromServer;
-import serial.MessageToServer;
 import utils.MessageControler;
 import utils.MessageControlerException;
 
 public class Launcher {
 
-	private static final Logger LOG = Logger.getLogger(MainClient.class
-			.getName());
+	//private static final Logger LOG = Logger.getLogger(Launcher.class.getName());
 	
 	private Scanner sc = null;
 
@@ -59,23 +48,23 @@ public class Launcher {
 	public static void main(String[] args) {
 		Launcher l = new Launcher();
 		
-		LOG.info("Init Cient");
+		//LOG.info("Init Cient");
 		l.sc = new Scanner(System.in);
 		MessageControler mc = new MessageControler();
 
 		while (true) {
 
-			//try {
+			try {
 
 				final String msg = l.sc.nextLine();
 				
 				mc.process(msg);
 				
-			//} catch (MessageControlerException e) {
+			} catch (MessageControlerException e) {
 				//LOG.error("error ...", e);
-			//} finally {
+			} finally {
 				
-			//}
+			}
 		}
 	}
 

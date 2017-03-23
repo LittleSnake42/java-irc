@@ -20,8 +20,9 @@ public class MessageControler {
 	/**
 	 * Point d'entrée, les autres fct sont en privé
 	 * @param 
+	 * @throws MessageControlerException 
 	 */
-	public void process(String s) {
+	public void process(String s) throws MessageControlerException {
 		
 		// Init message
 		MessageToServer msg = this.initMessage(s);
@@ -32,7 +33,12 @@ public class MessageControler {
 		} else if (msg.isCommand()) { //invalid command -> so maybe a message starting by # ?
 			
 			if (this.canSendMessage()) {
-				this.send(msg);
+				try {
+					this.send(msg);
+				} catch (ConnectionHandlerException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			} else {
 				// if no connected to server nor channel -> error, else is a
 				// message.
@@ -45,7 +51,12 @@ public class MessageControler {
 			// and is nickname set ?
 			// are we connected to a channel ?
 			if (this.canSendMessage()) {
-				this.send(msg);
+				try {
+					this.send(msg);
+				} catch (ConnectionHandlerException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			} else {
 				if (this.handler.isConnectionOpened)
 					throw new MessageControlerException("You are not connected to a channel, you can't send message now. Try #JOIN CHANNEL_NAME");					
@@ -108,7 +119,7 @@ public class MessageControler {
 				//if ok try to connect
 				if (isValidIP && isValidNickname) {
 					try {
-						this.connectToServer(serverIP, nickname);
+						this.connectToServer(msg);
 					} catch (ConnectionHandlerException e) {
 						throw new MessageControlerException(
 								"An error occured attempting to connect to IP \""
@@ -129,7 +140,7 @@ public class MessageControler {
 				
 				//if ok try to connect
 				try {
-					this.connectToChannel(channel);
+					this.connectToChannel(msg);
 				} catch (ConnectionHandlerException e) {
 					// TODO Auto-generated catch block
 					throw new MessageControlerException(
@@ -152,7 +163,7 @@ public class MessageControler {
 	// TODO nothing to do here
 	private boolean isValidIpAddress(String serverIP) {
 		InetAddressValidator validator = new InetAddressValidator();	
-		return (validator.isValidInet4Address(serverIP) || validator.isValidInet6Address(serverIP)); 
+		return (validator.isValidInet4Address(serverIP) /*|| validator.isValidInet6Address(serverIP)*/); 
 	}
 
 	private boolean isValidNickname(String nickname) {
@@ -165,8 +176,9 @@ public class MessageControler {
 		String serverIP = msg.getArgs().get(0);
 		String nickname = msg.getArgs().get(1);
 		// connect to server
-		// TODO singleton getInstance + check isOpened connection
-		ConnectionHandler handler = new ConnectionHandler();
+		if (this.handler.isConnectionOpened)
+			throw new ConnectionHandlerException("Already Connected !");
+		
 		handler.openConnection(serverIP);
 		
 		// write msg
@@ -232,11 +244,11 @@ public class MessageControler {
 		
 	}
 	
-	private void send(MessageToServer msg){
+	private void send(MessageToServer msg) throws ConnectionHandlerException {
 		this.handler.write(msg.toString());
 	}
 	
-	private MessageFromServer read(){
+	private MessageFromServer read() throws ConnectionHandlerException{
 		String s = this.handler.read();
 		
 		MessageFromServer msg = new MessageFromServer(s);

@@ -3,10 +3,5 @@
 	<classpathentry kind="src" output="target/classes" path="src/main/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
 	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER"/>
-	<classpathentry kind="lib" path="/home/remi/Downloads/commons-validator-1.6/commons-validator-1.6.jar"/>
-	<classpathentry kind="lib" path="/home/remi/Downloads/commons-validator-1.6/commons-validator-1.6-javadoc.jar"/>
-	<classpathentry kind="lib" path="/home/remi/Downloads/commons-validator-1.6/commons-validator-1.6-sources.jar"/>
-	<classpathentry kind="lib" path="/home/remi/Downloads/commons-validator-1.6/commons-validator-1.6-tests.jar"/>
-	<classpathentry kind="lib" path="/home/remi/Downloads/commons-validator-1.6/commons-validator-1.6-test-sources.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
