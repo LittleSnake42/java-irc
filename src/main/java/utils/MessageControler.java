@@ -15,10 +15,18 @@ public class MessageControler {
 	
 	public void process(String s) {
 		MessageToServer msg = new MessageToServer(s);
+		
+		if(msg.isCommand() && msg.isValidCommand()) {
+			processCommand(msg);
+		}
 	}
 
 	// Function to call if Message is a command
-	public void processCommand(String command, ArrayList<String> args) throws MessageControlerException {
+	public void processCommand(MessageToServer msg) throws MessageControlerException {
+		
+		String command = msg.getPost();
+		ArrayList<String> args = msg.getArgs();
+		
 		// Case #CONNECT : we expect 2 args (ip, nick)
 		if (command.toUpperCase() == "#CONNECT") {
 			
@@ -87,17 +95,15 @@ public class MessageControler {
 		return nickname.length() > 3;
 	}
 
-	private void connectToServer(String serverIP, String nickname) throws ConnectionHandlerException {
+	private void connectToServer(MessageToServer msg) throws ConnectionHandlerException {
+		
+		String serverIP = msg.getArgs().get(0);
+		String nickname = msg.getArgs().get(1);
 		// connect to server
 		// TODO singleton getInstance + check isOpened connection
 		ConnectionHandler handler = new ConnectionHandler();
 		handler.openConnection(serverIP);
 		
-		// init MSG
-		ArrayList<String> args = new ArrayList<String>();
-		args.add(serverIP);
-		args.add(nickname);
-		MessageToServer msg = new MessageToServer(nickname, "#connect", args);
 		// write msg
 		handler.write(msg.toString());
 		
