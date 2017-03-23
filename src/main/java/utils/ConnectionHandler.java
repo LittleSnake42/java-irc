@@ -32,7 +32,7 @@ public class ConnectionHandler {
 	private InputStreamReader isr = null;
 	private BufferedReader br     = null;
 	
-	private boolean isConnectionOpened = false;
+	public boolean isConnectionOpened = false;
 
 	public ConnectionHandler() {
 		// TODO Auto-generated constructor stub

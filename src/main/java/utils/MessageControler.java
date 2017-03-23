@@ -8,21 +8,86 @@ import serial.MessageFromServer;
 import serial.MessageToServer;
 
 public class MessageControler {
+	
+	public String nickname = "ClientApp";
+	private ConnectionHandler handler = ConnectionHandler.getInstance();
+	private String currentChannel = null;
 		
 	public MessageControler() {
 		// do nothing
 	}
 	
+	/**
+	 * Point d'entrée, les autres fct sont en privé
+	 * @param 
+	 */
 	public void process(String s) {
-		MessageToServer msg = new MessageToServer(s);
 		
+		// Init message
+		MessageToServer msg = this.initMessage(s);
+		
+		// Command ?
 		if(msg.isCommand() && msg.isValidCommand()) {
 			processCommand(msg);
+		} else if (msg.isCommand()) { //invalid command -> so maybe a message starting by # ?
+			
+			if (this.canSendMessage()) {
+				this.send(msg);
+			} else {
+				// if no connected to server nor channel -> error, else is a
+				// message.
+				throw new MessageControlerException("Unknown command \""
+						+ msg.getPost() + "\".");
+			}
+		} else { // Message
+			
+			// are we connected to a server ?
+			// and is nickname set ?
+			// are we connected to a channel ?
+			if (this.canSendMessage()) {
+				this.send(msg);
+			} else {
+				if (this.handler.isConnectionOpened)
+					throw new MessageControlerException("You are not connected to a channel, you can't send message now. Try #JOIN CHANNEL_NAME");					
+				else
+					throw new MessageControlerException("You are not connected to a server. Try #CONNECT SERVER_IP NICKNAME");
+
+			}
+			
 		}
 	}
 
+	private boolean canSendMessage() {
+		// TODO Auto-generated method stub
+		return this.handler.isConnectionOpened && this.currentChannel != null;
+	}
+
+	private MessageToServer initMessage(String s) {
+
+		
+		ArrayList<String> args = new ArrayList<String>();
+		String post = new String();
+		String nickname = this.nickname;
+		
+		if (s.startsWith("#")) { // command
+			String[] splited = s.split(" ");
+			post = splited[0];
+			if (splited[1] != null) {
+				args.add(splited[1]);
+			}// max 2 args
+			if (splited[2] != null) {
+				args.add(splited[2]);
+			}
+		} else {
+			post = s;
+		}
+		
+		MessageToServer msg = new MessageToServer(nickname, post, args);
+		return msg;
+	}
+
 	// Function to call if Message is a command
-	public void processCommand(MessageToServer msg) throws MessageControlerException {
+	private void processCommand(MessageToServer msg) throws MessageControlerException {
 		
 		String command = msg.getPost();
 		ArrayList<String> args = msg.getArgs();
@@ -105,27 +170,36 @@ public class MessageControler {
 		handler.openConnection(serverIP);
 		
 		// write msg
-		handler.write(msg.toString());
+		this.send(msg);
 		
 		// read response -> wait x second, then timeout
 		// is username ok etc...
-		String s = handler.read();
-		this.processServerMessage(s);
+		MessageFromServer answer = this.read();
+		this.processServerMessage(answer);
 		
 	}
-	
-	private void processServerMessage(String s) {
 
-		// init server message
-		MessageFromServer msgFromServer = new MessageFromServer(s);
+	private void diconnectFromServer(MessageToServer msg) throws ConnectionHandlerException {
+
+		// write msg
+		this.send(msg);
+
+		// close connection
+		this.handler.closeConnection();
+
+
+	}
+	
+	private void processServerMessage(MessageFromServer msg) {
 		
 		// check is valid ?
-		boolean isValid = msgFromServer.isValid();
-		if (! isValid) {
+		boolean isValid = msg.isValid();
+		if (! isValid) { // alaways for the moment
+			
 			
 		}
 		// server or user ?
-		boolean isFromServer = msgFromServer.isFromServer();
+		boolean isFromServer = msg.isFromServer();
 		// case 1  Server
 		if (isFromServer) {
 			
@@ -136,8 +210,36 @@ public class MessageControler {
 		}
 	}
 
-	private void connectToChannel(String channel) throws ConnectionHandlerException {
-		// TODO Auto-generated method stub
-		ConnectionHandler handler = new ConnectionHandler();
+	private void connectToChannel(MessageToServer msg) throws ConnectionHandlerException {
+
+		this.send(msg);
+
+		// Need to check if ok ?
+		
+		// set channel name for global use
+		this.currentChannel = msg.getArgs().get(0);
+		
+	}
+
+	private void disconnectFromChannel(MessageToServer msg) throws ConnectionHandlerException {
+
+		this.send(msg);
+
+		// Need to check if ok ?
+		
+		// set channel name for global use
+		this.currentChannel = null;
+		
+	}
+	
+	private void send(MessageToServer msg){
+		this.handler.write(msg.toString());
+	}
+	
+	private MessageFromServer read(){
+		String s = this.handler.read();
+		
+		MessageFromServer msg = new MessageFromServer(s);
+		return msg;
 	}
 }
