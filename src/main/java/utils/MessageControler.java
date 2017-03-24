@@ -102,18 +102,18 @@ public class MessageControler {
 
 		// check is valid ?
 		boolean isValid = msg.isValid();
-		if (!isValid) { // alaways for the moment
+		if (!isValid) { // always for the moment
 
 		}
 		// server or user ?
 		boolean isFromServer = msg.isFromServer();
 		// case 1 Server
 		if (isFromServer) {
-
+			System.err.println(msg.getPost());
 		}
 		// case 2 User
 		else {
-
+			System.out.println(msg.getNickname()+ " >" + msg.getPost());
 		}
 	}
 
