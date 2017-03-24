@@ -12,7 +12,6 @@ public class Launcher {
 
 	//private static final Logger LOG = Logger.getLogger(Launcher.class.getName());
 	
-
 	private Launcher() {
 		// Useless
 	}

@@ -87,10 +87,10 @@ public class MessageControler {
 		if (s.startsWith("#")) { // command
 			String[] splited = s.split(" ");
 			post = splited[0];
-			if (splited[1] != null) {
+			if (splited.length > 1 && splited[1] != null) {
 				args.add(splited[1]);
 			}// max 2 args
-			if (splited[2] != null) {
+			if (splited.length > 2 && splited[2] != null) {
 				args.add(splited[2]);
 			}
 		} else {
@@ -139,6 +139,7 @@ public class MessageControler {
 				boolean isValidNickname = this.isValidNickname(nickname);
 
 				// if not maybe in wrong order?
+				// No ok or not but not wrong order
 
 				// if ok try to connect
 				if (isValidIP && isValidNickname) {
@@ -263,7 +264,7 @@ public class MessageControler {
 
 		this.send(msg);
 
-		// Need to check if ok ?
+		// Need to check if ok
 
 		// set channel name for global use
 		this.currentChannel = msg.getArgs().get(0);
