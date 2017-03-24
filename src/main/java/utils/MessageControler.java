@@ -151,10 +151,26 @@ public class MessageControler {
 				throw new MessageControlerException("#JOIN expects 1 args, the target channel name.");
 			}
 			
-		} else if (command.toUpperCase() == "#QUIT") {
-
-		} else if (command.toUpperCase() == "#EXIT") {
-
+		} 
+		//This case is for leaving the application
+		else if (command.toUpperCase() == "#QUIT") {
+			try {
+				this.diconnectFromServer(msg);
+				this.diconnectFromServer(msg);
+			} catch (ConnectionHandlerException e) {
+				// TODO Auto-generated catch block
+				throw new MessageControlerException("problem while quitting the application");
+			}
+			
+		} 
+		// This case is for leaving the channel
+		else if (command.toUpperCase() == "#EXIT") {
+			try {
+				this.disconnectFromChannel(msg);
+			} catch (ConnectionHandlerException e) {
+				// TODO Auto-generated catch block
+				throw new MessageControlerException("problem while quitting the channel");
+			}
 		} else {
 			throw new MessageControlerException("Not a valid command. RTFM :)");
 		}
@@ -255,3 +271,18 @@ public class MessageControler {
 		return msg;
 	}
 }
+/* a conserver voir si on peut de faire.
+*		// We split this message to analyze if we got a "error"
+		String[] splitted = msg.split(" ");
+		// We check if we get a message from the server if yes we create a error message
+		if (splitted[0]==)
+		{
+			// Here we create the windows that show up to warn us we got an error from the server.
+		}
+		// Here we can put what we will write on the windows.
+*
+*
+*
+*
+*
+*/

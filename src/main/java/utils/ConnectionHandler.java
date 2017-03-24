@@ -70,26 +70,32 @@ public class ConnectionHandler {
 			throw new ConnectionHandlerException("Error opening connection.", e);
 		}
 	}
-	
+	// This Method will be used with the pretty white cross on the red square when we have implemented this
 	public void closeConnection() throws ConnectionHandlerException {
 		try {
 			// write
+			//Check if the bufferedwritter is open if yes we close it.
 			if (this.bw != null) {
 				this.bw.close();
 			}
+			//Check if the outputstreamwritter is open if yes we close it.
 			if (this.osw != null) {
 				this.osw.close();
 			}
+			//Check if the ouputstream is open if yes we close it.
 			if (this.out != null) {
 				this.out.close();
 			}
 			// read
+			//Check if the bufferedreader is open if yes we close it.
 			if (this.br != null) {
 				this.br.close();
 			}
+			//Check if the Inputstreamreader is open if yes we close it.
 			if (this.isr != null) {
 				this.isr.close();
 			}
+			//Check if the InputStream is open if yes we close it.
 			if (this.in != null) {
 				this.in.close();
 			}
@@ -103,13 +109,18 @@ public class ConnectionHandler {
 			this.isConnectionOpened = false;
 		}
 	}
-	
+	//this method allows to send a message to server, be it a command or a simply a message to the chat
 	public void write(String s) throws ConnectionHandlerException {
-	
+		// We check if we have a connection before doing anything else
 		if (this.isConnectionOpened) {
 				try {
+					// Writting on the buffer
 					bw.write(s);
+					// Add a end line caracter for the server to not block him.
+					bw.newLine();
+					// Send everything to the server
 					bw.flush();
+					//while checking for an eventual error
 				} catch (IOException e) {
 					throw new ConnectionHandlerException("Unabled to write string \"" + s + "\".", e);
 				}
@@ -118,12 +129,14 @@ public class ConnectionHandler {
 			throw new ConnectionHandlerException("No connection opened.");
 		}
 	}
-	
+	// This method allows to get message from the server and analyzing this message
 	public String read() throws ConnectionHandlerException {
 		
 		if (this.isConnectionOpened) {
 				try {
+					// We recover the message send to us by the server
 					String msg = this.br.readLine();
+					
 					return msg;
 				} catch (IOException e) {
 					throw new ConnectionHandlerException("Unabled to read from Buffer.", e);
