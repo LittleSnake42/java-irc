@@ -30,20 +30,23 @@ public class MessageControler {
 
 		// Command ?
 		if (msg.isCommand() && msg.isValidCommand()) {
+			log.info("Rentrée dans la commande",msg.getPost(),msg.getNickName(),msg.getArgs());
 			processCommand(msg);
 		} else if (msg.isCommand()) { // invalid command -> so maybe a message
 										// starting by # ?
 
 			if (this.canSendMessage()) {
 				try {
+					log.info("trying to message send");
 					this.send(msg);
 				} catch (ConnectionHandlerException e) {
 					// TODO Auto-generated catch block
+					log.error("Impossible to send the message",e);
 					e.printStackTrace();
 				}
 			} else {
 				// if no connected to server nor channel -> error, else is a
-				// message.
+				// message
 				throw new MessageControlerException("Unknown command \""
 						+ msg.getPost() + "\".");
 			}

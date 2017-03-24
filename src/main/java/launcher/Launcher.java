@@ -12,7 +12,6 @@ public class Launcher {
 
 	//private static final Logger LOG = Logger.getLogger(Launcher.class.getName());
 	
-	private Scanner sc = null;
 
 	private Launcher() {
 		// Useless
@@ -49,14 +48,14 @@ public class Launcher {
 		Launcher l = new Launcher();
 		
 		//LOG.info("Init Cient");
-		l.sc = new Scanner(System.in);
+		Scanner sc = new Scanner(System.in);
 		MessageControler mc = new MessageControler();
 
 		while (true) {
 
 			try {
 
-				final String msg = l.sc.nextLine();
+				final String msg = sc.nextLine();
 				
 				mc.process(msg);
 				
