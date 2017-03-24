@@ -282,18 +282,6 @@ public class MessageControler {
 
 	}
 
-	private void disconnectFromChannel(MessageToServer msg)
-			throws ConnectionHandlerException {
-
-		this.send(msg);
-
-		// Need to check if ok ?
-
-		// set channel name for global use
-		this.currentChannel = null;
-
-	}
-
 	/*
 	 * READ & Write
 	 */
