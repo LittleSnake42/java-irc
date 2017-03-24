@@ -4,37 +4,57 @@
  */
 package serial;
 
-import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
 
-public class MessageToServer implements Serializable {
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-	private static final long serialVersionUID = 1L;
-	
-	private String nickName;
+public class MessageToServer extends JSONObject {
+
+	private String nickname;
 	private String post;
-	private String parameter1;
-	private String parameter2;
+	private ArrayList<String> args;
+	
+	// Hum need to ask how to init an ArrayList
+	private static final String[] AVAILABLE_COMMANDS = {"#CONNECT", "#JOIN", "#QUIT", "#EXIT"};
 	
 	/**
-	 * @param nickName   : The nickname chosen by the user.
-	 * @param post       : Can be a normal message, or a command if begins by "#".
-	 * 					   Available commands : "#CONNECT serverIp nickName",
-	 * 					   "#JOIN channelName", "#QUIT", "#EXIT"
-	 * @param parameter1 : If @param post begins by "#"
-	 * @param parameter2 : If @param post begins by "#"
+	 * @param nickname : The nickname chosen by the user.
+	 * @param post : Can be a normal message, or a command if begins by "#".
+	 * 		  Available commands : "#CONNECT serverIp nickname", "#JOIN channelName", "#QUIT", "#EXIT"
+	 * @param args : If @param post begins by "#"
 	 */
-	public MessageToServer(String nickName, String post, String parameter1,String parameter2) {
-		this.setNickName(nickName);
+	public MessageToServer(String nickname, String post, ArrayList<String> args) {
+		this.setNickName(nickname);
 		this.setPost(post);
-		this.setParameter1(parameter1);
-		this.setParameter2(parameter2);
+		this.setArgs(args);
+	}
+	
+	public MessageToServer(String json) {
+		
+		super(json);
+
+		try {
+			String nickname = this.getString("nickname");
+			String post = this.getString("post");
+			JSONArray args = this.getJSONArray("args");
+			
+			this.setNickName(nickname);
+			this.setPost(post);
+			//this.setArgs(args.toList());
+			
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
-	 * @return the nickName
+	 * @return the nickname
 	 */
 	public String getNickName() {
-		return nickName;
+		return nickname;
 	}
 
 	/**
@@ -44,25 +64,16 @@ public class MessageToServer implements Serializable {
 		return post;
 	}
 
-	/**
-	 * @return the parameter1
-	 */
-	public String getParameter1() {
-		return parameter1;
+	public ArrayList<String> getArgs() {
+		return args;
 	}
 
 	/**
-	 * @return the parameter2
+	 * @param nickname the nickname to set
 	 */
-	public String getParameter2() {
-		return parameter2;
-	}
-
-	/**
-	 * @param nickName the nickName to set
-	 */
-	private void setNickName(String nickName) {
-		this.nickName = nickName;
+	private void setNickName(String nickname) {
+		this.nickname = nickname;
+		this.put("nickname", this.nickname);
 	}
 
 	/**
@@ -70,20 +81,35 @@ public class MessageToServer implements Serializable {
 	 */
 	private void setPost(String post) {
 		this.post = post;
+		this.put("post", this.post);
 	}
 
 	/**
-	 * @param parameter1 the parameter1 to set
+	 * @param args, array of args
 	 */
-	private void setParameter1(String parameter1) {
-		this.parameter1 = parameter1;
-	}
-
-	/**
-	 * @param parameter2 the parameter2 to set
-	 */
-	private void setParameter2(String parameter2) {
-		this.parameter2 = parameter2;
+	private void setArgs(ArrayList<String> args) {
+		this.args = args;
+		this.put("args", this.args);
 	}
 	
+	/**
+	 * Check whether the message is a command or a simple message
+	 * @return boolean
+	 */
+	public boolean isCommand() {
+		return this.post.startsWith("#");
+	}
+	
+	public boolean isValidCommand() {
+		// Method 1
+		// Not possible to switch "String" type in Java before java7
+		if (this.post.toUpperCase() == "#CONNECT") {
+		
+		} else if(this.post.toUpperCase() == "#JOIN"){
+			
+		}
+		// Method 2
+		return Arrays.asList(this.AVAILABLE_COMMANDS).contains(this.post.toUpperCase());
+		
+	}
 }
