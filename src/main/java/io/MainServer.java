@@ -1,20 +1,30 @@
 package io;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Scanner;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import serial.MessageFromServer;
+import serial.MessageToServer;
+import utils.MessageControler;
 
 public class MainServer {
 
 	public static final int SERVER_PORT = 12345;
-	private static final Logger LOG = Logger.getLogger(MainServer.class
-			.getName());
+
 	public boolean loopBreaker = true;
 
 	public static void run() throws ServerException {
@@ -36,7 +46,7 @@ public class MainServer {
 					server.close();
 				}
 			} catch (IOException e) {
-				LOG.error("Error closing server", e);
+				System.err.println(e.getMessage());
 			}
 		}
 
@@ -51,12 +61,72 @@ public class MainServer {
 		InputStreamReader isr = null;
 		BufferedReader br = null;
 
+		OutputStream out = null;
+		OutputStreamWriter osw = null;
+		BufferedWriter bw = null;
+
 		try {
+
 			in = client.getInputStream();
 			isr = new InputStreamReader(in, "UTF-8");
 			br = new BufferedReader(isr);
 			System.out.println(client.getInetAddress().getHostAddress());
-			System.out.println(br.readLine());
+
+			String string = br.readLine();
+
+			System.out.println(string);
+
+			out = client.getOutputStream();
+			osw = new OutputStreamWriter(out, "UTF-8");
+			bw = new BufferedWriter(osw);
+
+			// -----------------
+
+			MessageToServer msg = new MessageToServer(string);
+
+			JSONObject json = new JSONObject();
+
+			if (msg.getPost().toUpperCase().equals("#CONNECT")) {
+				json.put("nickname", "server");
+
+				json.put("post", "Vous etes connecté au serveur SERVERNAME.");
+
+				json.put("args", new JSONArray());
+
+			} else if (msg.getPost().toUpperCase().equals("#JOIN")) {
+				json.put("nickname", "server");
+
+				json.put("post",
+						"Vous etes connecté au channel CHANNELLLLLL.");
+
+				json.put("channels", new JSONArray());
+
+				json.put("users", new JSONArray());
+
+			} else if (msg.getPost().toUpperCase().equals("#QUIT")) {
+				json.put("nickname", "server");
+
+				json.put("post",
+						"Vous etes connecté au channel CHANNELLLLLL.");
+
+				json.put("channels", new JSONArray());
+			} else if (msg.getPost().toUpperCase().equals("#EXIT")) {
+				json.put("nickname", "server");
+
+				json.put("post", "Au revoir");
+
+				json.put("channels", new JSONArray());
+			} else {
+				json.put("nickname", "server");
+
+				json.put("post", "Adieu");
+
+				json.put("channels", new JSONArray());
+			}
+
+			bw.write(json.toString());
+
+			bw.flush();
 
 		} catch (IOException e) {
 			throw new ServerException("Error during writing data on SYSO", e);
@@ -71,21 +141,28 @@ public class MainServer {
 				if (in != null) {
 					in.close();
 				}
+				
+				
+				if (bw != null)
+					bw.close();
+				if (osw != null)
+					osw.close();
+				if (out != null)
+					out.close();
+				
 			} catch (Exception e) {
-				LOG.error("Err closing streams", e);
+				System.err.println(e.getMessage());
 			}
 		}
 
 	}
 
 	public static void main(String[] args) {
-		PropertyConfigurator.configure("log4j.properties");
-		
-		LOG.info("Start server on port " + SERVER_PORT + ".");
+
 		try {
 			MainServer.run();
 		} catch (ServerException e) {
-			LOG.error("Error in runing server", e);
+			e.printStackTrace();
 		}
 		System.exit(0);
 	}

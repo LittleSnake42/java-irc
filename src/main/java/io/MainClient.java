@@ -24,7 +24,7 @@ public class MainClient {
 			.getName());
 	private static final String NICKNAME = "LittleSnake";
 	private static final int SERVER_PORT = 12345;
-	private static final String SERVER_HOST = "10.42.0.1";
+	private static final String SERVER_HOST = "127.0.0.1";
 	private static final String ENCODING = "UTF-8";
 
 	public static void run() throws ClientException {
@@ -36,7 +36,6 @@ public class MainClient {
 		OutputStreamWriter osw = null;
 		BufferedWriter bw = null;
 
-		LOG.info("Init Cient");
 		sc = new Scanner(System.in);
 
 		while (true) {
@@ -68,7 +67,7 @@ public class MainClient {
 					if (s != null)
 						s.close();
 				} catch (IOException e) {
-					LOG.error("error closing ...", e);
+					//LOG.error("error closing ...", e);
 				}
 			}
 		}
@@ -81,13 +80,12 @@ public class MainClient {
 	}
 
 	public static void main(String[] args) {
-		PropertyConfigurator.configure("log4j.properties");
 
 		try {
 			MainClient.run();
 			System.exit(0);
 		} catch (ClientException e) {
-			LOG.error("Error runing client", e);
+			//LOG.error("Error runing client", e);
 			System.exit(-1);
 		}
 
