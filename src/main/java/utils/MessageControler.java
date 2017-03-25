@@ -1,5 +1,7 @@
 package utils;
 
+import ihm.Window;
+
 import java.util.ArrayList;
 
 import org.apache.commons.validator.routines.InetAddressValidator;
@@ -7,11 +9,17 @@ import org.apache.commons.validator.routines.InetAddressValidator;
 import serial.MessageFromServer;
 import serial.MessageToServer;
 
+// rename MainController
+
 public class MessageControler {
 
+	// Global variables
 	public String nickname = "ClientApp";
-	private ConnectionHandler handler = ConnectionHandler.getInstance();
 	private String currentChannel = null;
+
+	
+	// Components
+	private ConnectionHandler handler = ConnectionHandler.getInstance();
 
 	public MessageControler() {
 		// do nothing
@@ -30,18 +38,20 @@ public class MessageControler {
 
 		// Command ?
 		if (msg.isCommand() && msg.isValidCommand()) {
-			log.info("Rentr�e dans la commande",msg.getPost(),msg.getNickName(),msg.getArgs());
+			System.out.println("msg is command and is valid\n");
+			//log.info("Rentr�e dans la commande",msg.getPost(),msg.getNickName(),msg.getArgs());
 			processCommand(msg);
 		} else if (msg.isCommand()) { // invalid command -> so maybe a message
 										// starting by # ?
 
 			if (this.canSendMessage()) {
 				try {
-					log.info("trying to message send");
+					//log.info("trying to message send");
+					System.out.println("sending msg with #\n");
 					this.send(msg);
 				} catch (ConnectionHandlerException e) {
 					// TODO Auto-generated catch block
-					log.error("Impossible to send the message",e);
+					//log.error("Impossible to send the message",e);
 					e.printStackTrace();
 				}
 			} else {
@@ -128,11 +138,14 @@ public class MessageControler {
 		ArrayList<String> args = msg.getArgs();
 
 		// Case #CONNECT : we expect 2 args (ip, nick)
-		if (command.toUpperCase() == "#CONNECT") {
-
+		if (command.toUpperCase().equals("#CONNECT")) {
+			System.out.println("command connect detectée\n");
 			if (args.size() == 2) {
 				String serverIP = args.get(0);
 				String nickname = args.get(1);
+				
+				System.out.println("ip : "+serverIP);
+				System.out.println("nick : " + nickname);
 
 				// check if args are OK
 				boolean isValidIP = this.isValidIpAddress(serverIP);
@@ -146,11 +159,14 @@ public class MessageControler {
 					try {
 						this.connectToServer(msg);
 					} catch (ConnectionHandlerException e) {
+						System.err.println(e);
 						throw new MessageControlerException(
 								"An error occured attempting to connect to IP \""
 										+ serverIP + "\" with nickname \""
 										+ nickname + "\".", e);
 					}
+				} else {
+					System.err.println("nickname or ip not valid");
 				}
 
 			} else {
@@ -158,7 +174,8 @@ public class MessageControler {
 						"#CONNECT expects two args, the target server ip and a nickname.");
 			}
 
-		} else if (command.toUpperCase() == "#JOIN") {
+		} else if (command.toUpperCase().equals("#JOIN")) {
+			System.out.println("command join detectée\n");
 
 			if (args.size() == 1) {
 				String channel = args.get(0);
@@ -180,7 +197,7 @@ public class MessageControler {
 
 		}
 		// This case is for disconnect from server
-		else if (command.toUpperCase() == "#QUIT") {
+		else if (command.toUpperCase().equals("#QUIT")) {
 			try {
 				// this.disconnectFromChannel(msg);
 				this.disconnectFromServer(msg);
@@ -192,7 +209,7 @@ public class MessageControler {
 
 		}
 		// This case is for leaving the app
-		else if (command.toUpperCase() == "#EXIT") {
+		else if (command.toUpperCase().equals("#EXIT")) {
 			try {
 				// this.disconnectFromChannel(msg);
 				this.disconnectFromServer(msg);
@@ -243,6 +260,8 @@ public class MessageControler {
 
 		String serverIP = msg.getArgs().get(0);
 		String nickname = msg.getArgs().get(1);
+		
+		msg.setNickName(nickname);// update the nickame
 		// connect to server
 		if (this.handler.isConnectionOpened)
 			throw new ConnectionHandlerException("Already Connected !");

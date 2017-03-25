@@ -1,9 +1,8 @@
 package launcher;
 
-import java.util.Scanner;
+import ihm.Window;
 
-import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
+import java.util.Scanner;
 
 import utils.MessageControler;
 import utils.MessageControlerException;
@@ -44,26 +43,33 @@ public class Launcher {
 	}*/
 	
 	public static void main(String[] args) {
-		Launcher l = new Launcher();
 		
 		//LOG.info("Init Cient");
+		@SuppressWarnings("resource")
 		Scanner sc = new Scanner(System.in);
 		MessageControler mc = new MessageControler();
+		
+		
+		// open window
+		Window w = Window.getInstance();
+		w.setVisible(true);
+		
 
 		while (true) {
 
 			try {
+				String msg = sc.nextLine();
 
-				final String msg = sc.nextLine();
-				
 				mc.process(msg);
 				
 			} catch (MessageControlerException e) {
 				//LOG.error("error ...", e);
+				System.err.println(e);
 			} finally {
 				
 			}
 		}
+		
 	}
 
 }

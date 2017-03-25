@@ -71,7 +71,7 @@ public class MessageToServer extends JSONObject {
 	/**
 	 * @param nickname the nickname to set
 	 */
-	private void setNickName(String nickname) {
+	public void setNickName(String nickname) {
 		this.nickname = nickname;
 		this.put("nickname", this.nickname);
 	}
@@ -109,7 +109,7 @@ public class MessageToServer extends JSONObject {
 			
 		}
 		// Method 2
-		return Arrays.asList(this.AVAILABLE_COMMANDS).contains(this.post.toUpperCase());
+		return Arrays.asList(MessageToServer.AVAILABLE_COMMANDS).contains(this.post.toUpperCase());
 		
 	}
 }

@@ -1,7 +1,5 @@
 package utils;
 
-import io.ClientException;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -9,14 +7,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.Socket;
 
-import serial.MessageFromServer;
 
-
-// TODO SINGLETON !!!
 public class ConnectionHandler {
 	
 	private static final int SERVER_PORT = 12345;
@@ -51,9 +45,11 @@ public class ConnectionHandler {
 			throw new ConnectionHandlerException("You must close current connection before opening a new one.");
 		}
 		try {
+			System.out.println("openingconnection");
 			//
 			this.socket = new Socket(InetAddress.getByName(ip), SERVER_PORT);
 			
+			//if socket not ok do something : msg err
 			// write
 			this.out = socket.getOutputStream();
 			this.osw = new OutputStreamWriter(out, ENCODING);
@@ -67,6 +63,7 @@ public class ConnectionHandler {
 			this.isConnectionOpened = true;
 
 		} catch (IOException e) {
+			System.err.println(e.getMessage());
 			throw new ConnectionHandlerException("Error opening connection.", e);
 		}
 	}
@@ -121,6 +118,9 @@ public class ConnectionHandler {
 					// Send everything to the server
 					bw.flush();
 					//while checking for an eventual error
+					
+					System.out.println("message send : \"" + s + "\".");
+					
 				} catch (IOException e) {
 					throw new ConnectionHandlerException("Unabled to write string \"" + s + "\".", e);
 				}
@@ -132,16 +132,23 @@ public class ConnectionHandler {
 	// This method allows to get message from the server and analyzing this message
 	public String read() throws ConnectionHandlerException {
 		
+		String msg = null;
 		if (this.isConnectionOpened) {
+			while (msg == null) {
 				try {
 					// We recover the message send to us by the server
-					String msg = this.br.readLine();
-					
-					return msg;
+					msg = this.br.readLine();
+
 				} catch (IOException e) {
 					throw new ConnectionHandlerException("Unabled to read from Buffer.", e);
 				}
+
+			}
+
+			System.out.println(msg);
 			
+			return msg;
+		
 		} else {
 			throw new ConnectionHandlerException("No connection opened.");
 		}
