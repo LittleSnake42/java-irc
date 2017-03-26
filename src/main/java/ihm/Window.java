@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Event;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -117,6 +118,7 @@ public class Window extends JFrame {
 
 	// class listener button SEND
 	class BoutonListener implements ActionListener {
+
 		public void actionPerformed(ActionEvent arg0) {
 			// display messages on the screen
 			if (textField.getText().equals("")) {
