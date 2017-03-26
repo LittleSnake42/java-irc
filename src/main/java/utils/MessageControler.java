@@ -20,6 +20,8 @@ public class MessageControler {
 	
 	// Components
 	private ConnectionHandler handler = ConnectionHandler.getInstance();
+	private Window window = Window.getInstance();
+
 
 	public MessageControler() {
 		// do nothing
@@ -127,10 +129,12 @@ public class MessageControler {
 		boolean isFromServer = msg.isFromServer();
 		// case 1 Server
 		if (isFromServer) {
+			window.displayError(msg.getNickname() +" # "+msg.getPost());
 			System.err.println(msg.getNickname() +" # "+msg.getPost());
 		}
 		// case 2 User
 		else {
+			window.displayMessage(msg.getNickname()+ " > " + msg.getPost());
 			System.err.println(msg.getNickname()+ " > " + msg.getPost());
 		}
 	}

@@ -60,19 +60,20 @@ public class Launcher {
 		while (true) {
 
 			try {
-				String msg = sc.nextLine();
+				//String msg = sc.nextLine();
 
-				mc.process(msg);
+				//mc.process(msg);
 				
 				// bloquant
-				//mc.read();
+				//
+				mc.read();
 				
-			} catch (MessageControlerException e) {
+			//} catch (MessageControlerException e) {
 				//LOG.error("error ...", e);
-				System.err.println(e);
-			//} catch (ConnectionHandlerException e) {
+				//System.err.println(e);
+			} catch (ConnectionHandlerException e) {
 				// TODO Auto-generated catch block
-				//e.printStackTrace();
+				e.printStackTrace();
 			} finally {
 				
 			}

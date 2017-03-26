@@ -16,6 +16,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import utils.MessageControler;
+import utils.MessageControlerException;
+
 // graphical interface
 public class Window extends JFrame {
 
@@ -107,7 +110,17 @@ public class Window extends JFrame {
 			if (textField.getText().equals("")) {
 
 			} else {
-				screen.append(textField.getText() + "\n");
+				
+				// Process the message
+				MessageControler mc = new MessageControler();
+				try {
+					mc.process(textField.getText());
+				} catch (MessageControlerException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				// append it to chat
+				//screen.append(textField.getText() + "\n");
 			}
 
 			textField.setText("");
