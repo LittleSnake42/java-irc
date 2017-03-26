@@ -34,9 +34,10 @@ public class MainServer {
 
 			server = new ServerSocket(SERVER_PORT);
 
-			while (true) {
+			//while (true) {
+				
 				processSocket(server.accept());
-			}
+			//}
 
 		} catch (IOException e) {
 			throw new ServerException("Error during socket connection", e);
@@ -72,61 +73,71 @@ public class MainServer {
 			br = new BufferedReader(isr);
 			System.out.println(client.getInetAddress().getHostAddress());
 
-			String string = br.readLine();
-
-			System.out.println(string);
-
 			out = client.getOutputStream();
 			osw = new OutputStreamWriter(out, "UTF-8");
 			bw = new BufferedWriter(osw);
 
 			// -----------------
 
-			MessageToServer msg = new MessageToServer(string);
+			while(true) {
+				
+				
+				String string = br.readLine();
 
-			JSONObject json = new JSONObject();
+				System.out.println(string);
+				
+				
+				MessageToServer msg = new MessageToServer(string);
 
-			if (msg.getPost().toUpperCase().equals("#CONNECT")) {
-				json.put("nickname", "server");
+				JSONObject json = new JSONObject();
 
-				json.put("post", "Vous etes connecté au serveur SERVERNAME.");
+				if (msg.getPost().toUpperCase().equals("#CONNECT")) {
+					json.put("nickname", "server");
 
-				json.put("args", new JSONArray());
+					json.put("post", "Vous etes connecté au serveur SERVERNAME.");
 
-			} else if (msg.getPost().toUpperCase().equals("#JOIN")) {
-				json.put("nickname", "server");
+					json.put("args", new JSONArray());
 
-				json.put("post",
-						"Vous etes connecté au channel CHANNELLLLLL.");
+				} else if (msg.getPost().toUpperCase().equals("#JOIN")) {
+					json.put("nickname", "server");
 
-				json.put("channels", new JSONArray());
+					json.put("post",
+							"Vous etes connecté au channel CHANNELLLLLL.");
 
-				json.put("users", new JSONArray());
+					json.put("channels", new JSONArray());
 
-			} else if (msg.getPost().toUpperCase().equals("#QUIT")) {
-				json.put("nickname", "server");
+					json.put("users", new JSONArray());
 
-				json.put("post",
-						"Vous etes connecté au channel CHANNELLLLLL.");
+				} else if (msg.getPost().toUpperCase().equals("#QUIT")) {
+					json.put("nickname", "server");
 
-				json.put("channels", new JSONArray());
-			} else if (msg.getPost().toUpperCase().equals("#EXIT")) {
-				json.put("nickname", "server");
+					json.put("post",
+							"Au revoir");
 
-				json.put("post", "Au revoir");
+					json.put("channels", new JSONArray());
+				} else if (msg.getPost().toUpperCase().equals("#EXIT")) {
+					json.put("nickname", "server");
 
-				json.put("channels", new JSONArray());
-			} else {
-				json.put("nickname", "server");
+					json.put("post", "Au revoir");
 
-				json.put("post", "Adieu");
+					json.put("channels", new JSONArray());
+				} else {
+					json.put("nickname", msg.getNickName());
 
-				json.put("channels", new JSONArray());
+					json.put("post", msg.getPost());
+
+					json.put("channels", new JSONArray());
+				}
+
+				System.err.println("Sending :" + json);
+				bw.write(json.toString());
+				bw.newLine();
+				bw.flush();				
+				
 			}
+			
+			
 
-			bw.write(json.toString());
-
-			bw.flush();
 
 		} catch (IOException e) {
 			throw new ServerException("Error during writing data on SYSO", e);

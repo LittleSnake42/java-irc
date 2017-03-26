@@ -122,7 +122,7 @@ public class MessageControler {
 		boolean isFromServer = msg.isFromServer();
 		// case 1 Server
 		if (isFromServer) {
-			System.err.println(msg.getPost());
+			System.err.println(msg.getNickname() +" > "+msg.getPost());
 		}
 		// case 2 User
 		else {
@@ -262,6 +262,7 @@ public class MessageControler {
 		String nickname = msg.getArgs().get(1);
 		
 		msg.setNickName(nickname);// update the nickame
+		this.nickname = nickname;
 		// connect to server
 		if (this.handler.isConnectionOpened)
 			throw new ConnectionHandlerException("Already Connected !");
@@ -287,6 +288,8 @@ public class MessageControler {
 
 		// set channel name for global use
 		this.currentChannel = msg.getArgs().get(0);
+		
+		System.out.println("Connected to channel " + this.currentChannel);
 
 	}
 
@@ -302,6 +305,8 @@ public class MessageControler {
 
 		// close connection
 		this.handler.closeConnection();
+		
+		System.out.println("connection closed");
 
 	}
 
@@ -309,12 +314,17 @@ public class MessageControler {
 	 * READ & Write
 	 */
 	private void send(MessageToServer msg) throws ConnectionHandlerException {
+		
+		msg.setNickName(this.nickname);// update the nickame
+
+		System.out.println("WRiting : " + msg.toString());
 		this.handler.write(msg.toString());
 	}
 
-	private MessageFromServer read() throws ConnectionHandlerException {
+	public MessageFromServer read() throws ConnectionHandlerException {
 		String s = this.handler.read();
 
+		System.out.println("Read string : " + s);
 		MessageFromServer msg = new MessageFromServer(s);
 		return msg;
 	}

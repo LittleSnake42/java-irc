@@ -4,6 +4,7 @@ import ihm.Window;
 
 import java.util.Scanner;
 
+import utils.ConnectionHandlerException;
 import utils.MessageControler;
 import utils.MessageControlerException;
 
@@ -54,6 +55,7 @@ public class Launcher {
 		Window w = Window.getInstance();
 		w.setVisible(true);
 		
+		// lancer deuxieme thread pour lire?
 
 		while (true) {
 
@@ -62,9 +64,15 @@ public class Launcher {
 
 				mc.process(msg);
 				
+				// bloquant
+				//mc.read();
+				
 			} catch (MessageControlerException e) {
 				//LOG.error("error ...", e);
 				System.err.println(e);
+			} catch (ConnectionHandlerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			} finally {
 				
 			}
