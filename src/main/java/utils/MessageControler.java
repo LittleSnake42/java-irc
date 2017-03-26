@@ -49,6 +49,9 @@ public class MessageControler {
 					//log.info("trying to message send");
 					System.out.println("sending msg with #\n");
 					this.send(msg);
+					
+					MessageFromServer answer = this.read();
+					this.processServerMessage(answer);
 				} catch (ConnectionHandlerException e) {
 					// TODO Auto-generated catch block
 					//log.error("Impossible to send the message",e);
@@ -68,6 +71,8 @@ public class MessageControler {
 			if (this.canSendMessage()) {
 				try {
 					this.send(msg);
+					MessageFromServer answer = this.read();
+					this.processServerMessage(answer);
 				} catch (ConnectionHandlerException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -122,11 +127,11 @@ public class MessageControler {
 		boolean isFromServer = msg.isFromServer();
 		// case 1 Server
 		if (isFromServer) {
-			System.err.println(msg.getNickname() +" > "+msg.getPost());
+			System.err.println(msg.getNickname() +" # "+msg.getPost());
 		}
 		// case 2 User
 		else {
-			System.out.println(msg.getNickname()+ " >" + msg.getPost());
+			System.err.println(msg.getNickname()+ " > " + msg.getPost());
 		}
 	}
 
@@ -166,7 +171,7 @@ public class MessageControler {
 										+ nickname + "\".", e);
 					}
 				} else {
-					System.err.println("nickname or ip not valid");
+					System.err.println("ERR : nickname or ip not valid");
 				}
 
 			} else {
@@ -285,7 +290,8 @@ public class MessageControler {
 		this.send(msg);
 
 		// Need to check if ok
-
+		MessageFromServer answer = this.read();
+		this.processServerMessage(answer);
 		// set channel name for global use
 		this.currentChannel = msg.getArgs().get(0);
 		
@@ -303,6 +309,8 @@ public class MessageControler {
 		// write msg
 		this.send(msg);
 
+		MessageFromServer answer = this.read();
+		this.processServerMessage(answer);
 		// close connection
 		this.handler.closeConnection();
 		
@@ -317,14 +325,14 @@ public class MessageControler {
 		
 		msg.setNickName(this.nickname);// update the nickame
 
-		System.out.println("WRiting : " + msg.toString());
+		//System.out.println("WRiting : " + msg.toString());
 		this.handler.write(msg.toString());
 	}
 
 	public MessageFromServer read() throws ConnectionHandlerException {
 		String s = this.handler.read();
 
-		System.out.println("Read string : " + s);
+		//System.out.println("Read string : " + s);
 		MessageFromServer msg = new MessageFromServer(s);
 		return msg;
 	}

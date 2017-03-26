@@ -70,9 +70,9 @@ public class Launcher {
 			} catch (MessageControlerException e) {
 				//LOG.error("error ...", e);
 				System.err.println(e);
-			} catch (ConnectionHandlerException e) {
+			//} catch (ConnectionHandlerException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				//e.printStackTrace();
 			} finally {
 				
 			}

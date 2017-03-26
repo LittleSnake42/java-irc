@@ -111,7 +111,7 @@ public class MessageFromServer extends JSONObject{
 	 * @return boolean
 	 */
 	public boolean isFromServer() {
-		return this.nickname.toLowerCase() == "server";
+		return this.nickname.toLowerCase().equals("server");
 	}
 
 

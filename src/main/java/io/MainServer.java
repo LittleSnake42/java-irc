@@ -94,7 +94,7 @@ public class MainServer {
 				if (msg.getPost().toUpperCase().equals("#CONNECT")) {
 					json.put("nickname", "server");
 
-					json.put("post", "Vous etes connecté au serveur SERVERNAME.");
+					json.put("post", "Vous etes connecté au serveur de test ©LittleSnake.");
 
 					json.put("args", new JSONArray());
 
@@ -102,7 +102,7 @@ public class MainServer {
 					json.put("nickname", "server");
 
 					json.put("post",
-							"Vous etes connecté au channel CHANNELLLLLL.");
+							"Vous etes connecté au channel " +msg.getArgs().get(0)+".");
 
 					json.put("channels", new JSONArray());
 
