@@ -133,6 +133,7 @@ public class Window extends JFrame {
 				}
 				// append it to chat
 				// screen.append(textField.getText() + "\n");
+
 			}
 
 			textField.setText("");
