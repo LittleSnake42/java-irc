@@ -16,6 +16,8 @@ public class MessageControler {
 	// Global variables
 	public String nickname = "ClientApp";
 	private String currentChannel = null;
+	private static MessageControler INSTANCE = new MessageControler();
+
 
 	
 	// Components
@@ -23,9 +25,15 @@ public class MessageControler {
 	private Window window = Window.getInstance();
 
 
-	public MessageControler() {
+	private MessageControler() {
 		// do nothing
 	}
+	
+	public static MessageControler getInstance()
+    {
+        return INSTANCE;
+    }
+	
 
 	/**
 	 * Point d'entrée, les autres fct sont en privé

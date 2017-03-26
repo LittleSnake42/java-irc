@@ -6,6 +6,7 @@ package serial;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,7 +44,19 @@ public class MessageToServer extends JSONObject {
 			
 			this.setNickName(nickname);
 			this.setPost(post);
-			//this.setArgs(args.toList());
+			
+			List<Object> list = args.toList();
+			
+			ArrayList<String> new_args = new ArrayList<String>();
+			if (list.size() > 0 && list.get(0) != null)
+			new_args.add((String) list.get(0));
+
+			if (list.size() > 1 && list.get(1) != null)
+			new_args.add((String) list.get(1));
+
+			
+			
+			this.setArgs(new_args);
 			
 		} catch (JSONException e) {
 			e.printStackTrace();

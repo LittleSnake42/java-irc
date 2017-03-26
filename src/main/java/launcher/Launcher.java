@@ -48,7 +48,7 @@ public class Launcher {
 		//LOG.info("Init Cient");
 		@SuppressWarnings("resource")
 		Scanner sc = new Scanner(System.in);
-		MessageControler mc = new MessageControler();
+		///MessageControler mc = new MessageControler();
 		
 		
 		// open window
@@ -57,27 +57,27 @@ public class Launcher {
 		
 		// lancer deuxieme thread pour lire?
 
-		while (true) {
-
-			try {
-				//String msg = sc.nextLine();
-
-				//mc.process(msg);
-				
-				// bloquant
-				//
-				mc.read();
-				
-			//} catch (MessageControlerException e) {
-				//LOG.error("error ...", e);
-				//System.err.println(e);
-			} catch (ConnectionHandlerException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} finally {
-				
-			}
-		}
+//		while (true) {
+//
+//			try {
+//				//String msg = sc.nextLine();
+//
+//				//mc.process(msg);
+//				
+//				// bloquant
+//				//
+//				mc.read();
+//				
+//			//} catch (MessageControlerException e) {
+//				//LOG.error("error ...", e);
+//				//System.err.println(e);
+//			} catch (ConnectionHandlerException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			} finally {
+//				
+//			}
+//		}
 		
 	}
 

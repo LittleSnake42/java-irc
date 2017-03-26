@@ -112,7 +112,7 @@ public class Window extends JFrame {
 			} else {
 				
 				// Process the message
-				MessageControler mc = new MessageControler();
+				MessageControler mc = MessageControler.getInstance();
 				try {
 					mc.process(textField.getText());
 				} catch (MessageControlerException e) {
