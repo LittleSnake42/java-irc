@@ -2,11 +2,15 @@ package ihm;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -15,6 +19,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.StyledDocument;
 
 import utils.MessageControler;
 import utils.MessageControlerException;
@@ -27,12 +34,16 @@ public class Window extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel container = new JPanel();
-	private JTextArea screen = new JTextArea();
+	private JTextPane screen = new JTextPane();
 	private JTextArea users = new JTextArea();
 	private JTextField textField = new JTextField();
 	private JComboBox<?> combo = new JComboBox<Object>();
 	private JButton button = new JButton("Send");
+	
+	
+	public ImageIcon icon = new ImageIcon("swag.jpg", "Titre");
 
+	
 	private static Window INSTANCE = new Window();
 
 	private Window() {
@@ -56,7 +67,7 @@ public class Window extends JFrame {
 
 		// screen
 		screen.setEditable(false);
-		screen.setLineWrap(true);
+		//screen.setLineWrap(true);
 
 		users.setPreferredSize(new Dimension(150, 190));
 		users.setEditable(false);
@@ -130,7 +141,18 @@ public class Window extends JFrame {
 
 	// method to display messages on the screen
 	public void displayMessage(String message) {
-		screen.append(message + "\n");
+		StyledDocument document = (StyledDocument) screen.getDocument();
+		
+		screen.insertIcon(new ImageIcon("/java-irc/src/main/java/ihm/swag.jpg"));
+		
+		try {
+			document.insertString(document.getLength(), message + "\n", null);
+		} catch (BadLocationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+//		screen.append(message + "\n");
 	}
 
 	// method to display online users
@@ -147,6 +169,6 @@ public class Window extends JFrame {
 	public void displayError(String message) {
 		//JOptionPane jop = new JOptionPane();
 		JOptionPane.showMessageDialog(null, message, "Erreur",
-				JOptionPane.ERROR_MESSAGE);
+				JOptionPane.INFORMATION_MESSAGE);
 	}
 }
