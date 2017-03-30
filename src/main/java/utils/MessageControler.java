@@ -1,18 +1,22 @@
 package utils;
 
 import ihm.Window;
+import io.MainClient;
 
 import java.util.ArrayList;
 
 import org.apache.commons.validator.routines.InetAddressValidator;
+import org.apache.log4j.Logger;
 
 import serial.MessageFromServer;
 import serial.MessageToServer;
 
 // rename MainController
-
+// This
 public class MessageControler {
-
+	//Log variable.
+	
+	private static final Logger LOG = Logger.getLogger(MessageControler.class.getName());
 	// Global variables
 	public String nickname = "ClientApp";
 	private String currentChannel = null;
@@ -41,25 +45,34 @@ public class MessageControler {
 	 * @param
 	 * @throws MessageControlerException
 	 */
+	
+	/*
+	* This method treats the string asked as a argument and convert it to a MessageToServer Object
+	* ready to get send to the Server if he pass the control. 
+	*/	
 	public void process(String s) throws MessageControlerException {
 
 		// Init message
+		//Create an object msg using the method initMessage.
 		MessageToServer msg = this.initMessage(s);
 
-		// Command ?
+		
+		//We are checking if its a command and a valid one. If yes we call the method processCommand to make it a command ready to get send
+		// to the server. 
+		//If its not a command it means it's a message then.
 		if (msg.isCommand() && msg.isValidCommand()) {
-			System.out.println("msg is command and is valid\n");
-			//log.info("Rentr�e dans la commande",msg.getPost(),msg.getNickName(),msg.getArgs());
+			LOG.info("Enter into the command "+s);
 			processCommand(msg);
 		} else if (msg.isCommand()) { // invalid command -> so maybe a message
 										// starting by # ?
 
 			if (this.canSendMessage()) {
 				try {
-					//log.info("trying to message send");
-					System.out.println("sending msg with #\n");
+					LOG.info("Command Message send ");
 					this.send(msg);
 					
+					// We recover the Message send by the server as an object MessageFromServer
+					// and we treat it to check we do not have a problem With the message we send previously.
 					MessageFromServer answer = this.read();
 					this.processServerMessage(answer);
 				} catch (ConnectionHandlerException e) {
@@ -70,8 +83,10 @@ public class MessageControler {
 			} else {
 				// if no connected to server nor channel -> error, else is a
 				// message
-				throw new MessageControlerException("Unknown command \""
-						+ msg.getPost() + "\".");
+				LOG.error("Unknown Command "+ msg.getPost());
+				
+				//Pas sur si je le laisse. Pareil pour les autres.
+				//throw new MessageControlerException("Unknown command \""+ msg.getPost() + "\".");
 			}
 		} else { // Message
 
@@ -80,20 +95,25 @@ public class MessageControler {
 			// are we connected to a channel ?
 			if (this.canSendMessage()) {
 				try {
+					LOG.info("Simple Message send");
 					this.send(msg);
+					// We recover the Message send by the server as an object MessageFromServer
+					// and we treat it to check we do not have a problem With the message we send previously.
 					MessageFromServer answer = this.read();
 					this.processServerMessage(answer);
 				} catch (ConnectionHandlerException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					// if we enter here it means we have an error.
+					LOG.error("Error while sending the message",e);
 				}
 			} else {
+				// We check if we are connected to a server. if yes then it means we are not connected to a channel
+				// else it means we are not even connected to a server.
 				if (this.handler.isConnectionOpened)
-					throw new MessageControlerException(
-							"You are not connected to a channel, you can't send message now. Try #JOIN CHANNEL_NAME");
+					LOG.error("You are not connected to a channel, you can't send message now. Try #JOIN CHANNEL_NAME");
+					//throw new MessageControlerException("You are not connected to a channel, you can't send message now. Try #JOIN CHANNEL_NAME");
 				else
-					throw new MessageControlerException(
-							"You are not connected to a server. Try #CONNECT SERVER_IP NICKNAME");
+					LOG.error("You are not connected to a server, Try #CONNECT SERVER_IP NICKNAME");
+					//throw new MessageControlerException("You are not connected to a server. Try #CONNECT SERVER_IP NICKNAME");
 
 			}
 
@@ -101,17 +121,24 @@ public class MessageControler {
 	}
 
 	/**
-	 * Functions to process messages
+	 * Functions to process messages asking a string for argument
 	 */
 	private MessageToServer initMessage(String s) {
-
+		
+		//Initialize the local variable.
 		ArrayList<String> args = new ArrayList<String>();
 		String post = new String();
 		String nickname = this.nickname;
-
-		if (s.startsWith("#")) { // command
+		//We check if the string is a command by checking if it starts by #
+		if (s.startsWith("#")) {
+			
+			//We separate the string in a array of string to recover the args and the post
 			String[] splited = s.split(" ");
+			//The first part of the string is put on the POST part.
 			post = splited[0];
+			
+			// We are checking if we have args here if yes then we put the splitted parts in ARGS
+			// We are limited to 2 arguments
 			if (splited.length > 1 && splited[1] != null) {
 				args.add(splited[1]);
 			}// max 2 args
@@ -119,13 +146,14 @@ public class MessageControler {
 				args.add(splited[2]);
 			}
 		} else {
+			//If its not a command then POST is the string put in argument
 			post = s;
 		}
-
+		// We create a MessageToServer object and then we send it as a return value
 		MessageToServer msg = new MessageToServer(nickname, post, args);
 		return msg;
 	}
-
+	// We analyze the message send by the server
 	private void processServerMessage(MessageFromServer msg) {
 
 		// check is valid ?
@@ -136,14 +164,16 @@ public class MessageControler {
 		// server or user ?
 		boolean isFromServer = msg.isFromServer();
 		// case 1 Server
+		//In both case we display what we got. In the first case its the message from the server.
+		//In the second case it is the message send by the user.
 		if (isFromServer) {
 			window.displayError(msg.getNickname() +" # "+msg.getPost());
-			System.err.println(msg.getNickname() +" # "+msg.getPost());
+			LOG.error(msg.getNickname() +" # "+msg.getPost());
 		}
 		// case 2 User
 		else {
 			window.displayMessage(msg.getNickname()+ " > " + msg.getPost());
-			System.err.println(msg.getNickname()+ " > " + msg.getPost());
+			LOG.error(msg.getNickname() +" > "+msg.getPost());
 		}
 	}
 
@@ -156,13 +186,14 @@ public class MessageControler {
 
 		// Case #CONNECT : we expect 2 args (ip, nick)
 		if (command.toUpperCase().equals("#CONNECT")) {
-			System.out.println("command connect detectée\n");
+			LOG.info("Command connect detected.");
 			if (args.size() == 2) {
 				String serverIP = args.get(0);
 				String nickname = args.get(1);
 				
-				System.out.println("ip : "+serverIP);
-				System.out.println("nick : " + nickname);
+				LOG.info("IP : " + serverIP);
+				LOG.info("NICKNAME :" + nickname );
+
 
 				// check if args are OK
 				boolean isValidIP = this.isValidIpAddress(serverIP);
@@ -174,42 +205,38 @@ public class MessageControler {
 				// if ok try to connect
 				if (isValidIP && isValidNickname) {
 					try {
+						LOG.info("Trying to connect to the server.");
 						this.connectToServer(msg);
 					} catch (ConnectionHandlerException e) {
-						System.err.println(e);
-						throw new MessageControlerException(
-								"An error occured attempting to connect to IP \""
-										+ serverIP + "\" with nickname \""
-										+ nickname + "\".", e);
+						LOG.error("An error occured attempting to connect to IP : " + serverIP 
+								+ " / with nickname : " + nickname + " / Because of the error : ",e );
 					}
 				} else {
-					System.err.println("ERR : nickname or ip not valid");
+					LOG.error("NICKNAME OR IP ADRESS NOT VALID");
 				}
 
 			} else {
-				throw new MessageControlerException(
-						"#CONNECT expects two args, the target server ip and a nickname.");
+				LOG.error("#CONNECT expects two args, the target server ip and a nickname.");
 			}
 
 		} else if (command.toUpperCase().equals("#JOIN")) {
-			System.out.println("command join detectée\n");
-
+			
+			LOG.info("Command JOIN detected.");
+			// We need one argument to use the command JOIN
 			if (args.size() == 1) {
 				String channel = args.get(0);
 				// check if args are OK
 
-				// if ok try to connect
+				// if ok try to join
 				try {
 					this.connectToChannel(msg);
 				} catch (ConnectionHandlerException e) {
-					// TODO Auto-generated catch block
-					throw new MessageControlerException(
-							"Unabled to join channel \"" + channel + "\".", e);
+					LOG.error("Unable to join the channel : " + channel + " / Because of the error : ", e );
+			
 				}
 
 			} else {
-				throw new MessageControlerException(
-						"#JOIN expects 1 args, the target channel name.");
+				LOG.error("#JOIN expects 1 args, the target channel name.");
 			}
 
 		}
@@ -220,8 +247,7 @@ public class MessageControler {
 				this.disconnectFromServer(msg);
 			} catch (ConnectionHandlerException e) {
 				// TODO Auto-generated catch block
-				throw new MessageControlerException(
-						"problem while quitting the application");
+				LOG.error("Problem while quitting the application because of the error : ", e);
 			}
 
 		}
@@ -233,23 +259,29 @@ public class MessageControler {
 				// QUit global app;
 			} catch (ConnectionHandlerException e) {
 				// TODO Auto-generated catch block
-				throw new MessageControlerException(
-						"problem while quitting the channel");
+				LOG.error("Problem while quitting the channel because of the error : ", e);
 			}
 		} else {
-			throw new MessageControlerException("Not a valid command. RTFM :)");
+			LOG.error("Not a valid command. RTFM :)");
 		}
 	}
 
 	/**
-	 * Functions isSomething, canDoSomething
+	 * Functions isSomething, canDoSomething 
 	 */
-
+	/*
+	 *  This function check if we the message is ok to be send to the server.
+	 *  Return true if there is a connection and a channel selected
+	 *  Return false if one or both are missing.
+	 */
 	private boolean canSendMessage() {
-		// TODO Auto-generated method stub
+		 
 		return this.handler.isConnectionOpened && this.currentChannel != null;
 	}
-
+	/*
+	 *  This function check if the IP adress is valid.
+	 *  Return true if the IP adress is valid.
+	 */
 	private boolean isValidIpAddress(String serverIP) {
 		InetAddressValidator validator = new InetAddressValidator();
 		return (validator.isValidInet4Address(serverIP) /*
@@ -258,7 +290,10 @@ public class MessageControler {
 														 * (serverIP)
 														 */);
 	}
-
+	/*
+	 *  This function check if we the nickname is good.
+	 *  return true if we have 3 or more characters on the nickname
+	 */
 	private boolean isValidNickname(String nickname) {
 		// String de + de 3 caractères
 		return nickname.length() > 3;
@@ -282,7 +317,7 @@ public class MessageControler {
 		this.nickname = nickname;
 		// connect to server
 		if (this.handler.isConnectionOpened)
-			throw new ConnectionHandlerException("Already Connected !");
+			LOG.error("ALREADY CONNECTED !");
 
 		handler.openConnection(serverIP);
 
@@ -306,8 +341,7 @@ public class MessageControler {
 		this.processServerMessage(answer);
 		// set channel name for global use
 		this.currentChannel = msg.getArgs().get(0);
-		
-		System.out.println("Connected to channel " + this.currentChannel);
+		LOG.info("Connected to channel " + this.currentChannel);
 
 	}
 
@@ -326,7 +360,7 @@ public class MessageControler {
 		// close connection
 		this.handler.closeConnection();
 		
-		System.out.println("connection closed");
+		LOG.info("Disconneted from the server.");
 
 	}
 
@@ -349,10 +383,3 @@ public class MessageControler {
 		return msg;
 	}
 }
-/*
- * a conserver voir si on peut de faire. // We split this message to analyze if
- * we got a "error" String[] splitted = msg.split(" "); // We check if we get a
- * message from the server if yes we create a error message if (splitted[0]==) {
- * // Here we create the windows that show up to warn us we got an error from
- * the server. } // Here we can put what we will write on the windows.
- */

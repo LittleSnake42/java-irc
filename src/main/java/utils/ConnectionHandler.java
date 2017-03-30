@@ -10,9 +10,12 @@ import java.io.OutputStreamWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 
+import org.apache.log4j.Logger;
+
 
 public class ConnectionHandler {
 	
+	private static final Logger LOG = Logger.getLogger(ConnectionHandler.class.getName());
 	private static final int SERVER_PORT = 12345;
 	private static final String ENCODING = "UTF-8";
 	private static ConnectionHandler INSTANCE = new ConnectionHandler();
@@ -42,10 +45,11 @@ public class ConnectionHandler {
 	public void openConnection(String ip) throws ConnectionHandlerException {
 		// check if a socket is already opened
 		if (this.isConnectionOpened) {
-			throw new ConnectionHandlerException("You must close current connection before opening a new one.");
+			
+			LOG.error("You must close current connection before opening a new one.");
 		}
 		try {
-			System.out.println("openingconnection");
+			LOG.info("Opening connection to the server " + ip);
 			//
 			this.socket = new Socket(InetAddress.getByName(ip), SERVER_PORT);
 			
@@ -63,8 +67,8 @@ public class ConnectionHandler {
 			this.isConnectionOpened = true;
 
 		} catch (IOException e) {
-			System.err.println(e.getMessage());
-			throw new ConnectionHandlerException("Error opening connection.", e);
+			LOG.error("Error opening connection. ", e);
+
 		}
 	}
 	// This Method will be used with the pretty white cross on the red square when we have implemented this
@@ -101,7 +105,7 @@ public class ConnectionHandler {
 				this.socket.close();
 			}
 		} catch (IOException e) {
-			throw new ConnectionHandlerException("Error closing connection.", e);
+			LOG.error("Error while closing connection. ", e);
 		} finally {
 			this.isConnectionOpened = false;
 		}
@@ -119,14 +123,14 @@ public class ConnectionHandler {
 					bw.flush();
 					//while checking for an eventual error
 					
-					System.out.println("message send : \"" + s + "\".");
 					
+					LOG.info("message send : \"" + s + "\". ");
 				} catch (IOException e) {
-					throw new ConnectionHandlerException("Unabled to write string \"" + s + "\".", e);
+					LOG.error("Unabled to write string \"" + s + "\".", e);
 				}
 			
 		} else {
-			throw new ConnectionHandlerException("No connection opened.");
+			LOG.error("No connection opened.");
 		}
 	}
 	// This method allows to get message from the server and analyzing this message
@@ -140,16 +144,18 @@ public class ConnectionHandler {
 					msg = this.br.readLine();
 
 				} catch (IOException e) {
-					throw new ConnectionHandlerException("Unabled to read from Buffer.", e);
+					LOG.error("Unabled to read from Buffer.", e);
 				}
 
 			}
 
-			System.out.println(msg);
+			LOG.info(msg);
 			
 			return msg;
 		
 		} else {
+			LOG.error("No connection opened.");
+			//Pour une raison qui m'échappe java me fait chier ici si j'enlève cette ligne en disant qu'il faut un return.
 			throw new ConnectionHandlerException("No connection opened.");
 		}
 	}
