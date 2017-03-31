@@ -85,7 +85,7 @@ public class FrameConnection extends JFrame {
 	}
 	
 	
-	public class ValidateConnectionListener implements ActionListener{
+	public class ValidateConnectionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			String strNickname, strIpServer;
 			
