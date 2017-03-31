@@ -7,8 +7,12 @@ import java.awt.Event;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -26,6 +30,9 @@ import javax.swing.text.StyledDocument;
 
 import utils.MessageControler;
 import utils.MessageControlerException;
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 
 // graphical interface
 public class Window extends JFrame {
@@ -35,7 +42,10 @@ public class Window extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel container = new JPanel();
-	private JTextPane screen = new JTextPane();
+
+	private JTextArea screen = new JTextArea();
+	private JTextPane jTextPane = new JTextPane();
+
 	private JTextArea users = new JTextArea();
 	private JTextField textField = new JTextField();
 	private JComboBox<?> combo = new JComboBox<Object>();
@@ -47,10 +57,12 @@ public class Window extends JFrame {
 
 	private Window() {
 		this.setTitle("Client IRC");
-		this.setMinimumSize(new Dimension(600, 400));
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setLocationRelativeTo(null);
 
+		this.setMinimumSize(new Dimension(500, 300));
+		this.setSize(800, 500);
+		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		this.setLocationRelativeTo(null);
+		
 		initComposant();
 
 		this.setContentPane(container);
@@ -66,18 +78,28 @@ public class Window extends JFrame {
 	// add composants
 	private void initComposant() {
 
-		// screen
-		screen.setEditable(false);
-		// screen.setLineWrap(true);
+		//screen.setEditable(false);
+		//screen.setLineWrap(true);
+		
+		jTextPane.setSize(100, 100);
+		jTextPane.setEditable(false);
 
 		users.setPreferredSize(new Dimension(150, 190));
 		users.setEditable(false);
 		users.setLineWrap(true);
 
 		// smiley
-		String[] smiley = { "o( ><)o", "(>_<)", "�\\_(�_�)_/�", ":S", "=(" };
-		combo = new JComboBox<Object>(smiley);
-		combo.setForeground(Color.blue);
+
+		String smiley[] = {"o( ><)o", "(>_<)", "�\\_(�_�)_/�", ":S", "=("};
+		
+		ImageIcon emoticon[] = {
+				new ImageIcon("image/smile.png"),
+				new ImageIcon("photo.jpg"),
+				new ImageIcon("photo.jpg"),
+				
+				
+		};
+		combo = new JComboBox(smiley);
 
 		// add listeners
 		combo.addActionListener(new ItemAction());
@@ -100,11 +122,50 @@ public class Window extends JFrame {
 		bottom.add(buttons, BorderLayout.EAST);
 		bottom.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-		container.add(new JScrollPane(screen), BorderLayout.CENTER);
-		//container.add(new JScrollPane(users), BorderLayout.EAST);
-		container.add(bottom, BorderLayout.SOUTH);
-	}
+		//container.add(new JScrollPane(screen), BorderLayout.CENTER);
+		
+		Style defaut = jTextPane.getStyle("default");
+		Style style1 = jTextPane.addStyle("style1", defaut);
+		StyleConstants.setForeground(style1, Color.CYAN);
+	    StyleConstants.setFontFamily(style1, "Comic sans MS");
+	    Style style2 = jTextPane.addStyle("style2", style1);
+	    StyleConstants.setForeground(style2, Color.RED);
+	    //StyleConstants.setFontSize(style2, 25);
+	    
+	    Style imageStyle = jTextPane.addStyle("ImageStyle", null);
+        StyleConstants.setIcon(imageStyle, new ImageIcon("image/smile.png"));
+	    
+	    StyledDocument sDoc = (StyledDocument)jTextPane.getDocument();
+	    jTextPane.insertIcon(emoticon[0]);
+	    try {
+	          int pos = 0;
+	          sDoc.insertString(pos, "JKHESIJFJKHESIJFJKHESIJFJKHESIJFJKHESIJFJKHESIJFJKHESIJFJKHESIJFJKHESIJFJKHESIJFJKHESIJFJKHESIJF", defaut);pos+="jk".length();
+	          sDoc.insertString(pos, "jk", style1);pos+="jk".length();
+	          sDoc.insertString(pos, "jk", style2);pos+="jk".length();
+	    } catch (BadLocationException e) { }
 
+		container.add(new JScrollPane(jTextPane), BorderLayout.CENTER);
+		container.add(new JScrollPane(users), BorderLayout.EAST);
+		container.add(bottom, BorderLayout.SOUTH);
+		
+		this.addWindowListener( new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				closeFrame();
+			}
+		});
+	}	
+	
+	public void closeFrame() {
+		int answer = JOptionPane.showConfirmDialog(this,
+                "Are you sure you wish to close? ",
+                "Confirmation",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
+		if(answer == JOptionPane.YES_OPTION ){
+			dispose();
+		}
+	}
+		
 	// class listener smiley
 	class ItemAction implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
