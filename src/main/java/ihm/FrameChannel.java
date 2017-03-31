@@ -91,7 +91,7 @@ public class FrameChannel extends JFrame {
 				
 				JOptionPane.showMessageDialog(null, "Channel is correct", "Successfully connected", JOptionPane.INFORMATION_MESSAGE);
 				dispose();
-				Window window = new Window();
+				Window window = Window.getInstance();
 				window.setVisible(true);
 				
 			}
