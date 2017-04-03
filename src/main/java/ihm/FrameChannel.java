@@ -54,7 +54,7 @@ public class FrameChannel extends JFrame {
 		cancel.setBounds(210, 120, 87, 20);
 		
 		validate.addActionListener(new ValidateChannelListener());
-		cancel.addActionListener(new cancelListener());
+		cancel.addActionListener(new CancelListener());
 		
 		this.addWindowListener( new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
@@ -99,7 +99,7 @@ public class FrameChannel extends JFrame {
 		}
 	}
 		
-	public class cancelListener implements ActionListener{
+	public class CancelListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			
 			dispose();
@@ -107,6 +107,5 @@ public class FrameChannel extends JFrame {
 			window.setVisible(true);
 			
 		}
-
 	}
 }

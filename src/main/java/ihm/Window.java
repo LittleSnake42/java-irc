@@ -11,10 +11,16 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -22,10 +28,11 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
+
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
 import utils.MessageControler;
@@ -34,127 +41,156 @@ import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
-// graphical interface
+
+/*
+ * This class is the graphical interface for displaying chat messages
+ */
+
 public class Window extends JFrame {
-
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
-	private JPanel container = new JPanel();
-
-	private JTextArea screen = new JTextArea();
-	private JTextPane jTextPane = new JTextPane();
-
-	private JTextArea users = new JTextArea();
-	private JTextField textField = new JTextField();
-	private JComboBox<?> combo = new JComboBox<Object>();
-	private JButton button = new JButton("Send");
-
+	private JPanel mainPanel, panelTop, panelButtons, panelCenter, panelRight, panelBottom;
+	private JTextPane screen, textField;
+	private JComboBox<?> listSmileys;
+	private JButton buttonSend, buttonChannel, buttonLogout;
+	private StyledDocument sDoc;
+	private Style defaut, styleCyan, styleRed;
+	private int pos = 0;
+	
 	public ImageIcon icon = new ImageIcon("swag.jpg", "Titre");
 
 	private static Window INSTANCE = new Window();
 
 	private Window() {
+	
 		this.setTitle("Client IRC");
 
 		this.setMinimumSize(new Dimension(500, 300));
 		this.setSize(800, 500);
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		this.setLocationRelativeTo(null);
-		
-		initComposant();
 
-		this.setContentPane(container);
-		ImageIcon img = new ImageIcon("images/swag.jpg");
-		this.setIconImage(img.getImage());
-		// this.setVisible(true);
+		initComponents();
+
+		this.setContentPane(mainPanel);    
+
 	}
+	
 
 	public static Window getInstance() {
 		return INSTANCE;
 	}
-
-	// add composants
-	private void initComposant() {
-
-		//screen.setEditable(false);
-		//screen.setLineWrap(true);
+	
+	// This method allow to init components
+	private void initComponents(){
 		
-		jTextPane.setSize(100, 100);
-		jTextPane.setEditable(false);
-
-		users.setPreferredSize(new Dimension(150, 190));
-		users.setEditable(false);
-		users.setLineWrap(true);
-
-		// smiley
-
-		String smiley[] = {"o( ><)o", "(>_<)", "�\\_(�_�)_/�", ":S", "=("};
+		// create panels
+		mainPanel = new JPanel();
+		panelTop = new JPanel();
+		panelBottom = new JPanel();
+		panelCenter = new JPanel();
+		panelRight = new JPanel();
 		
-		ImageIcon emoticon[] = {
-				new ImageIcon("image/smile.png"),
-				new ImageIcon("photo.jpg"),
-				new ImageIcon("photo.jpg"),
-				
-				
+		// layout
+		mainPanel.setLayout(new BorderLayout());
+		panelTop.setLayout(new BoxLayout(panelTop, BoxLayout.LINE_AXIS));
+		panelBottom.setLayout(new BorderLayout());
+		panelCenter.setLayout(new BorderLayout());
+		panelRight.setLayout(new BorderLayout());
+		
+		
+		/*
+		 * TOP panel components
+		 */
+		buttonChannel = new JButton("Change channel");
+		buttonLogout = new JButton("Logout");
+
+
+		panelTop.add(buttonChannel);
+		panelTop.add(buttonLogout);
+		
+		
+		/*
+		 * BOTTOM panel components
+		 */
+		textField  = new JTextPane();
+		
+		// components for smileys		
+		ImageIcon[] emoticon = {
+			new ImageIcon("image/grinning.png"),
+			new ImageIcon("image/grin.png"),
+			new ImageIcon("image/laughing.png")				
 		};
-		combo = new JComboBox(smiley);
-
-		// add listeners
-		combo.addActionListener(new ItemAction());
-		button.addActionListener(new BoutonListener());
-		textField.addKeyListener(new keyboardListener());
-
-		JPanel bottom = new JPanel();
-		bottom.setLayout(new BorderLayout());
-
-		// boutons
-		JPanel buttons = new JPanel();
-		buttons.add(combo);
-		buttons.add(button);
-
-		// main container
-		container.setLayout(new BorderLayout());
-
-		// SOUTH
-		bottom.add(textField, BorderLayout.CENTER);
-		bottom.add(buttons, BorderLayout.EAST);
-		bottom.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
-		//container.add(new JScrollPane(screen), BorderLayout.CENTER);
 		
-		Style defaut = jTextPane.getStyle("default");
-		Style style1 = jTextPane.addStyle("style1", defaut);
-		StyleConstants.setForeground(style1, Color.CYAN);
-	    StyleConstants.setFontFamily(style1, "Comic sans MS");
-	    Style style2 = jTextPane.addStyle("style2", style1);
-	    StyleConstants.setForeground(style2, Color.RED);
-	    //StyleConstants.setFontSize(style2, 25);
-	    
-	    Style imageStyle = jTextPane.addStyle("ImageStyle", null);
-        StyleConstants.setIcon(imageStyle, new ImageIcon("image/smile.png"));
-	    
-	    StyledDocument sDoc = (StyledDocument)jTextPane.getDocument();
-	    jTextPane.insertIcon(emoticon[0]);
-	    try {
-	          int pos = 0;
-	          sDoc.insertString(pos, "JKHESIJFJKHESIJFJKHESIJFJKHESIJFJKHESIJFJKHESIJFJKHESIJFJKHESIJFJKHESIJFJKHESIJFJKHESIJFJKHESIJF", defaut);pos+="jk".length();
-	          sDoc.insertString(pos, "jk", style1);pos+="jk".length();
-	          sDoc.insertString(pos, "jk", style2);pos+="jk".length();
-	    } catch (BadLocationException e) { }
-
-		container.add(new JScrollPane(jTextPane), BorderLayout.CENTER);
-		container.add(new JScrollPane(users), BorderLayout.EAST);
-		container.add(bottom, BorderLayout.SOUTH);
+		listSmileys = new JComboBox<Object>(emoticon);
+		listSmileys.setPreferredSize(new Dimension(60,30));
 		
-		this.addWindowListener( new WindowAdapter() {
+		buttonSend = new JButton("SEND");
+		
+		// add combo and button "SEND" to the panel buttons
+		panelButtons = new JPanel();
+		panelButtons.add(listSmileys);
+		panelButtons.add(buttonSend);
+		
+		// add components to the panel bottom
+		panelBottom.add(textField, BorderLayout.CENTER);
+		panelBottom.add(panelButtons, BorderLayout.EAST);
+		panelBottom.setBorder(BorderFactory.createEmptyBorder(1,1,1,1));
+		
+		
+		/*
+		 * CENTER panel components
+		 */
+		screen = new JTextPane();
+		screen.setSize(100, 100);
+		screen.setEditable(false);
+		
+		defaut = screen.getStyle("default");
+		
+		styleCyan = screen.addStyle("style1", defaut);
+		StyleConstants.setForeground(styleCyan, Color.CYAN);
+	    StyleConstants.setFontFamily(styleCyan, "Comic sans MS");
+	    
+	    styleRed = screen.addStyle("style2", styleCyan);
+	    StyleConstants.setForeground(styleRed, Color.RED);
+	   	    
+	    sDoc = (StyledDocument)screen.getDocument();
+	    
+	    panelCenter.add(screen);
+		
+	    
+		/*
+		 * Main panel
+		 */
+	    // add panels to main panel
+		mainPanel.add(new JScrollPane(panelTop), BorderLayout.NORTH);
+	    mainPanel.add(new JScrollPane(panelCenter), BorderLayout.CENTER);
+	    mainPanel.add(new JScrollPane(panelRight), BorderLayout.EAST);
+	    mainPanel.add(panelBottom, BorderLayout.SOUTH);
+		
+	    
+	   /*
+	    *  add listeners
+	    */
+	    buttonChannel.addActionListener(new ChannelListener());
+		buttonLogout.addActionListener(new LogoutListener());
+	 	listSmileys.addActionListener(new ItemAction());
+	 	buttonSend.addActionListener(new SendListener());
+	 	textField.addKeyListener(new keyboardListener());
+	 	
+		
+	    this.addWindowListener( new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				closeFrame();
 			}
 		});
 	}	
 	
+	/*
+	 * Methods
+	 */
+	
+
 	public void closeFrame() {
 		int answer = JOptionPane.showConfirmDialog(this,
                 "Are you sure you wish to close? ",
@@ -165,20 +201,50 @@ public class Window extends JFrame {
 			dispose();
 		}
 	}
-		
+
+	
+	/*
+	 * Class Listener
+	 */
+	
+	// class listener button "Change channel"
+	public class ChannelListener implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+			
+			dispose();
+			FrameChannel window = new FrameChannel();
+			window.setVisible(true);
+			
+		}
+
+	}
+	
+	// class listener button "Logout"
+	public class LogoutListener implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+			
+			dispose();
+			FrameConnection window = new FrameConnection();
+			window.setVisible(true);
+			
+		}
+	}
+
+
 	// class listener smiley
 	class ItemAction implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			textField.setText(textField.getText() + " "
-					+ combo.getSelectedItem());
 
+			//textField.setText(textField.getText() + " " + listSmileys.getSelectedItem());
+			String smiley[] = {":grinning:", ":grin:", ":laughing:"};
+			textField.setText(textField.getText() + smiley[listSmileys.getSelectedIndex()] + " ");
 			// focus
 			textField.requestFocus();
 		}
 	}
 
 	// class listener button SEND
-	class BoutonListener implements ActionListener {
+	class SendListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent arg0) {
 			// display messages on the screen
@@ -197,6 +263,13 @@ public class Window extends JFrame {
 				// append it to chat
 				// screen.append(textField.getText() + "\n");
 
+			}
+			
+	        try {
+				sDoc.insertString(pos, textField.getText(), defaut); pos+=textField.getText().length();
+			} catch (BadLocationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 
 			textField.setText("");
@@ -218,11 +291,6 @@ public class Window extends JFrame {
 		}
 
 		// screen.append(message + "\n");
-	}
-
-	// method to display online users
-	public void displayUsers(String user) {
-		users.append(user + "\n");
 	}
 
 	// method to get message sent
