@@ -24,9 +24,8 @@ public class Main {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		//FrameConnection connection = new FrameConnection();
-		//connection.setVisible(true);
+
+		Window.getInstance();
 		
 		Window connection = new Window();
 		connection.setVisible(true);
