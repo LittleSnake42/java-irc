@@ -1,8 +1,14 @@
 package launcher;
 
+import ihm.FrameConnection;
 import ihm.Window;
 
 import org.apache.log4j.Logger;
+
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
+import utils.ClientListener;
 
 public class Launcher {
 
@@ -31,9 +37,32 @@ public class Launcher {
 		//TODO logs fichiers
 
 		
-		// open window
-		Window w = Window.getInstance();
-		w.setVisible(true);
+		try {
+			UIManager.setLookAndFeel("com.jtattoo.plaf.noire.NoireLookAndFeel");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedLookAndFeelException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		Window.getInstance();
+		
+		FrameConnection connection = new FrameConnection();
+		connection.setVisible(true);
+		
+		// read ? not tested
+		ClientListener cl = new ClientListener();
+
+		Thread t = new Thread( cl );
+		t.start();
 			
 	}
 

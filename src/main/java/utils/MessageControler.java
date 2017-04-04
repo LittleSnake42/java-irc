@@ -10,7 +10,13 @@ import serial.MessageFromServer;
 import serial.MessageToServer;
 
 // rename MainController
-
+/*
+ *  connect() method will create
+ *  and start a new thread which will listen for server responses.
+ *  As soon as it will receive a response it will notify all the  registered listeners.
+ *  So in order to receive asynchronously the server responses 
+ * you will have to register a listener using register(SomeListener) method.
+ */
 public class MessageControler {
 
 	// Global variables

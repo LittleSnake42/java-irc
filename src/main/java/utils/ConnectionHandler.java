@@ -25,7 +25,7 @@ public class ConnectionHandler {
 	// Read
 	private InputStream in        = null;
 	private InputStreamReader isr = null;
-	private BufferedReader br     = null;
+	protected BufferedReader br     = null;
 	
 	public boolean isConnectionOpened = false;
 
