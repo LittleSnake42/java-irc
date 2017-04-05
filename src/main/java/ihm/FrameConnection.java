@@ -16,7 +16,7 @@ import javax.swing.JTextField;
 public class FrameConnection extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private JLabel labelTitle,labelNickname,labelIpServer;
+	private JLabel labelNickname,labelIpServer;
 	private JTextField nickname,ipServer;
 	private JButton validate;
 
@@ -29,8 +29,6 @@ public class FrameConnection extends JFrame {
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		this.setResizable(false);
-	
-		labelTitle = new JLabel("CONNECTION");
 		
 		labelNickname = new JLabel("Nickname");
 		nickname = new JTextField();
@@ -38,14 +36,11 @@ public class FrameConnection extends JFrame {
 		labelIpServer = new JLabel("IP Server");
 		ipServer = new JTextField();
 		
-		validate = new JButton("OK");
+		validate = new JButton("Login");
 		
 		
 		Container content = this.getContentPane();
 		content.setLayout(null);
-		
-		content.add(labelTitle);
-		labelTitle.setBounds(150, 10, 100, 20);
 		
 		content.add(labelNickname);
 		labelNickname.setBounds(30, 50, 100, 20);

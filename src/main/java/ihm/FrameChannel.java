@@ -103,8 +103,9 @@ public class FrameChannel extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			
 			dispose();
-			FrameConnection window = new FrameConnection();
-			window.setVisible(true);
+			Login login = new Login();
+			login.setVisible(true);
+			login.setLocationRelativeTo(null);
 			
 		}
 	}

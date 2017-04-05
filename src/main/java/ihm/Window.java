@@ -41,28 +41,27 @@ import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
-
 /*
  * This class is the graphical interface for displaying chat messages
  */
 
 public class Window extends JFrame {
-	
+
 	private static final long serialVersionUID = 1L;
-	private JPanel mainPanel, panelTop, panelButtons, panelCenter, panelRight, panelBottom;
+	private JPanel mainPanel, panelTop, panelButtons, panelCenter, panelRight,
+			panelBottom;
 	private JTextPane screen, textField;
 	private JComboBox<?> listSmileys;
 	private JButton buttonSend, buttonChannel, buttonLogout;
 	private StyledDocument sDoc;
 	private Style defaut, styleCyan, styleRed;
 	private int pos = 0;
-	
+
 	public ImageIcon icon = new ImageIcon("swag.jpg", "Titre");
 
 	private static Window INSTANCE = new Window();
 
 	private Window() {
-	
 		this.setTitle("Client IRC");
 
 		this.setMinimumSize(new Dimension(500, 300));
@@ -72,44 +71,39 @@ public class Window extends JFrame {
 
 		initComponents();
 
-		this.setContentPane(mainPanel);    
-
+		this.setContentPane(mainPanel);
 	}
-	
 
 	public static Window getInstance() {
 		return INSTANCE;
 	}
-	
+
 	// This method allow to init components
-	private void initComponents(){
-		
+	private void initComponents() {
+
 		// create panels
 		mainPanel = new JPanel();
 		panelTop = new JPanel();
 		panelBottom = new JPanel();
 		panelCenter = new JPanel();
 		panelRight = new JPanel();
-		
+
 		// layout
 		mainPanel.setLayout(new BorderLayout());
 		panelTop.setLayout(new BoxLayout(panelTop, BoxLayout.LINE_AXIS));
 		panelBottom.setLayout(new BorderLayout());
 		panelCenter.setLayout(new BorderLayout());
 		panelRight.setLayout(new BorderLayout());
-		
-		
+
 		/*
 		 * TOP panel components
 		 */
 		buttonChannel = new JButton("Change channel");
 		buttonLogout = new JButton("Logout");
 
-
 		panelTop.add(buttonChannel);
 		panelTop.add(buttonLogout);
-		
-		
+
 		/*
 		 * BOTTOM panel components
 		 */
@@ -123,121 +117,120 @@ public class Window extends JFrame {
 		};
 		
 		listSmileys = new JComboBox<Object>(emoticon);
-		listSmileys.setPreferredSize(new Dimension(60,30));
-		
+		listSmileys.setPreferredSize(new Dimension(60, 30));
+
 		buttonSend = new JButton("SEND");
-		
+
 		// add combo and button "SEND" to the panel buttons
 		panelButtons = new JPanel();
 		panelButtons.add(listSmileys);
 		panelButtons.add(buttonSend);
-		
+
 		// add components to the panel bottom
 		panelBottom.add(textField, BorderLayout.CENTER);
 		panelBottom.add(panelButtons, BorderLayout.EAST);
-		panelBottom.setBorder(BorderFactory.createEmptyBorder(1,1,1,1));
-		
-		
+		panelBottom.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
+
 		/*
 		 * CENTER panel components
 		 */
 		screen = new JTextPane();
 		screen.setSize(100, 100);
 		screen.setEditable(false);
-		
+
 		defaut = screen.getStyle("default");
-		
+
 		styleCyan = screen.addStyle("style1", defaut);
 		StyleConstants.setForeground(styleCyan, Color.CYAN);
-	    StyleConstants.setFontFamily(styleCyan, "Comic sans MS");
-	    
-	    styleRed = screen.addStyle("style2", styleCyan);
-	    StyleConstants.setForeground(styleRed, Color.RED);
-	   	    
-	    sDoc = (StyledDocument)screen.getDocument();
-	    
-	    panelCenter.add(screen);
-		
-	    
+		StyleConstants.setFontFamily(styleCyan, "Comic sans MS");
+
+		styleRed = screen.addStyle("style2", styleCyan);
+		StyleConstants.setForeground(styleRed, Color.RED);
+
+		sDoc = (StyledDocument) screen.getDocument();
+
+		panelCenter.add(screen);
+
 		/*
 		 * Main panel
 		 */
-	    // add panels to main panel
+		// add panels to main panel
 		mainPanel.add(new JScrollPane(panelTop), BorderLayout.NORTH);
-	    mainPanel.add(new JScrollPane(panelCenter), BorderLayout.CENTER);
-	    mainPanel.add(new JScrollPane(panelRight), BorderLayout.EAST);
-	    mainPanel.add(panelBottom, BorderLayout.SOUTH);
-		
-	    
-	   /*
-	    *  add listeners
-	    */
-	    buttonChannel.addActionListener(new ChannelListener());
+		mainPanel.add(new JScrollPane(panelCenter), BorderLayout.CENTER);
+		mainPanel.add(new JScrollPane(panelRight), BorderLayout.EAST);
+		mainPanel.add(panelBottom, BorderLayout.SOUTH);
+
+		/*
+		 * add listeners
+		 */
+		buttonChannel.addActionListener(new ChannelListener());
 		buttonLogout.addActionListener(new LogoutListener());
-	 	listSmileys.addActionListener(new ItemAction());
-	 	buttonSend.addActionListener(new SendListener());
-	 	textField.addKeyListener(new keyboardListener());
-	 	
-		
-	    this.addWindowListener( new WindowAdapter() {
+		listSmileys.addActionListener(new ItemAction());
+		buttonSend.addActionListener(new SendListener());
+		textField.addKeyListener(new keyboardListener());
+
+		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				closeFrame();
 			}
 		});
-	}	
-	
+	}
+
 	/*
 	 * Methods
 	 */
-	
 
+	// this method allow to request a confirmation before closing the
+	// application
 	public void closeFrame() {
+		ImageIcon imageQuestion = new ImageIcon("image/question.png");
 		int answer = JOptionPane.showConfirmDialog(this,
-                "Are you sure you wish to close? ",
-                "Confirmation",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE);
-		if(answer == JOptionPane.YES_OPTION ){
+				"Are you sure you wish to close? ", "Confirmation",
+				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
+				imageQuestion);
+		if (answer == JOptionPane.YES_OPTION) {
 			dispose();
 		}
 	}
 
-	
 	/*
 	 * Class Listener
 	 */
-	
+
 	// class listener button "Change channel"
-	public class ChannelListener implements ActionListener{
+	public class ChannelListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			
+
 			dispose();
-			FrameChannel window = new FrameChannel();
-			window.setVisible(true);
-			
+			Channel channel = new Channel();
+			channel.setVisible(true);
+			channel.setLocationRelativeTo(null);
+
 		}
 
 	}
-	
+
 	// class listener button "Logout"
-	public class LogoutListener implements ActionListener{
+	public class LogoutListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			
+
 			dispose();
-			FrameConnection window = new FrameConnection();
-			window.setVisible(true);
-			
+			Login login = new Login();
+			login.setVisible(true);
+			login.setLocationRelativeTo(null);
+
 		}
 	}
-
 
 	// class listener smiley
 	class ItemAction implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 
-			//textField.setText(textField.getText() + " " + listSmileys.getSelectedItem());
-			String smiley[] = {":grinning:", ":grin:", ":laughing:"};
-			textField.setText(textField.getText() + smiley[listSmileys.getSelectedIndex()] + " ");
+			// textField.setText(textField.getText() + " " +
+			// listSmileys.getSelectedItem());
+			String smiley[] = { ":grinning:", ":grin:", ":laughing:" };
+			textField.setText(textField.getText()
+					+ smiley[listSmileys.getSelectedIndex()] + " ");
 			// focus
 			textField.requestFocus();
 		}
@@ -264,9 +257,10 @@ public class Window extends JFrame {
 				// screen.append(textField.getText() + "\n");
 
 			}
-			
-	        try {
-				sDoc.insertString(pos, textField.getText(), defaut); pos+=textField.getText().length();
+
+			try {
+				sDoc.insertString(pos, textField.getText(), defaut);
+				pos += textField.getText().length();
 			} catch (BadLocationException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -325,10 +319,9 @@ public class Window extends JFrame {
 						e.printStackTrace();
 					}
 
-				}
-
 				textField.setText("");
 				textField.requestFocus();
+			}
 			}
 		}
 

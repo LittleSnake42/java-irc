@@ -8,7 +8,7 @@ public class Main {
 	public static void main(String[] args) {
 
 		Window window = Window.getInstance();
-		
+
 		try {
 			UIManager.setLookAndFeel("com.jtattoo.plaf.noire.NoireLookAndFeel");
 		} catch (ClassNotFoundException e) {
@@ -26,9 +26,10 @@ public class Main {
 		}
 
 		Window.getInstance();
-		
-		Window connection = new Window();
-		connection.setVisible(true);
-		
+
+		Login login = new Login();
+		login.setVisible(true);
+		login.setLocationRelativeTo(null);
+
 	}
 }
