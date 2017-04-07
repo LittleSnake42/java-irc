@@ -31,10 +31,6 @@ public class Launcher {
 		// #EXIT ON QUITTE LE SERVEUR 
 
 		//TODO check si le serveur est ok (fermeture intempestive) -> thread qui lit
-		
-		//TODO connect -> si username non valide !!
-
-		//TODO logs fichiers
 
 		
 		try {
@@ -58,11 +54,11 @@ public class Launcher {
 		FrameConnection connection = new FrameConnection();
 		connection.setVisible(true);
 		
-		// read ? not tested
-		ClientListener cl = new ClientListener();
-
-		Thread t = new Thread( cl );
-		t.start();
+//		// read ? not tested
+//		ClientListener cl = new ClientListener();
+//
+//		Thread t = new Thread( cl );
+//		t.start();
 			
 	}
 
