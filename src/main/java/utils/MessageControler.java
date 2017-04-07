@@ -18,22 +18,17 @@ public class MessageControler {
 	private String currentChannel = null;
 	private static MessageControler INSTANCE = new MessageControler();
 
-
-	
 	// Components
 	private ConnectionHandler handler = ConnectionHandler.getInstance();
 	private Window window = Window.getInstance();
 
-
 	private MessageControler() {
 		// do nothing
 	}
-	
-	public static MessageControler getInstance()
-    {
-        return INSTANCE;
-    }
-	
+
+	public static MessageControler getInstance() {
+		return INSTANCE;
+	}
 
 	/**
 	 * Point d'entrée, les autres fct sont en privé
@@ -48,23 +43,19 @@ public class MessageControler {
 
 		// Command ?
 		if (msg.isCommand() && msg.isValidCommand()) {
-			System.out.println("msg is command and is valid\n");
-			//log.info("Rentr�e dans la commande",msg.getPost(),msg.getNickName(),msg.getArgs());
 			processCommand(msg);
 		} else if (msg.isCommand()) { // invalid command -> so maybe a message
 										// starting by # ?
 
 			if (this.canSendMessage()) {
 				try {
-					//log.info("trying to message send");
-					System.out.println("sending msg with #\n");
+
 					this.send(msg);
-					
+
 					MessageFromServer answer = this.read();
 					this.processServerMessage(answer);
 				} catch (ConnectionHandlerException e) {
-					// TODO Auto-generated catch block
-					//log.error("Impossible to send the message",e);
+
 					e.printStackTrace();
 				}
 			} else {
@@ -88,12 +79,16 @@ public class MessageControler {
 					e.printStackTrace();
 				}
 			} else {
-				if (this.handler.isConnectionOpened)
-					throw new MessageControlerException(
-							"You are not connected to a channel, you can't send message now. Try #JOIN CHANNEL_NAME");
-				else
-					throw new MessageControlerException(
-							"You are not connected to a server. Try #CONNECT SERVER_IP NICKNAME");
+				if (this.handler.isConnectionOpened) {
+					String message = "You are not connected to a channel, you can't send message now. Try #JOIN CHANNEL_NAME";
+					// throw new MessageControlerException(message);
+					this.window.displayError(message);
+				} else {
+					String message = "You are not connected to a server. Try #CONNECT SERVER_IP NICKNAME";
+					this.window.displayError(message);
+					// throw new MessageControlerException(message);
+
+				}
 
 			}
 
@@ -137,13 +132,13 @@ public class MessageControler {
 		boolean isFromServer = msg.isFromServer();
 		// case 1 Server
 		if (isFromServer) {
-			window.displayError(msg.getNickname() +" # "+msg.getPost());
-			System.err.println(msg.getNickname() +" # "+msg.getPost());
+			window.displayInfo(msg.getNickname() + " # " + msg.getPost());
+			// System.err.println(msg.getNickname() +" # "+msg.getPost());
 		}
 		// case 2 User
 		else {
-			window.displayMessage(msg.getNickname()+ " > " + msg.getPost());
-			System.err.println(msg.getNickname()+ " > " + msg.getPost());
+			window.displayMessage(msg.getNickname() + " > " + msg.getPost());
+			// System.err.println(msg.getNickname()+ " > " + msg.getPost());
 		}
 	}
 
@@ -156,13 +151,13 @@ public class MessageControler {
 
 		// Case #CONNECT : we expect 2 args (ip, nick)
 		if (command.toUpperCase().equals("#CONNECT")) {
-			System.out.println("command connect detectée\n");
+			// System.out.println("command connect detectée\n");
 			if (args.size() == 2) {
 				String serverIP = args.get(0);
 				String nickname = args.get(1);
-				
-				System.out.println("ip : "+serverIP);
-				System.out.println("nick : " + nickname);
+
+				// System.out.println("ip : "+serverIP);
+				// System.out.println("nick : " + nickname);
 
 				// check if args are OK
 				boolean isValidIP = this.isValidIpAddress(serverIP);
@@ -176,23 +171,26 @@ public class MessageControler {
 					try {
 						this.connectToServer(msg);
 					} catch (ConnectionHandlerException e) {
-						System.err.println(e);
-						throw new MessageControlerException(
-								"An error occured attempting to connect to IP \""
-										+ serverIP + "\" with nickname \""
-										+ nickname + "\".", e);
+						// System.err.println(e);
+						String message = "An error occured attempting to connect to IP \""
+								+ serverIP
+								+ "\" with nickname \""
+								+ nickname
+								+ "\".";
+						this.window.displayError(message);
+						//throw new MessageControlerException(message, e);
 					}
 				} else {
-					System.err.println("ERR : nickname or ip not valid");
+					this.window.displayError("ERROR : nickname or ip not valid");
 				}
 
 			} else {
-				throw new MessageControlerException(
-						"#CONNECT expects two args, the target server ip and a nickname.");
+				String message = "#CONNECT expects two args, the target server ip and a nickname.";
+				//throw new MessageControlerException(message);
+				this.window.displayError(message);
 			}
 
 		} else if (command.toUpperCase().equals("#JOIN")) {
-			System.out.println("command join detectée\n");
 
 			if (args.size() == 1) {
 				String channel = args.get(0);
@@ -203,13 +201,15 @@ public class MessageControler {
 					this.connectToChannel(msg);
 				} catch (ConnectionHandlerException e) {
 					// TODO Auto-generated catch block
-					throw new MessageControlerException(
-							"Unabled to join channel \"" + channel + "\".", e);
+					String message = "Unabled to join channel \"" + channel + "\".";
+					this.window.displayError(message);
+					//throw new MessageControlerException(message, e);
 				}
 
 			} else {
-				throw new MessageControlerException(
-						"#JOIN expects 1 args, the target channel name.");
+				String message = "#JOIN expects 1 args, the target channel name.";
+				this.window.displayError(message);
+				//throw new MessageControlerException(message);
 			}
 
 		}
@@ -219,9 +219,9 @@ public class MessageControler {
 				// this.disconnectFromChannel(msg);
 				this.disconnectFromServer(msg);
 			} catch (ConnectionHandlerException e) {
-				// TODO Auto-generated catch block
-				throw new MessageControlerException(
-						"problem while quitting the application");
+				String message = "Error attempting to #quit";
+				this.window.displayError(message);
+				//throw new MessageControlerException(message, e);
 			}
 
 		}
@@ -232,12 +232,13 @@ public class MessageControler {
 				this.disconnectFromServer(msg);
 				// QUit global app;
 			} catch (ConnectionHandlerException e) {
-				// TODO Auto-generated catch block
-				throw new MessageControlerException(
-						"problem while quitting the channel");
+				String message = "Error attempting to #quit";
+				this.window.displayError(message);
+				//throw new MessageControlerException(message, e);
 			}
 		} else {
-			throw new MessageControlerException("Not a valid command. RTFM :)");
+			window.displayError("WTF !? RTMF Bitch, unsupported command!");
+			//throw new MessageControlerException("Not a valid command. RTFM :)");
 		}
 	}
 
@@ -277,42 +278,29 @@ public class MessageControler {
 
 		String serverIP = msg.getArgs().get(0);
 		String nickname = msg.getArgs().get(1);
-		
+
 		msg.setNickName(nickname);// update the nickame
 		this.nickname = nickname;
 		// connect to server
-		if (this.handler.isConnectionOpened)
-			throw new ConnectionHandlerException("Already Connected !");
-
+		if (this.handler.isConnectionOpened) {
+			this.window.displayError("Ooops, seems you're already connected ....");
+			//throw new ConnectionHandlerException("Already Connected !");
+		}
 		handler.openConnection(serverIP);
 
 		// write msg
 		this.send(msg);
 
-		// read response -> wait x second, then timeout
-		// is username ok etc...
-		//MessageFromServer answer = this.read();
-		//this.processServerMessage(answer);
- System.out.println("i dont read msg from serv but start a thread, do it ?");
- 
- 		Thread t = new Thread(new ClientListener());
- 		t.start();
-		
-		
+		Thread t = new Thread(new ClientListener());
+		t.start();
+
 	}
 
 	private void connectToChannel(MessageToServer msg)
 			throws ConnectionHandlerException {
 
 		this.send(msg);
-
-		// Need to check if ok
-//		MessageFromServer answer = this.read();
-//		this.processServerMessage(answer);
-//		// set channel name for global use
 		this.currentChannel = msg.getArgs().get(0);
-		
-		System.out.println("Connected to channel " + this.currentChannel);
 
 	}
 
@@ -326,30 +314,27 @@ public class MessageControler {
 		// write msg
 		this.send(msg);
 
-		//MessageFromServer answer = this.read();
-		//this.processServerMessage(answer);
 		// close connection
 		this.handler.closeConnection();
-		
-		System.out.println("connection closed");
 
+		this.window.displayInfo("Connection with server closed.");
 	}
 
 	/*
 	 * READ & Write
 	 */
 	private void send(MessageToServer msg) throws ConnectionHandlerException {
-		
+
 		msg.setNickName(this.nickname);// update the nickame
 
-		//System.out.println("WRiting : " + msg.toString());
+		// System.out.println("WRiting : " + msg.toString());
 		this.handler.write(msg.toString());
 	}
 
 	public MessageFromServer read() throws ConnectionHandlerException {
 		String s = this.handler.read();
 
-		//System.out.println("Read string : " + s);
+		// System.out.println("Read string : " + s);
 		MessageFromServer msg = new MessageFromServer(s);
 		return msg;
 	}

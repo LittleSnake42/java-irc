@@ -2,6 +2,11 @@ package utils;
 
 public class ConnectionHandlerException extends Exception {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public ConnectionHandlerException() {
 		// TODO Auto-generated constructor stub
 	}

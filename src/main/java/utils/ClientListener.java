@@ -1,7 +1,5 @@
 package utils;
 
-import java.awt.Window;
-
 import serial.MessageFromServer;
 
 public class ClientListener implements Runnable{
@@ -11,8 +9,6 @@ public class ClientListener implements Runnable{
 	}
 	
 	public void run() {
-		
-		ConnectionHandler ch = ConnectionHandler.getInstance();
 		
 		MessageControler mc = MessageControler.getInstance();
 		

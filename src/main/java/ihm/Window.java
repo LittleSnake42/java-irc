@@ -2,14 +2,11 @@ package ihm;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -55,6 +52,7 @@ public class Window extends JFrame {
 		initComposant();
 
 		this.setContentPane(container);
+		this.displaySwag();
 		// this.setVisible(true);
 	}
 
@@ -167,8 +165,18 @@ public class Window extends JFrame {
 
 	// method to display an error message
 	public void displayError(String message) {
-		//JOptionPane jop = new JOptionPane();
+
 		JOptionPane.showMessageDialog(null, message, "Erreur",
-				JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.ERROR_MESSAGE);
+	}
+	
+	public void displayInfo(String message) {
+		JOptionPane.showMessageDialog(null, message, "Just to let you know ...", JOptionPane.INFORMATION_MESSAGE);
+	}
+	
+	public void displaySwag() {
+		screen.insertIcon(new ImageIcon("/java-irc/src/main/java/ihm/swag.jpg"));
+		System.out.println("ok");
+		
 	}
 }
