@@ -1,7 +1,6 @@
 package ihm;
 
 
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,10 +18,12 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import ihm.FrameConnection.ValidateConnectionListener;
-
 public class Login extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField textFieldNickname;
 	private JTextField textFieldServer;
@@ -32,14 +33,14 @@ public class Login extends JFrame {
 	 * Create the frame to login
 	 */
 	public Login() {
-		setTitle("Client IRC");
-		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		setResizable(false);
-		setBounds(100, 100, 460, 261);
+		this.setTitle("Client IRC");
+		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		this.setResizable(false);
+		this.setBounds(100, 100, 460, 261);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		this.setContentPane(contentPane);
 		
 		JButton btnLogin = new JButton("Login");
 		Icon imgOk = new ImageIcon("image/ok.png");

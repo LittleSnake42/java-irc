@@ -94,9 +94,8 @@ public class Channel extends JFrame {
 				JOptionPane.showMessageDialog(null, "Channel is correct", "Successfully connected", JOptionPane.INFORMATION_MESSAGE, imgInfo);
 				
 				dispose();
-				Window window = Window.getInstance();
-				window.setVisible(true);
-				window.setLocationRelativeTo(null);
+				Chat chat = Chat.getInstance();
+				chat.setVisible(true);
 				
 			}
 			
