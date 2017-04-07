@@ -61,8 +61,9 @@ public class MessageControler {
 			} else {
 				// if no connected to server nor channel -> error, else is a
 				// message
-				throw new MessageControlerException("Unknown command \""
-						+ msg.getPost() + "\".");
+				String message = "Unknown command \""+ msg.getPost() + "\".";
+				//throw new MessageControlerException(message);
+				this.window.displayError(message);
 			}
 		} else { // Message
 
@@ -72,8 +73,8 @@ public class MessageControler {
 			if (this.canSendMessage()) {
 				try {
 					this.send(msg);
-					MessageFromServer answer = this.read();
-					this.processServerMessage(answer);
+					//MessageFromServer answer = this.read();
+					//this.processServerMessage(answer);
 				} catch (ConnectionHandlerException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
