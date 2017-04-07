@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -36,11 +35,9 @@ public class Window extends JFrame {
 	private JTextField textField = new JTextField();
 	private JComboBox<?> combo = new JComboBox<Object>();
 	private JButton button = new JButton("Send");
-	
-	
+
 	public ImageIcon icon = new ImageIcon("swag.jpg", "Titre");
 
-	
 	private static Window INSTANCE = new Window();
 
 	private Window() {
@@ -52,7 +49,8 @@ public class Window extends JFrame {
 		initComposant();
 
 		this.setContentPane(container);
-		this.displaySwag();
+		ImageIcon img = new ImageIcon("images/swag.jpg");
+		this.setIconImage(img.getImage());
 		// this.setVisible(true);
 	}
 
@@ -65,7 +63,7 @@ public class Window extends JFrame {
 
 		// screen
 		screen.setEditable(false);
-		//screen.setLineWrap(true);
+		// screen.setLineWrap(true);
 
 		users.setPreferredSize(new Dimension(150, 190));
 		users.setEditable(false);
@@ -97,7 +95,7 @@ public class Window extends JFrame {
 		bottom.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
 		container.add(new JScrollPane(screen), BorderLayout.CENTER);
-		container.add(new JScrollPane(users), BorderLayout.EAST);
+		//container.add(new JScrollPane(users), BorderLayout.EAST);
 		container.add(bottom, BorderLayout.SOUTH);
 	}
 
@@ -119,7 +117,7 @@ public class Window extends JFrame {
 			if (textField.getText().equals("")) {
 
 			} else {
-				
+
 				// Process the message
 				MessageControler mc = MessageControler.getInstance();
 				try {
@@ -129,7 +127,7 @@ public class Window extends JFrame {
 					e.printStackTrace();
 				}
 				// append it to chat
-				//screen.append(textField.getText() + "\n");
+				// screen.append(textField.getText() + "\n");
 			}
 
 			textField.setText("");
@@ -140,9 +138,9 @@ public class Window extends JFrame {
 	// method to display messages on the screen
 	public void displayMessage(String message) {
 		StyledDocument document = (StyledDocument) screen.getDocument();
-		
+
 		screen.insertIcon(new ImageIcon("/java-irc/src/main/java/ihm/swag.jpg"));
-		
+
 		try {
 			document.insertString(document.getLength(), message + "\n", null);
 		} catch (BadLocationException e) {
@@ -150,7 +148,7 @@ public class Window extends JFrame {
 			e.printStackTrace();
 		}
 
-//		screen.append(message + "\n");
+		// screen.append(message + "\n");
 	}
 
 	// method to display online users
@@ -169,14 +167,10 @@ public class Window extends JFrame {
 		JOptionPane.showMessageDialog(null, message, "Erreur",
 				JOptionPane.ERROR_MESSAGE);
 	}
-	
+
 	public void displayInfo(String message) {
-		JOptionPane.showMessageDialog(null, message, "Just to let you know ...", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(null, message,
+				"Just to let you know ...", JOptionPane.INFORMATION_MESSAGE);
 	}
-	
-	public void displaySwag() {
-		screen.insertIcon(new ImageIcon("/java-irc/src/main/java/ihm/swag.jpg"));
-		System.out.println("ok");
-		
-	}
+
 }
