@@ -126,7 +126,7 @@ public class MessageControler {
 		return msg;
 	}
 
-	private void processServerMessage(MessageFromServer msg) {
+	protected void processServerMessage(MessageFromServer msg) {
 
 		// check is valid ?
 		boolean isValid = msg.isValid();
@@ -291,9 +291,14 @@ public class MessageControler {
 
 		// read response -> wait x second, then timeout
 		// is username ok etc...
-		MessageFromServer answer = this.read();
-		this.processServerMessage(answer);
-
+		//MessageFromServer answer = this.read();
+		//this.processServerMessage(answer);
+ System.out.println("i dont read msg from serv but start a thread, do it ?");
+ 
+ 		Thread t = new Thread(new ClientListener());
+ 		t.start();
+		
+		
 	}
 
 	private void connectToChannel(MessageToServer msg)
@@ -302,9 +307,9 @@ public class MessageControler {
 		this.send(msg);
 
 		// Need to check if ok
-		MessageFromServer answer = this.read();
-		this.processServerMessage(answer);
-		// set channel name for global use
+//		MessageFromServer answer = this.read();
+//		this.processServerMessage(answer);
+//		// set channel name for global use
 		this.currentChannel = msg.getArgs().get(0);
 		
 		System.out.println("Connected to channel " + this.currentChannel);
@@ -321,8 +326,8 @@ public class MessageControler {
 		// write msg
 		this.send(msg);
 
-		MessageFromServer answer = this.read();
-		this.processServerMessage(answer);
+		//MessageFromServer answer = this.read();
+		//this.processServerMessage(answer);
 		// close connection
 		this.handler.closeConnection();
 		
@@ -349,10 +354,3 @@ public class MessageControler {
 		return msg;
 	}
 }
-/*
- * a conserver voir si on peut de faire. // We split this message to analyze if
- * we got a "error" String[] splitted = msg.split(" "); // We check if we get a
- * message from the server if yes we create a error message if (splitted[0]==) {
- * // Here we create the windows that show up to warn us we got an error from
- * the server. } // Here we can put what we will write on the windows.
- */

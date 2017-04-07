@@ -119,7 +119,7 @@ public class ConnectionHandler {
 					bw.flush();
 					//while checking for an eventual error
 					
-					System.out.println("message send : \"" + s + "\".");
+					System.out.println("message send test: \"" + s + "\".");
 					
 				} catch (IOException e) {
 					throw new ConnectionHandlerException("Unabled to write string \"" + s + "\".", e);
