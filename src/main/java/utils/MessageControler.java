@@ -1,7 +1,6 @@
 package utils;
 
-import ihm.Window;
-
+import ihm.Chat;
 import java.util.ArrayList;
 
 import org.apache.commons.validator.routines.InetAddressValidator;
@@ -26,7 +25,7 @@ public class MessageControler {
 
 	// Components
 	private ConnectionHandler handler = ConnectionHandler.getInstance();
-	private Window window = Window.getInstance();
+	private Chat window = Chat.getInstance();
 
 	private MessageControler() {
 		// do nothing
