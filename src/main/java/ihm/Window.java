@@ -3,8 +3,12 @@ package ihm;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Event;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -77,6 +81,7 @@ public class Window extends JFrame {
 		// add listeners
 		combo.addActionListener(new ItemAction());
 		button.addActionListener(new BoutonListener());
+		textField.addKeyListener(new keyboardListener());
 
 		JPanel bottom = new JPanel();
 		bottom.setLayout(new BorderLayout());
@@ -171,6 +176,37 @@ public class Window extends JFrame {
 	public void displayInfo(String message) {
 		JOptionPane.showMessageDialog(null, message,
 				"Just to let you know ...", JOptionPane.INFORMATION_MESSAGE);
+	}
+	
+	class keyboardListener implements KeyListener {
+
+		public void keyTyped(KeyEvent eKey) {
+			if (eKey.getKeyChar() == Event.ENTER) {
+				if (!textField.getText().equals("")) {
+
+					// Process the message
+					MessageControler mc = MessageControler.getInstance();
+					try {
+						mc.process(textField.getText());
+					} catch (MessageControlerException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+				}
+
+				textField.setText("");
+				textField.requestFocus();
+			}
+		}
+
+		public void keyPressed(KeyEvent e) {
+
+		}
+
+		public void keyReleased(KeyEvent e) {
+
+		}
 	}
 
 }
