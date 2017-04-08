@@ -71,6 +71,7 @@ public class ConnectionHandler {
 	public void closeConnection() throws ConnectionHandlerException {
 		try {
 			// write
+			this.isConnectionOpened = false;
 			//Check if the bufferedwritter is open if yes we close it.
 			if (this.bw != null) {
 				this.bw.close();
