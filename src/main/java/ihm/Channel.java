@@ -19,14 +19,15 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
-
+import utils.MessageControler;
+import utils.MessageControlerException;
 import ihm.Login.ValidateConnectionListener;
 
 public class Channel extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textFieldChannel;
-
+	private MessageControler msg = MessageControler.getInstance();
 
 	/**
 	 * Create the frame to choose the channel
@@ -80,9 +81,14 @@ public class Channel extends JFrame {
 	public class ChannelListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			String strChannel;
-			
+		
 			strChannel = textFieldChannel.getText();
-			
+			try {
+				msg.process("#join " + strChannel);
+			} catch (MessageControlerException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			if (strChannel.isEmpty()) {
 				
 				ImageIcon imgError = new ImageIcon("image/error.png");

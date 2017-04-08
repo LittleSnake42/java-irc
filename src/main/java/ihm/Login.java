@@ -17,6 +17,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import utils.MessageControler;
+import utils.MessageControlerException;
 
 public class Login extends JFrame {
 
@@ -27,12 +29,13 @@ public class Login extends JFrame {
 	private JPanel contentPane;
 	private JTextField textFieldNickname;
 	private JTextField textFieldServer;
-
+	private MessageControler msg = MessageControler.getInstance();
 
 	/**
 	 * Create the frame to login
 	 */
 	public Login() {
+	
 		this.setTitle("Client IRC");
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		this.setResizable(false);
@@ -89,11 +92,17 @@ public class Login extends JFrame {
 	
 	public class ValidateConnectionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			String strNickname, strIpServer;
 			
+			String strNickname, strIpServer;
 			strNickname = textFieldNickname.getText();
 			strIpServer = textFieldServer.getText();
-			
+			try {
+				msg.process("#connect " + strIpServer + " " + strNickname);
+			} catch (MessageControlerException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			/*
 			if (strNickname.isEmpty() || strIpServer.isEmpty()) {
 				
 				ImageIcon imgError = new ImageIcon("image/error.png");
@@ -103,12 +112,12 @@ public class Login extends JFrame {
 				
 				ImageIcon imgInfo = new ImageIcon("image/info.png");
 				JOptionPane.showMessageDialog(null, "Nickname or IP server is correct", "Successfully connected", JOptionPane.INFORMATION_MESSAGE, imgInfo);
-				
+				*/
 				dispose();
 				Channel channel = new Channel();
 				channel.setVisible(true);
 				channel.setLocationRelativeTo(null);
-			}
+			
 			
 		}
 	}
