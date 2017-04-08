@@ -1,14 +1,9 @@
 package launcher;
 
-import ihm.FrameConnection;
-import ihm.Window;
-
-import org.apache.log4j.Logger;
-
+import ihm.Chat;
+import ihm.Login;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-
-import utils.ClientListener;
 
 public class Launcher {
 
@@ -49,10 +44,10 @@ public class Launcher {
 			e.printStackTrace();
 		}
 
-		Window.getInstance();
+		Chat.getInstance();
 		
-		FrameConnection connection = new FrameConnection();
-		connection.setVisible(true);
+		Login login = new Login();
+		login.setVisible(true);
 		
 //		// read ? not tested
 //		ClientListener cl = new ClientListener();

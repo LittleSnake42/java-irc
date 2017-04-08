@@ -199,6 +199,11 @@ public class Chat extends JFrame {
 		JOptionPane.showMessageDialog(null, message, "Erreur", JOptionPane.ERROR_MESSAGE);
 	}
 	
+	public void displayInfo(String message) {
+		JOptionPane.showMessageDialog(null, message,
+				"Just to let you know ...", JOptionPane.INFORMATION_MESSAGE);
+	}
+	
 	// this method allow to request a confirmation before closing the application
 	public void closeFrame() {
 		ImageIcon imageQuestion = new ImageIcon("image/question.png");
