@@ -326,6 +326,7 @@ public class MessageControler {
 		this.handler.closeConnection();
 
 		this.window.displayInfo("Connection with server closed.");
+		
 	}
 
 	/*

@@ -113,11 +113,19 @@ public class Channel extends JFrame {
 	
 	public class LogoutListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
-			
+			// Le soucis est que le client continue de lire sur le serveur et même en mettant le bool à faux il continue à lire
+			// Le problème vient de la méthode read de MessageControler qui continue de lire indéfiniment...
+			try {
+				msg.process("#exit");
+				
+			} catch (MessageControlerException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		
 			dispose();
 			Login login = new Login();
 			login.setVisible(true);
-			
 		}
 	}
 	
