@@ -33,10 +33,12 @@ public class Channel extends JFrame {
 	 * Create the frame to choose the channel
 	 */
 	public Channel() {
-		setTitle("Chat IRC");
-		setResizable(false);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 460, 261);
+		this.setTitle("Chat IRC");
+		this.setResizable(false);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setBounds(100, 100, 460, 261);
+		this.setLocationRelativeTo(null);
+		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -115,7 +117,6 @@ public class Channel extends JFrame {
 			dispose();
 			Login login = new Login();
 			login.setVisible(true);
-			login.setLocationRelativeTo(null);
 			
 		}
 	}

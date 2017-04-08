@@ -40,6 +40,8 @@ public class Login extends JFrame {
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		this.setResizable(false);
 		this.setBounds(100, 100, 460, 261);
+		this.setLocationRelativeTo(null);
+		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(null);
@@ -116,8 +118,6 @@ public class Login extends JFrame {
 				dispose();
 				Channel channel = new Channel();
 				channel.setVisible(true);
-				channel.setLocationRelativeTo(null);
-			
 			
 		}
 	}
