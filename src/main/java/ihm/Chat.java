@@ -13,6 +13,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -21,6 +23,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -75,6 +78,10 @@ public class Chat extends JFrame {
 		
 		JPanel panelTopEast = new JPanel();
 		panelTop.add(panelTopEast, BorderLayout.EAST);
+		
+		JLabel lblNickname = new JLabel("Nickname : ");
+		lblNickname.setFont(new Font("Tahoma", Font.BOLD, 14));
+		panelTop.add(lblNickname, BorderLayout.CENTER);
 		
 		JButton btnChannel = new JButton("Change channel");
 		btnChannel.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -132,7 +139,7 @@ public class Chat extends JFrame {
 		
 		JTextPane textPane = new JTextPane();
 		textPane.setEditable(false);
-		    JScrollPane sp = new JScrollPane(textPane);
+		JScrollPane sp = new JScrollPane(textPane);
 		panelCenter.add(sp);
 		
 		styleNormal = new SimpleAttributeSet();
@@ -140,33 +147,6 @@ public class Chat extends JFrame {
 		StyleConstants.setFontSize(styleNormal, 14);
 		
 		doc = textPane.getStyledDocument();
-		
-		/*try {
-			
-			
-			doc.insertString(doc.getLength(), "N-impn test qui va fonctionnerCeci est un test qui va fonctionnerCeci est un test qui va fonctionner"+"\n\n", styleNormal);
-			doc.insertString(doc.getLength(), "CecCeci est un test qui va fonctionnerCeci est un test qui va fonctionnerCeci est un test qui va fonctionnerr"+"\n", styleNormal);
-			
-			// The image must first be wrapped in a style
-		    Style grin = doc.addStyle("StyleName", null);
-		    StyleConstants.setIcon(grin, new ImageIcon("image/grin.png"));
-		    
-		    Style grinning = doc.addStyle("StyleName", null);
-		    StyleConstants.setIcon(grinning, new ImageIcon("image/grinning.png"));
-		    
-		    Style laughing = doc.addStyle("StyleName", null);
-		    StyleConstants.setIcon(laughing, new ImageIcon("image/laughing.png"));
-		 
-		    doc.insertString(doc.getLength(), "ignored text", grin);
-		    doc.insertString(doc.getLength(), "ignored text", grinning);
-		    doc.insertString(doc.getLength(), "ignored text", laughing);
-			doc.insertString(doc.getLength(), "\nCecCeci est un test qui va fonctionnerCeci est un test qui va fonctionnerCeci est un test qui va fonctionnerr"+"\n", styleNormal);
-
-				
-		}
-		catch (BadLocationException e) {
-			e.printStackTrace();
-		}*/
 		
 		this.addWindowListener( new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
@@ -186,6 +166,39 @@ public class Chat extends JFrame {
 	
 	// this method allow to display messages on the screen
 	public void displayMessage(String message) {
+		try {
+			doc.insertString(doc.getLength(), message + "\n", styleNormal);
+		} catch (BadLocationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// insert a emoji
+		//textPane.insertIcon(new ImageIcon("image/grinning.png"));
+		
+		/*
+		 * convert text to emoji
+		 * 
+		 *  Pattern pattern = Pattern.compile(":grin:");
+		 Matcher matcher = pattern.matcher(message);
+		 StringBuffer buffer = new StringBuffer();
+		 StringBuffer buffer2 = new StringBuffer();
+		 
+		 while (matcher.find()) {
+				 
+			 matcher.appendReplacement(buffer, "");
+			 
+			try {
+				doc.insertString(doc.getLength(), buffer.toString(), styleNormal);
+			} catch (BadLocationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			 textPane.insertIcon(new ImageIcon("image/grinning.png"));
+			 System.out.println("buffer :" + buffer.toString());
+		 }
+		 matcher.appendTail(buffer);
+		 * 
+		 */
 		
 	}
 
@@ -230,7 +243,6 @@ public class Chat extends JFrame {
 			dispose();
 			Channel channel = new Channel();
 			channel.setVisible(true);
-			channel.setLocationRelativeTo(null);
 			
 		}
 
@@ -243,7 +255,6 @@ public class Chat extends JFrame {
 			dispose();
 			Login login = new Login();
 			login.setVisible(true);
-			login.setLocationRelativeTo(null);
 			
 		}
 	}
@@ -283,10 +294,8 @@ public class Chat extends JFrame {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-
+				
 			}
-			
-			
 
 			textArea.setText("");
 			textArea.requestFocus();
@@ -307,13 +316,6 @@ public class Chat extends JFrame {
 					try {
 						mc.process(textArea.getText());
 					} catch (MessageControlerException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					// append it to chat
-					try {
-						doc.insertString(doc.getLength(), textArea.getText(), styleNormal);
-					} catch (BadLocationException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
