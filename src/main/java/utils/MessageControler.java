@@ -133,6 +133,8 @@ public class MessageControler {
 		boolean isFromServer = msg.isFromServer();
 		// case 1 Server
 		if (isFromServer) {
+			System.err.println("Debug:\nNick: " +msg.getNickname()+ "\nPost: " +msg.getPost()+"\n");
+			
 			window.displayInfo(msg.getNickname() + " # " + msg.getPost());
 			// System.err.println(msg.getNickname() +" # "+msg.getPost());
 		}
