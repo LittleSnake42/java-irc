@@ -43,10 +43,9 @@ public class ConnectionHandler {
 		// check if a socket is already opened
 		if (this.isConnectionOpened) {
 			throw new ConnectionHandlerException("You must close current connection before opening a new one.");
+			//APP . window .display error
 		}
 		try {
-			System.out.println("openingconnection");
-			//
 			this.socket = new Socket(InetAddress.getByName(ip), SERVER_PORT);
 			
 			//if socket not ok do something : msg err
@@ -59,8 +58,8 @@ public class ConnectionHandler {
 			this.in  = this.socket.getInputStream();
 			this.isr = new InputStreamReader(in, ENCODING);
 			this.br  = new BufferedReader(isr);
-			
-			this.isConnectionOpened = true;
+
+			this.isConnectionOpened = true; // APP 
 
 		} catch (IOException e) {
 			System.err.println(e.getMessage());
@@ -70,8 +69,6 @@ public class ConnectionHandler {
 	// This Method will be used with the pretty white cross on the red square when we have implemented this
 	public void closeConnection() throws ConnectionHandlerException {
 		try {
-			// write
-			this.isConnectionOpened = false;
 			//Check if the bufferedwritter is open if yes we close it.
 			if (this.bw != null) {
 				this.bw.close();

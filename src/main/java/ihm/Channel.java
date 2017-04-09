@@ -86,26 +86,15 @@ public class Channel extends JFrame {
 		
 			strChannel = textFieldChannel.getText();
 			try {
-				msg.process("#join " + strChannel);
+				msg.process("#JOIN " + strChannel);
 			} catch (MessageControlerException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			if (strChannel.isEmpty()) {
 				
-				ImageIcon imgError = new ImageIcon("image/error.png");
-			    JOptionPane.showMessageDialog(null, "Channel incorrect", "Erreur", JOptionPane.ERROR_MESSAGE, imgError);
-			
-			} else {
-				
-				ImageIcon imgInfo = new ImageIcon("image/info.png");				
-				JOptionPane.showMessageDialog(null, "Channel is correct", "Successfully connected", JOptionPane.INFORMATION_MESSAGE, imgInfo);
-				
-				dispose();
-				Chat chat = Chat.getInstance();
-				chat.setVisible(true);
-				
-			}
+			dispose();
+			Chat chat = Chat.getInstance();
+			chat.setVisible(true);
 			
 		}
 	}
@@ -113,10 +102,9 @@ public class Channel extends JFrame {
 	
 	public class LogoutListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
-			// Le soucis est que le client continue de lire sur le serveur et même en mettant le bool à faux il continue à lire
-			// Le problème vient de la méthode read de MessageControler qui continue de lire indéfiniment...
+
 			try {
-				msg.process("#exit");
+				msg.process("#EXIT");
 				
 			} catch (MessageControlerException e1) {
 				// TODO Auto-generated catch block

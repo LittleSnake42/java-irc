@@ -13,9 +13,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.Icon;
@@ -227,6 +224,17 @@ public class Chat extends JFrame {
                 JOptionPane.QUESTION_MESSAGE,
                 imageQuestion);
 		if(answer == JOptionPane.YES_OPTION ){
+			// Close server if not already done
+			MessageControler mc = MessageControler.getInstance();
+			if (mc.isConnectionOpened()) {
+				try {
+					mc.process("#EXIT");
+				} catch (MessageControlerException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
 			dispose();
 		}
 	}

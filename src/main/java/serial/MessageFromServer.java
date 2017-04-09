@@ -114,6 +114,9 @@ public class MessageFromServer extends JSONObject{
 		return this.nickname.toLowerCase().equals("server");
 	}
 
+	public boolean isError() {
+		return this.nickname.toLowerCase().equals("error");
+	}
 
 	public boolean isValid() {
 		// TODO Auto-generated method stub

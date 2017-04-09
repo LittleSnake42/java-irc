@@ -29,7 +29,7 @@ public class Login extends JFrame {
 	private JPanel contentPane;
 	private JTextField textFieldNickname;
 	private JTextField textFieldServer;
-	private MessageControler msg = MessageControler.getInstance();
+	private MessageControler mc = MessageControler.getInstance();
 
 	/**
 	 * Create the frame to login
@@ -99,26 +99,23 @@ public class Login extends JFrame {
 			strNickname = textFieldNickname.getText();
 			strIpServer = textFieldServer.getText();
 			try {
-				msg.process("#connect " + strIpServer + " " + strNickname);
+				mc.process("#CONNECT " + strIpServer + " " + strNickname);
 			} catch (MessageControlerException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			/*
-			if (strNickname.isEmpty() || strIpServer.isEmpty()) {
-				
-				ImageIcon imgError = new ImageIcon("image/error.png");
-			    JOptionPane.showMessageDialog(null, "Nickname or IP server incorrect", "Erreur", JOptionPane.ERROR_MESSAGE, imgError);
 			
-			} else {
+			
+			// Is ok ? 
+			if (mc.isConnectionOpened()) {
+			// close frame, open next
 				
-				ImageIcon imgInfo = new ImageIcon("image/info.png");
-				JOptionPane.showMessageDialog(null, "Nickname or IP server is correct", "Successfully connected", JOptionPane.INFORMATION_MESSAGE, imgInfo);
-				*/
 				dispose();
 				Channel channel = new Channel();
 				channel.setVisible(true);
 			
+			}
+						
 		}
 	}
 	
