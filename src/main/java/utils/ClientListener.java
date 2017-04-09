@@ -4,6 +4,8 @@ import serial.MessageFromServer;
 
 public class ClientListener implements Runnable {
 
+    private volatile boolean exit = false;
+
 	public ClientListener() {
 		// TODO Auto-generated constructor stub
 	}
@@ -14,7 +16,7 @@ public class ClientListener implements Runnable {
 
 		MessageFromServer msg = null;
 
-		while (true) {
+		while (!exit) {
 
 			try {
 				msg = mc.read();
@@ -28,5 +30,9 @@ public class ClientListener implements Runnable {
 		}
 
 	}
+	
+	public void stop(){
+        exit = true;
+    }
 
 }

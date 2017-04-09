@@ -114,15 +114,6 @@ public class MessageToServer extends JSONObject {
 	}
 	
 	public boolean isValidCommand() {
-		// Method 1
-		// Not possible to switch "String" type in Java before java7
-		if (this.post.toUpperCase() == "#CONNECT") {
-		
-		} else if(this.post.toUpperCase() == "#JOIN"){
-			
-		}
-		// Method 2
 		return Arrays.asList(MessageToServer.AVAILABLE_COMMANDS).contains(this.post.toUpperCase());
-		
 	}
 }
