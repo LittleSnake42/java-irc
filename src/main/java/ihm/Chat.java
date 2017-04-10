@@ -14,7 +14,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Arrays;
-
+import java.util.HashMap;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.Icon;
@@ -58,6 +58,7 @@ public class Chat extends JFrame {
 	
 	private static final String[] EMOJIS = {"grin", "grinning", "laughing", "angry-et", "angry", "cat", "devil", "dog", "kiss", "nerd"};
 	private static final ImageIcon[] EMOJIS_FILES = initEmojis();
+	private static final HashMap<String, String> EMOJIS_EQUIVALENT = initEquivalentList();
 	
 	private static Chat INSTANCE = new Chat();
 
@@ -69,6 +70,21 @@ public class Chat extends JFrame {
 		}
 		
 		return emos;
+	}
+	
+	public static HashMap<String, String> initEquivalentList(){
+		
+		HashMap<String, String> equiv = new HashMap<String, String>();
+		
+		
+//		equiv.put(":)", "smile");
+//		equiv.put(";)", "smile-eye-closed");
+//		equiv.put(":(", "mood");
+//		equiv.put(":p", "thongue");
+//		equiv.put(":D", "happy");
+		equiv.put(":)", "grin");
+		
+		return equiv;
 	}
 
 	/*
@@ -225,12 +241,26 @@ public class Chat extends JFrame {
 		// With an array (much cleaner) -> unlimited number of emos !!
 		
 		for (int i = 0; i < parts.length; i++) {
+			
+			System.out.println(parts[i]);
+
 			if (Arrays.asList(Chat.EMOJIS).contains(parts[i])) {
 				// Il faut placer le curseur
 				textPane.setCaretPosition(doc.getLength());
 				textPane.insertIcon(new ImageIcon("emojis/"+parts[i]+".png"));
 				show = false;
-			} else {
+			} 
+			else {
+				
+//				if(Chat.EMOJIS_EQUIVALENT.containsKey(":" + parts[i])) {
+//					String emo_name = EMOJIS_EQUIVALENT.get(":" + parts[i]);
+//					textPane.setCaretPosition(doc.getLength());
+//					textPane.insertIcon(new ImageIcon("emojis/"+emo_name+".png"));
+//					System.out.println(emo_name);
+//
+//					show = false;
+//				}
+
 				// check if we have inserted a smiley before or no (because of the final ":" )
 				if (show && i != 0 && !parts[i].equals("")) {
 					message = ":" + parts[i];
