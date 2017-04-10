@@ -48,6 +48,7 @@ public class Chat extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private static Chat INSTANCE = new Chat();
 	private JPanel contentPane;
+	private JTextPane textPane;
 	private JTextArea textArea;
 	private JComboBox<Object> comboBox;
 	private StyledDocument doc;
@@ -134,7 +135,7 @@ public class Chat extends JFrame {
 		contentPane.add(panelCenter, BorderLayout.CENTER);
 		panelCenter.setLayout(new BorderLayout(0, 0));
 		
-		JTextPane textPane = new JTextPane();
+		textPane = new JTextPane();
 		textPane.setEditable(false);
 		JScrollPane sp = new JScrollPane(textPane);
 		panelCenter.add(sp);
@@ -163,39 +164,55 @@ public class Chat extends JFrame {
 	
 	// this method allow to display messages on the screen
 	public void displayMessage(String message) {
-		try {
-			doc.insertString(doc.getLength(), message + "\n", styleNormal);
-		} catch (BadLocationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		// insert a emoji
-		//textPane.insertIcon(new ImageIcon("image/grinning.png"));
 		
-		/*
-		 * convert text to emoji
-		 * 
-		 *  Pattern pattern = Pattern.compile(":grin:");
-		 Matcher matcher = pattern.matcher(message);
-		 StringBuffer buffer = new StringBuffer();
-		 StringBuffer buffer2 = new StringBuffer();
-		 
-		 while (matcher.find()) {
-				 
-			 matcher.appendReplacement(buffer, "");
-			 
-			try {
-				doc.insertString(doc.getLength(), buffer.toString(), styleNormal);
-			} catch (BadLocationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			 textPane.insertIcon(new ImageIcon("image/grinning.png"));
-			 System.out.println("buffer :" + buffer.toString());
-		 }
-		 matcher.appendTail(buffer);
-		 * 
-		 */
+		message += " ";
+		
+		String[] parts = message.split(":");
+		
+		boolean show = true;
+			
+		for (int i = 0; i < parts.length; i++) {
+			 switch (parts[i]) {
+				case "grin":
+					textPane.insertIcon(new ImageIcon("image/grin.png"));
+					show = false;
+					break;
+					
+				case "grinning":
+					textPane.insertIcon(new ImageIcon("image/grinning.png"));
+					show = false;
+					break;
+					
+				case "laughing":
+					textPane.insertIcon(new ImageIcon("image/grinning.png"));
+					show = false;
+					break;
+				
+				default:
+						if (show && i != 0) {
+							parts[i] = ":" + parts[i];
+						}
+						
+					try {
+						doc.insertString(doc.getLength(), parts[i], styleNormal);
+					} catch (BadLocationException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
+					show = true;
+					break;
+				}
+
+		}
+		
+		try {
+			doc.insertString(doc.getLength(), "\n", styleNormal);
+		} catch (BadLocationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 		
 	}
 
@@ -296,12 +313,7 @@ public class Chat extends JFrame {
 					e.printStackTrace();
 				}
 				// append it to chat
-				try {
-					doc.insertString(doc.getLength(), textArea.getText()+"\n", styleNormal);
-				} catch (BadLocationException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				displayMessage(textArea.getText());
 				
 			}
 
