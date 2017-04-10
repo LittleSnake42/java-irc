@@ -17,16 +17,17 @@ public class ClientListener implements Runnable {
 		MessageFromServer msg = null;
 
 		while (!exit) {
+			if (mc.isConnectionOpened()) {
 
-			try {
-				msg = mc.read();
-				mc.processServerMessage(msg);
-				msg = null;
-			} catch (ConnectionHandlerException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				try {
+					msg = mc.read();
+					mc.processServerMessage(msg);
+					msg = null;
+				} catch (ConnectionHandlerException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
-
 		}
 
 	}

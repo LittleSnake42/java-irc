@@ -17,8 +17,9 @@ public class Launcher {
 		
 		//LOG.info("Init Cient");
 		//LOG.info("Enjoy boys");
-
-		//TODO penser à fermer thread qui lit on disconnect
+		
+		
+		// TODO logs 4j + fichier
 		
 		// TODO SI on ferme la fenetre channel, comme on est connecté, on ferme la connection
 		

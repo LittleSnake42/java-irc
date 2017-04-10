@@ -1,5 +1,7 @@
 package utils;
 
+import ihm.Chat;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -120,6 +122,8 @@ public class ConnectionHandler {
 					System.out.println("message send test: \"" + s + "\".");
 					
 				} catch (IOException e) {
+					// IO error, close everything
+					this.closeConnection();
 					throw new ConnectionHandlerException("Unabled to write string \"" + s + "\".", e);
 				}
 			
@@ -138,6 +142,11 @@ public class ConnectionHandler {
 					msg = this.br.readLine();
 
 				} catch (IOException e) {
+					// IO error, close everything
+					this.closeConnection();
+					Chat chat = Chat.getInstance();
+					chat.displayError("An unexpected error appened. Server is not reachable. Quitting the APP.");
+					chat.dispose();
 					throw new ConnectionHandlerException("Unabled to read from Buffer.", e);
 				}
 
