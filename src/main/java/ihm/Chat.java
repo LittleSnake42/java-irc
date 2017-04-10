@@ -243,6 +243,7 @@ public class Chat extends JFrame {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+				show = true;
 			}
 			
 			// si dernier mot (ou emo) \n
@@ -253,7 +254,6 @@ public class Chat extends JFrame {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-			show = true;
 		}
 		
 	}
