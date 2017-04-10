@@ -35,7 +35,6 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
-import serial.MessageToServer;
 import utils.MessageControler;
 import utils.MessageControlerException;
 
@@ -49,7 +48,6 @@ public class Chat extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static Chat INSTANCE = new Chat();
 	private JPanel contentPane;
 	private JTextPane textPane;
 	private JTextArea textArea;
@@ -61,16 +59,14 @@ public class Chat extends JFrame {
 	private static final String[] EMOJIS = {"grin", "grinning", "laughing", "angry-et", "angry", "cat", "devil", "dog", "kiss", "nerd"};
 	private static final ImageIcon[] EMOJIS_FILES = initEmojis();
 	
-	
+	private static Chat INSTANCE = new Chat();
+
 	public static ImageIcon[] initEmojis(){
-		ImageIcon[] emos = {
-				new ImageIcon("image/grinning.png"),
-				new ImageIcon("image/grin.png"),
-				new ImageIcon("image/laughing.png")				
-			};
 		
-		// todo -> foreach EMOS on set un new Icon
-		
+		ImageIcon[] emos = new ImageIcon[EMOJIS.length];
+		for (int i=0; i < EMOJIS.length; i++) {
+			emos[i] = new ImageIcon("emojis/"+EMOJIS[i]+".png");
+		}
 		
 		return emos;
 	}
@@ -125,7 +121,6 @@ public class Chat extends JFrame {
 		// components for smileys		
 		
 		
-		initEmojis();
 		comboBox = new JComboBox<Object>(EMOJIS_FILES);
 		comboBox.setPreferredSize(new Dimension(60,30));
 		comboBox.addActionListener(new ItemAction());
@@ -233,11 +228,11 @@ public class Chat extends JFrame {
 			if (Arrays.asList(Chat.EMOJIS).contains(parts[i])) {
 				// Il faut placer le curseur
 				textPane.setCaretPosition(doc.getLength());
-				textPane.insertIcon(new ImageIcon("image/"+parts[i]+".png"));
+				textPane.insertIcon(new ImageIcon("emojis/"+parts[i]+".png"));
 				show = false;
 			} else {
-				// check if we have inserted a smiley before or no (beacuse of the final ":" )
-				if (show && i != 0) {
+				// check if we have inserted a smiley before or no (because of the final ":" )
+				if (show && i != 0 && !parts[i].equals("")) {
 					message = ":" + parts[i];
 				} else {
 					message = parts[i];
@@ -249,6 +244,15 @@ public class Chat extends JFrame {
 					e1.printStackTrace();
 				}
 			}
+			
+			// si dernier mot (ou emo) \n
+			if (i+1 == parts.length)
+				try {
+					doc.insertString(doc.getLength(), "\n", styleNormal);
+				} catch (BadLocationException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			show = true;
 		}
 		
