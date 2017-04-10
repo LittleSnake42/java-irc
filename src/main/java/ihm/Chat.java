@@ -13,6 +13,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Arrays;
+
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.Icon;
@@ -33,6 +35,7 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
+import serial.MessageToServer;
 import utils.MessageControler;
 import utils.MessageControlerException;
 
@@ -54,6 +57,23 @@ public class Chat extends JFrame {
 	private StyledDocument doc;
 	private SimpleAttributeSet styleNormal;
 
+	
+	private static final String[] EMOJIS = {"grin", "grinning", "laughing", "angry-et", "angry", "cat", "devil", "dog", "kiss", "nerd"};
+	private static final ImageIcon[] EMOJIS_FILES = initEmojis();
+	
+	
+	public static ImageIcon[] initEmojis(){
+		ImageIcon[] emos = {
+				new ImageIcon("image/grinning.png"),
+				new ImageIcon("image/grin.png"),
+				new ImageIcon("image/laughing.png")				
+			};
+		
+		// todo -> foreach EMOS on set un new Icon
+		
+		
+		return emos;
+	}
 
 	/*
 	 * Create the frame.
@@ -103,13 +123,10 @@ public class Chat extends JFrame {
 		panelBottomEast.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 		
 		// components for smileys		
-		ImageIcon[] emoticon = {
-			new ImageIcon("image/grinning.png"),
-			new ImageIcon("image/grin.png"),
-			new ImageIcon("image/laughing.png")				
-		};
 		
-		comboBox = new JComboBox<Object>(emoticon);
+		
+		initEmojis();
+		comboBox = new JComboBox<Object>(EMOJIS_FILES);
 		comboBox.setPreferredSize(new Dimension(60,30));
 		comboBox.addActionListener(new ItemAction());
 		panelBottomEast.add(comboBox);
@@ -164,55 +181,76 @@ public class Chat extends JFrame {
 	
 	// this method allow to display messages on the screen
 	public void displayMessage(String message) {
-		
-		message += " ";
-		
+				
 		String[] parts = message.split(":");
 		
 		boolean show = true;
 			
+//		for (int i = 0; i < parts.length; i++) {
+//			 switch (parts[i]) {
+//				case "grin":
+//					// Il faut placer le curseur
+//					textPane.setCaretPosition(doc.getLength());
+//					textPane.insertIcon(new ImageIcon("image/grin.png"));
+//					show = false;
+//					break;
+//					
+//				case "grinning":
+//					// Il faut placer le curseur
+//					textPane.setCaretPosition(doc.getLength());
+//					textPane.insertIcon(new ImageIcon("image/grinning.png"));
+//					show = false;
+//					break;
+//					
+//				case "laughing":
+//					// Il faut placer le curseur
+//					textPane.setCaretPosition(doc.getLength());
+//					textPane.insertIcon(new ImageIcon("image/grinning.png"));
+//					show = false;
+//					break;
+//				
+//				default:
+//						if (show && i != 0) {
+//							parts[i] = ":" + parts[i];
+//						}
+//						
+//					try {
+//						doc.insertString(doc.getLength(), parts[i], styleNormal);
+//					} catch (BadLocationException e1) {
+//						// TODO Auto-generated catch block
+//						e1.printStackTrace();
+//					}
+//					
+//					show = true;
+//					break;
+//				}
+//
+//		}
+		
+		// With an array (much cleaner) -> unlimited number of emos !!
+		
 		for (int i = 0; i < parts.length; i++) {
-			 switch (parts[i]) {
-				case "grin":
-					textPane.insertIcon(new ImageIcon("image/grin.png"));
-					show = false;
-					break;
-					
-				case "grinning":
-					textPane.insertIcon(new ImageIcon("image/grinning.png"));
-					show = false;
-					break;
-					
-				case "laughing":
-					textPane.insertIcon(new ImageIcon("image/grinning.png"));
-					show = false;
-					break;
-				
-				default:
-						if (show && i != 0) {
-							parts[i] = ":" + parts[i];
-						}
-						
-					try {
-						doc.insertString(doc.getLength(), parts[i], styleNormal);
-					} catch (BadLocationException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					
-					show = true;
-					break;
+			if (Arrays.asList(Chat.EMOJIS).contains(parts[i])) {
+				// Il faut placer le curseur
+				textPane.setCaretPosition(doc.getLength());
+				textPane.insertIcon(new ImageIcon("image/"+parts[i]+".png"));
+				show = false;
+			} else {
+				// check if we have inserted a smiley before or no (beacuse of the final ":" )
+				if (show && i != 0) {
+					message = ":" + parts[i];
+				} else {
+					message = parts[i];
 				}
-
+				try {
+					doc.insertString(doc.getLength(), message, styleNormal);
+				} catch (BadLocationException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+			show = true;
 		}
-		
-		try {
-			doc.insertString(doc.getLength(), "\n", styleNormal);
-		} catch (BadLocationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
 		
 	}
 
@@ -287,8 +325,8 @@ public class Chat extends JFrame {
 	// class listener smiley
 	class ItemAction implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
-			String smiley[] = {":grinning:", ":grin:", ":laughing:"};
-			textArea.setText(textArea.getText() + smiley[comboBox.getSelectedIndex()] + " ");
+
+			textArea.setText(textArea.getText() + ":" + EMOJIS[comboBox.getSelectedIndex()] + ":");
 			// focus
 			textArea.requestFocus();
 		}               
