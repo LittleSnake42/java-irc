@@ -279,6 +279,7 @@ public class MessageControler {
 			// write msg
 			this.send(msg);
 
+			System.out.println("sending : " + msg.toString());
 			// For this specifique case the server can send an error (nick
 			// already used)
 			// So we treat directly the message
@@ -369,7 +370,7 @@ public class MessageControler {
 	public MessageFromServer read() throws ConnectionHandlerException {
 		String s = this.handler.read();
 
-		// System.out.println("Read string : " + s);
+		System.out.println("Read string : " + s);
 		MessageFromServer msg = new MessageFromServer(s);
 		return msg;
 	}
