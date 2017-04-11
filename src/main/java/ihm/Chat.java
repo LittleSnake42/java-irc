@@ -32,6 +32,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
@@ -54,9 +55,11 @@ public class Chat extends JFrame {
 	private JComboBox<Object> comboBox;
 	private StyledDocument doc;
 	private SimpleAttributeSet styleNormal;
+	private SimpleAttributeSet nickStyle;
+
 
 	
-	private static final String[] EMOJIS = {"grin", "grinning", "laughing", "angry-et", "angry", "cat", "devil", "dog", "kiss", "nerd"};
+	private static final String[] EMOJIS = {":grin:", ":grinning:"};
 	private static final ImageIcon[] EMOJIS_FILES = initEmojis();
 	private static final HashMap<String, String> EMOJIS_EQUIVALENT = initEquivalentList();
 	
@@ -66,7 +69,7 @@ public class Chat extends JFrame {
 		
 		ImageIcon[] emos = new ImageIcon[EMOJIS.length];
 		for (int i=0; i < EMOJIS.length; i++) {
-			emos[i] = new ImageIcon("emojis/"+EMOJIS[i]+".png");
+			emos[i] = new ImageIcon("emojis/"+EMOJIS[i].replace(":", "")+".png");
 		}
 		
 		return emos;
@@ -76,13 +79,8 @@ public class Chat extends JFrame {
 		
 		HashMap<String, String> equiv = new HashMap<String, String>();
 		
-		
-//		equiv.put(":)", "smile");
-//		equiv.put(";)", "smile-eye-closed");
-//		equiv.put(":(", "mood");
-//		equiv.put(":p", "thongue");
-//		equiv.put(":D", "happy");
 		equiv.put(":)", "grin");
+		equiv.put(":(", "grinning");
 		
 		return equiv;
 	}
@@ -172,6 +170,13 @@ public class Chat extends JFrame {
 		StyleConstants.setFontFamily(styleNormal, "Calibri");
 		StyleConstants.setFontSize(styleNormal, 14);
 		
+		nickStyle = new SimpleAttributeSet();
+		StyleConstants.setFontFamily(nickStyle, "Calibri");
+		StyleConstants.setFontSize(nickStyle, 14);
+	    StyleConstants.setBold(nickStyle, true);
+	    StyleConstants.setForeground(nickStyle, Color.red);
+
+		
 		doc = textPane.getStyledDocument();
 		
 		this.addWindowListener( new WindowAdapter() {
@@ -191,89 +196,60 @@ public class Chat extends JFrame {
 	 */
 	
 	// this method allow to display messages on the screen
-	public void displayMessage(String message) {
+	public void displayMessage(String message, String nick) {
 				
-		String[] parts = message.split(":");
-		
+		message += " ";
+		String[] parts = message.split(" ");
+
 		boolean show = true;
-			
-//		for (int i = 0; i < parts.length; i++) {
-//			 switch (parts[i]) {
-//				case "grin":
-//					// Il faut placer le curseur
-//					textPane.setCaretPosition(doc.getLength());
-//					textPane.insertIcon(new ImageIcon("image/grin.png"));
-//					show = false;
-//					break;
-//					
-//				case "grinning":
-//					// Il faut placer le curseur
-//					textPane.setCaretPosition(doc.getLength());
-//					textPane.insertIcon(new ImageIcon("image/grinning.png"));
-//					show = false;
-//					break;
-//					
-//				case "laughing":
-//					// Il faut placer le curseur
-//					textPane.setCaretPosition(doc.getLength());
-//					textPane.insertIcon(new ImageIcon("image/grinning.png"));
-//					show = false;
-//					break;
-//				
-//				default:
-//						if (show && i != 0) {
-//							parts[i] = ":" + parts[i];
-//						}
-//						
-//					try {
-//						doc.insertString(doc.getLength(), parts[i], styleNormal);
-//					} catch (BadLocationException e1) {
-//						// TODO Auto-generated catch block
-//						e1.printStackTrace();
-//					}
-//					
-//					show = true;
-//					break;
-//				}
-//
-//		}
+				
+		// Displays the nick
+		MessageControler mc = MessageControler.getInstance();
+		try {
+			if (nick.equals(mc.nickname))
+				doc.insertString(doc.getLength(), nick + " # ", nickStyle);
+			else
+				doc.insertString(doc.getLength(), nick + " > ", styleNormal);
+
+		} catch (BadLocationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
-		// With an array (much cleaner) -> unlimited number of emos !!
-		
+		// Displays the message + emos		
 		for (int i = 0; i < parts.length; i++) {
-			
-			System.out.println(parts[i]);
+			parts[i].replace("\\n", ""); // space ?
 
 			if (Arrays.asList(Chat.EMOJIS).contains(parts[i])) {
 				// Il faut placer le curseur
+				String emo_name = parts[i].replace(":", "");
 				textPane.setCaretPosition(doc.getLength());
-				textPane.insertIcon(new ImageIcon("emojis/"+parts[i]+".png"));
+				textPane.insertIcon(new ImageIcon("emojis/"+emo_name+".png"));
 				show = false;
 			} 
 			else {
-				
-//				if(Chat.EMOJIS_EQUIVALENT.containsKey(":" + parts[i])) {
-//					String emo_name = EMOJIS_EQUIVALENT.get(":" + parts[i]);
-//					textPane.setCaretPosition(doc.getLength());
-//					textPane.insertIcon(new ImageIcon("emojis/"+emo_name+".png"));
-//					System.out.println(emo_name);
-//
-//					show = false;
-//				}
 
-				// check if we have inserted a smiley before or no (because of the final ":" )
-				if (show && i != 0 && !parts[i].equals("")) {
-					message = ":" + parts[i];
+				if(Chat.EMOJIS_EQUIVALENT.containsKey(parts[i])) {
+					String emo_name = EMOJIS_EQUIVALENT.get(parts[i]);
+					textPane.setCaretPosition(doc.getLength());
+					textPane.insertIcon(new ImageIcon("emojis/"+emo_name+".png"));
+					show = false;
 				} else {
-					message = parts[i];
+
+					// check if we have inserted a smiley before or no (because of the final ":" )
+					if (show && i != 0) {
+						message = " " + parts[i];
+					} else {
+						message = parts[i];
+					}
+					try {
+						doc.insertString(doc.getLength(), message, styleNormal);
+					} catch (BadLocationException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					show = true;
 				}
-				try {
-					doc.insertString(doc.getLength(), message, styleNormal);
-				} catch (BadLocationException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				show = true;
 			}
 			
 			// si dernier mot (ou emo) \n
@@ -360,7 +336,7 @@ public class Chat extends JFrame {
 	class ItemAction implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 
-			textArea.setText(textArea.getText() + ":" + EMOJIS[comboBox.getSelectedIndex()] + ":");
+			textArea.setText(textArea.getText() + EMOJIS[comboBox.getSelectedIndex()]);
 			// focus
 			textArea.requestFocus();
 		}               
@@ -384,8 +360,6 @@ public class Chat extends JFrame {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				// append it to chat
-				displayMessage(textArea.getText());
 				
 			}
 
