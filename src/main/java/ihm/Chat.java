@@ -198,9 +198,19 @@ public class Chat extends JFrame {
 	// this method allow to display messages on the screen
 	public void displayMessage(String message, String nick) {
 				
-		message += " ";
-		String[] parts = message.split(" ");
-
+		
+		//check if need to be split
+		String[] parts = null;
+		if (message.contains(" ")) {
+			System.out.println("Yep split");
+			parts = message.split(" ");
+		} else {
+			System.out.println("Nop");
+			parts = new String[1];
+			parts[0] = message.replaceAll("[\\r\\n]+", "");
+			System.out.println(parts[0].length());
+		}
+		
 		boolean show = true;
 				
 		// Displays the nick
@@ -218,7 +228,6 @@ public class Chat extends JFrame {
 		
 		// Displays the message + emos		
 		for (int i = 0; i < parts.length; i++) {
-			parts[i].replace("\\n", ""); // space ?
 
 			if (Arrays.asList(Chat.EMOJIS).contains(parts[i])) {
 				// Il faut placer le curseur
