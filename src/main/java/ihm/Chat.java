@@ -59,7 +59,7 @@ public class Chat extends JFrame {
 
 
 	
-	private static final String[] EMOJIS = {":grin:", ":grinning:"};
+	private static final String[] EMOJIS = {":grin:", ":grinning:", ":8ball:", ":money:", ":snake:", ":ghost:", ":wind:", ":reverse:", ":little-thongue:", ":big-thongue:", ":monkey:", ":sad:", ":sad-cat:"};
 	private static final ImageIcon[] EMOJIS_FILES = initEmojis();
 	private static final HashMap<String, String> EMOJIS_EQUIVALENT = initEquivalentList();
 	
@@ -80,8 +80,13 @@ public class Chat extends JFrame {
 		HashMap<String, String> equiv = new HashMap<String, String>();
 		
 		equiv.put(":)", "grin");
-		equiv.put(":(", "grinning");
+		equiv.put(":(", "sad");
+		equiv.put("(:", "reverse");
+		equiv.put(":p", "little-thongue");
+		equiv.put(":P", "big-thongue");
 		
+		equiv.put(";(", "sad-cat");
+
 		return equiv;
 	}
 
