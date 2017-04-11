@@ -92,7 +92,7 @@ public class Chat extends JFrame {
 		this.setTitle("Client IRC");
 		this.setMinimumSize(new Dimension(300, 200));
 		this.setSize(800, 500);
-		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		
 		contentPane = new JPanel();
@@ -382,14 +382,14 @@ public class Chat extends JFrame {
 		  
 	    public void keyTyped(KeyEvent eKey) {
 	    	if (eKey.getKeyChar() == Event.ENTER) {
-	    		if (textArea.getText().equals("")) {
+	    		if (textArea.getText().replaceAll("[\\r\\n]+", "").equals("")) {
 
 				} else {
 					
 					// Process the message
 					MessageControler mc = MessageControler.getInstance();
 					try {
-						mc.process(textArea.getText());
+						mc.process(textArea.getText().replaceAll("[\\r\\n]+", ""));
 					} catch (MessageControlerException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
