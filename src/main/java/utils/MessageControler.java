@@ -135,7 +135,7 @@ public class MessageControler {
 		}
 		// case 3 User
 		else {
-			window.displayMessage(msg.getNickname() + " > " + msg.getPost());
+			window.displayMessage(msg.getPost(), msg.getNickname());
 		}
 	}
 
