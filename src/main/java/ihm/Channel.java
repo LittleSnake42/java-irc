@@ -49,28 +49,20 @@ public class Channel extends JFrame {
 		btnOk.setIcon(imgOk);
 		btnOk.setFont(new Font("Tahoma", Font.BOLD, 14));
 		btnOk.addActionListener(new ChannelListener());
-		btnOk.setBounds(164, 157, 104, 30);
+		btnOk.setBounds(164, 152, 104, 30);
 		contentPane.add(btnOk);
 		
 		JLabel lblChannel = new JLabel("Channel");
 		lblChannel.setHorizontalAlignment(SwingConstants.LEFT);
 		lblChannel.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblChannel.setBounds(186, 41, 72, 30);
+		lblChannel.setBounds(187, 30, 72, 30);
 		contentPane.add(lblChannel);
 		
 		textFieldChannel = new JTextField();
 		textFieldChannel.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		textFieldChannel.setBounds(115, 94, 203, 30);
+		textFieldChannel.setBounds(115, 85, 203, 30);
 		contentPane.add(textFieldChannel);
 		textFieldChannel.setColumns(10);
-		
-		JButton btnLogout = new JButton("Logout");
-		Icon imgLogout = new ImageIcon("image/logout.png");
-		btnLogout.setIcon(imgLogout);
-		btnLogout.setFont(new Font("Tahoma", Font.BOLD, 14));
-		btnLogout.addActionListener(new LogoutListener());
-		btnLogout.setBounds(346, 11, 98, 30);
-		contentPane.add(btnLogout);
 		
 		this.addWindowListener( new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
@@ -96,24 +88,6 @@ public class Channel extends JFrame {
 			Chat chat = Chat.getInstance();
 			chat.setVisible(true);
 			
-		}
-	}
-	
-	
-	public class LogoutListener implements ActionListener{
-		public void actionPerformed(ActionEvent e) {
-
-			try {
-				msg.process("#EXIT");
-				
-			} catch (MessageControlerException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		
-			dispose();
-			Login login = new Login();
-			login.setVisible(true);
 		}
 	}
 	
