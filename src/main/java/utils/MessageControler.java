@@ -27,7 +27,7 @@ public class MessageControler {
 	private MessageControler() {
 		// do nothing
 	}
-
+	//Getting the Instance to not create many instance.
 	public static MessageControler getInstance() {
 		return INSTANCE;
 	}
@@ -39,28 +39,33 @@ public class MessageControler {
 	 * @throws MessageControlerException
 	 */
 	public void process(String s) throws MessageControlerException {
-
+		
 		// Init message
 		MessageToServer msg = this.initMessage(s);
 
 		// Command ?
 		if (msg.isCommand() && msg.isValidCommand()) {
+			this.handler.getLogger().info("This is a command to send to the server. ");
+			this.handler.getLogger().info("Here is the command : " + s);
 			processCommand(msg);
 		} else if (msg.isCommand()) { // invalid command -> so maybe a message
 										// starting by # ?
 
 			if (this.canSendMessage()) {
 				try {
-
+					this.handler.getLogger().info("This is a message to send to the server");
+					this.handler.getLogger().info("Here is the message " + s);
 					this.send(msg);
 
 				} catch (ConnectionHandlerException e) {
-
+					this.handler.getLogger().error("Problem while sending the message...");
+					this.handler.getLogger().error("Here is the message : " + e.getMessage());
 					e.printStackTrace();
 				}
 			} else {
 				// if no connected to server nor channel -> error, else is a
 				// message
+				this.handler.getLogger().error("UNKNOWN COMMAND. PLEASE THERE IS ONLY 4 COMMAND TO REMEMBER. BE SERIOUS.");
 				String message = "Unknown command \""+ msg.getPost() + "\".";
 				//throw new MessageControlerException(message);
 				this.window.displayError(message);
@@ -70,17 +75,22 @@ public class MessageControler {
 			// are we connected to a server ?
 			// and is nickname set ?
 			// are we connected to a channel ?
+			
 			if (this.canSendMessage()) {
 				try {
+					this.handler.getLogger().info("Message send : " + s);
 					this.send(msg);
 				} catch (ConnectionHandlerException e) {
-					e.printStackTrace();
+					this.handler.getLogger().error("ERROR WHILE SENDING THE MESSAGE.");
+					this.handler.getLogger().error("Here is the message : "+e.getMessage());
 				}
 			} else {
 				if (this.handler.isConnectionOpened) {
+					this.handler.getLogger().error("Not connected to a channel. So you can't send message. Connect to a channel first.");
 					String message = "You are not connected to a channel, you can't send message now. Try #JOIN CHANNEL_NAME";
 					this.window.displayError(message);
 				} else {
+					this.handler.getLogger().error("You are not connected to a server. So connect to a server before sending message.");
 					String message = "You are not connected to a server. Try #CONNECT SERVER_IP NICKNAME";
 					this.window.displayError(message);
 				}
@@ -160,23 +170,28 @@ public class MessageControler {
 				// if ok try to connect
 				if (isValidIP && isValidNickname) {
 					try {
+						this.handler.getLogger().info("Trying to connect to the server.");
 						this.connectToServer(msg);
 					} catch (ConnectionHandlerException e) {
 						// System.err.println(e);
+						
 						String message = "An error occured attempting to connect to IP \""
 								+ serverIP
 								+ "\" with nickname \""
 								+ nickname
 								+ "\".";
+						this.handler.getLogger().error(message);
 						this.window.displayError(message);
 						// Throw execption to stop execution
 						throw new MessageControlerException(message);
 					}
 				} else {
+					this.handler.getLogger().error("The nickname or the ip is not valid. Or both.");
 					this.window.displayError("ERROR : nickname or ip not valid");
 				}
 
 			} else {
+				this.handler.getLogger().error("Connect expects 2 args, you can't connect with one or zero. You have to put the server ip and the NICKNAME");
 				String message = "#CONNECT expects two args, the target server ip and a nickname.";
 				//throw new MessageControlerException(message);
 				this.window.displayError(message);
@@ -188,17 +203,22 @@ public class MessageControler {
 				String channel = args.get(0);
 
 				try {
+					this.handler.getLogger().info("Trying to connect to the channel : " + channel);
 					this.connectToChannel(msg);
 				} catch (ConnectionHandlerException e) {
 					// TODO Auto-generated catch block
+				
 					String message = "Unabled to join channel \"" + channel + "\".";
+					this.handler.getLogger().error(message);
 					this.window.displayError(message);
+					this.handler.getLogger().error("Here is the error message : " + e.getMessage());
 					System.err.println(e.getMessage());
 					//throw new MessageControlerException(message, e);
 				}
 
 			} else {
 				String message = "#JOIN expects 1 args, the target channel name.";
+				this.handler.getLogger().error(message);
 				this.window.displayError(message);
 				//throw new MessageControlerException(message);
 			}
@@ -207,9 +227,11 @@ public class MessageControler {
 		// This case is for disconnect from channel
 		else if (command.toUpperCase().equals("#QUIT")) {
 			try {
+				this.handler.getLogger().info("Trying to quit the CHANNEL because its bad. No fun.");
 				this.disconnectFromChannel(msg);
 			} catch (ConnectionHandlerException e) {
 				String message = "Error attempting to #QUIT";
+				this.handler.getLogger().error(message);
 				this.window.displayError(message);
 				//throw new MessageControlerException(message, e);
 			}
@@ -218,13 +240,17 @@ public class MessageControler {
 		// This case is for leaving the server
 		else if (command.toUpperCase().equals("#EXIT")) {
 			try {
+				this.handler.getLogger().info("We are trying to exité the server.");
 				this.disconnectFromServer(msg);
 			} catch (ConnectionHandlerException e) {
+				
 				String message = "Error attempting to #EXIT";
+				this.handler.getLogger().error(message);
 				this.window.displayError(message);
 				//throw new MessageControlerException(message, e);
 			}
 		} else {
+			this.handler.getLogger().error("No srly. 4 Commands to remember, not going to be this hard yes ?");
 			window.displayError("WTF !? RTMF Bitch, unsupported command!");
 			//throw new MessageControlerException("Not a valid command. RTFM :)");
 		}
@@ -269,6 +295,7 @@ public class MessageControler {
 
 		// connect to server
 		if (this.handler.isConnectionOpened) {
+			this.handler.getLogger().error("Already connected to the server " + serverIP + "...");
 			this.window
 					.displayError("Ooops, seems you're already connected ....");
 			// throw new ConnectionHandlerException("Already Connected !");
@@ -278,7 +305,7 @@ public class MessageControler {
 			this.nickname = nickname;
 			// write msg
 			this.send(msg);
-
+			this.handler.getLogger().info("Sending : " + msg.toString());
 			System.out.println("sending : " + msg.toString());
 			// For this specifique case the server can send an error (nick
 			// already used)
@@ -345,7 +372,7 @@ public class MessageControler {
 		
 		// close connection
 		this.handler.closeConnection();
-
+		this.handler.getLogger().info("Disconnected from the server.");
 		this.window.displayInfo("Connection with server closed.");
 		
 	}
