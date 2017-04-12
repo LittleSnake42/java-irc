@@ -206,7 +206,7 @@ public class Chat extends JFrame {
 		
 		// bug fix :smile::smile: not ok
 		if (message.contains("::"))
-			message = message.replace("::", ":2:");
+			message = message.replace("::", ": :");
 				
 		//check if need to be split
 		String[] parts = null;
