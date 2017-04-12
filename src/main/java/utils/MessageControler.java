@@ -158,7 +158,7 @@ public class MessageControler {
 
 		// Case #CONNECT : we expect 2 args (ip, nick)
 		if (command.toUpperCase().equals("#CONNECT")) {
-
+			// We split if we have 2 args given : we split on serverIP and nickname.
 			if (args.size() == 2) {
 				String serverIP = args.get(0);
 				String nickname = args.get(1);
@@ -172,6 +172,7 @@ public class MessageControler {
 					try {
 						this.handler.getLogger().info("Trying to connect to the server.");
 						this.connectToServer(msg);
+						//while checking for error.
 					} catch (ConnectionHandlerException e) {
 						// System.err.println(e);
 						
@@ -185,29 +186,30 @@ public class MessageControler {
 						// Throw execption to stop execution
 						throw new MessageControlerException(message);
 					}
+					// One isn't correct or both
 				} else {
 					this.handler.getLogger().error("The nickname or the ip is not valid. Or both.");
 					this.window.displayError("ERROR : nickname or ip not valid");
 				}
-
+				//There is one missing or both.
 			} else {
 				this.handler.getLogger().error("Connect expects 2 args, you can't connect with one or zero. You have to put the server ip and the NICKNAME");
 				String message = "#CONNECT expects two args, the target server ip and a nickname.";
 				//throw new MessageControlerException(message);
 				this.window.displayError(message);
 			}
-
+			//Case Join we need one arg.
 		} else if (command.toUpperCase().equals("#JOIN")) {
-
+			//Checking if we get one arg : the channel.
 			if (args.size() == 1) {
 				String channel = args.get(0);
-
+				//If its good then we try to connect.
 				try {
 					this.handler.getLogger().info("Trying to connect to the channel : " + channel);
 					this.connectToChannel(msg);
+					//while checking for error.
 				} catch (ConnectionHandlerException e) {
-					// TODO Auto-generated catch block
-				
+					//warn the user we can't connect.
 					String message = "Unabled to join channel \"" + channel + "\".";
 					this.handler.getLogger().error(message);
 					this.window.displayError(message);
@@ -215,7 +217,7 @@ public class MessageControler {
 					System.err.println(e.getMessage());
 					//throw new MessageControlerException(message, e);
 				}
-
+				// He didn't tell us which channel he wanted to join.
 			} else {
 				String message = "#JOIN expects 1 args, the target channel name.";
 				this.handler.getLogger().error(message);
@@ -226,6 +228,7 @@ public class MessageControler {
 		}
 		// This case is for disconnect from channel
 		else if (command.toUpperCase().equals("#QUIT")) {
+			// Trying to disconnect from channel while checking for error.
 			try {
 				this.handler.getLogger().info("Trying to quit the CHANNEL because its bad. No fun.");
 				this.disconnectFromChannel(msg);
@@ -239,6 +242,7 @@ public class MessageControler {
 		}
 		// This case is for leaving the server
 		else if (command.toUpperCase().equals("#EXIT")) {
+			// Trying to disconnect from the server while checking for error.
 			try {
 				this.handler.getLogger().info("We are trying to exité the server.");
 				this.disconnectFromServer(msg);
@@ -249,7 +253,8 @@ public class MessageControler {
 				this.window.displayError(message);
 				//throw new MessageControlerException(message, e);
 			}
-		} else {
+		} // If you got here then you are doing it on purpose and you should drink bleach.
+		else {
 			this.handler.getLogger().error("No srly. 4 Commands to remember, not going to be this hard yes ?");
 			window.displayError("WTF !? RTMF Bitch, unsupported command!");
 			//throw new MessageControlerException("Not a valid command. RTFM :)");
@@ -259,12 +264,12 @@ public class MessageControler {
 	/**
 	 * Functions isSomething, canDoSomething
 	 */
-
+	// This method allows us to check if the message can be send.
 	private boolean canSendMessage() {
 		// TODO Auto-generated method stub
 		return this.handler.isConnectionOpened && this.currentChannel != null;
 	}
-
+	//This method check if the IP address is a valid IPv4 address.
 	private boolean isValidIpAddress(String serverIP) {
 		InetAddressValidator validator = new InetAddressValidator();
 		return (validator.isValidInet4Address(serverIP) /*
@@ -273,7 +278,7 @@ public class MessageControler {
 														 * (serverIP)
 														 */);
 	}
-
+	// This method check if the nickname is valid.
 	private boolean isValidNickname(String nickname) {
 		// String de + de 3 caractÃ¨res
 		return nickname.length() > 3;
@@ -286,7 +291,7 @@ public class MessageControler {
 	/*
 	 * Connect
 	 */
-
+	// We use this method to connect to the server.
 	private void connectToServer(MessageToServer msg)
 			throws ConnectionHandlerException {
 
@@ -324,7 +329,7 @@ public class MessageControler {
 
 		}
 	}
-
+	// This method is used to connect to the channel.
 	private void connectToChannel(MessageToServer msg)
 			throws ConnectionHandlerException {
 
@@ -348,7 +353,7 @@ public class MessageControler {
 	}
 
 	/*
-	 * Disconnect
+	 * Disconnect from the server.
 	 */
 
 	private void disconnectFromServer(MessageToServer msg)
@@ -360,7 +365,7 @@ public class MessageControler {
 			MessageToServer m = new MessageToServer(this.nickname, "#QUIT", new ArrayList<String>());
 			disconnectFromChannel(m);
 		}
-		
+		// We check if the listener is up or not. If he is up then we stop him.
 		if(this.listener != null)
 			this.listener.stop();
 		this.listener = null;
@@ -376,9 +381,10 @@ public class MessageControler {
 		this.window.displayInfo("Connection with server closed.");
 		
 	}
-
+	// Method used to disconnect from the channel.
 	private void disconnectFromChannel(MessageToServer msg) throws ConnectionHandlerException {
 		// write msg
+		this.handler.getLogger().info("Disconnected from the channel cuz its bad. No fun.");
 		this.send(msg);
 		String channel = this.currentChannel;
 		// close connection
@@ -387,15 +393,16 @@ public class MessageControler {
 	}
 
 	/*
-	 * READ & Write
+	 * READ & Write both using connectionHandler
 	 */
+	// This method is used to send the message to the server
 	private void send(MessageToServer msg) throws ConnectionHandlerException {
 
 		msg.setNickName(this.nickname);// update the nickame
 
 		this.handler.write(msg.toString());
 	}
-
+	// while this one is used to read from the server.
 	public MessageFromServer read() throws ConnectionHandlerException {
 		String s = this.handler.read();
 
@@ -404,7 +411,7 @@ public class MessageControler {
 		return msg;
 	}
 
-
+	// a simple method to check if we aren't already connected to a server.
 	public boolean isConnectionOpened() {
 		return this.handler.isConnectionOpened;
 		
