@@ -84,8 +84,8 @@ public class Chat extends JFrame {
 		equiv.put("(:", "reverse");
 		equiv.put(":p", "little_thongue");
 		equiv.put(":P", "big_thongue");
-		
 		equiv.put(";(", "sad_cat");
+		equiv.put("+1", "ok_hand");
 
 		return equiv;
 	}
