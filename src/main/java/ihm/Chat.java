@@ -59,7 +59,7 @@ public class Chat extends JFrame {
 
 
 	
-	private static final String[] EMOJIS = {":grin:", ":grinning:", ":8ball:", ":money:", ":snake:", ":ghost:", ":wind:", ":reverse:", ":little-thongue:", ":big-thongue:", ":monkey:", ":sad:", ":sad-cat:"};
+	private static final String[] EMOJIS = {":grinning:", ":grin:", ":joy:", ":rofl:", ":sweat_smile:", ":laughing:", ":wink:", ":blush:", ":sunglasses:", ":heart_eyes:", ":kissing_heart:", ":thinking:", ":smirk:", ":sleeping:", ":big_thongue:", ":drooling_face:", ":little_thongue:", ":big_thongue:", ":reverse:", ":sad:", ":triumph:", ":cry:", ":dizzy_face:", ":smiling_imp:", ":face_palm:", ":monkey:", ":smiley_cat:", ":sad-cat:", ":scream_cat:", ":8ball:", ":money:", ":snake:", ":ghost:", ":wind:", ":poop:", ":muscle:", ":ok_hand:", ":thumbsup:", ":clap:"};
 	private static final ImageIcon[] EMOJIS_FILES = initEmojis();
 	private static final HashMap<String, String> EMOJIS_EQUIVALENT = initEquivalentList();
 	
@@ -82,10 +82,10 @@ public class Chat extends JFrame {
 		equiv.put(":)", "grin");
 		equiv.put(":(", "sad");
 		equiv.put("(:", "reverse");
-		equiv.put(":p", "little-thongue");
-		equiv.put(":P", "big-thongue");
+		equiv.put(":p", "little_thongue");
+		equiv.put(":P", "big_thongue");
 		
-		equiv.put(";(", "sad-cat");
+		equiv.put(";(", "sad_cat");
 
 		return equiv;
 	}
@@ -327,6 +327,8 @@ public class Chat extends JFrame {
 	public class ChannelListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			
+			textPane.setText("");
+			textArea.setText("");
 			dispose();
 			Channel channel = new Channel();
 			channel.setVisible(true);
@@ -339,6 +341,8 @@ public class Chat extends JFrame {
 	public class LogoutListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			
+			textPane.setText("");
+			textArea.setText("");
 			dispose();
 			Login login = new Login();
 			login.setVisible(true);
