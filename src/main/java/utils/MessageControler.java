@@ -306,6 +306,8 @@ public class MessageControler {
 			// Init message so that server knows we're going to quit the channel
 			MessageToServer m = new MessageToServer(this.nickname, "#quit", new ArrayList<String>());
 			disconnectFromChannel(m);
+			// empty the textArea
+			window.cleanDisplay();
 		}
 		// Now connect to new channel
 		this.send(msg);

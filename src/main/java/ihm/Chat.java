@@ -79,13 +79,27 @@ public class Chat extends JFrame {
 		
 		HashMap<String, String> equiv = new HashMap<String, String>();
 		
+		// Classics
 		equiv.put(":)", "grin");
 		equiv.put(":(", "sad");
-		equiv.put("(:", "reverse");
 		equiv.put(":p", "little_thongue");
 		equiv.put(":P", "big_thongue");
-		equiv.put(";(", "sad_cat");
+
+		// Originals
 		equiv.put("+1", "ok_hand");
+		equiv.put("(:", "reverse");
+		equiv.put("Zzz", "tired_face");
+
+		// Kitties :D
+		equiv.put(";(", "sad_cat");
+		equiv.put(":O", "scream_cat");
+		equiv.put(":D", "smiley_cat");
+		
+		// Joke
+		equiv.put("Guillaume", "monkey");
+		
+		equiv.put("LittleSnake", "snake");
+
 
 		return equiv;
 	}
@@ -219,17 +233,28 @@ public class Chat extends JFrame {
 			parts[0] = message.replaceAll("[\\r\\n]+", "");
 			System.out.println(parts[0].length());
 		}
-		
-		boolean show = true;
-				
+						
 		// Displays the nick
 		MessageControler mc = MessageControler.getInstance();
 		try {
-			if (nick.equals(mc.nickname))
-				doc.insertString(doc.getLength(), nick + " # ", nickStyle);
-			else
-				doc.insertString(doc.getLength(), nick + " > ", styleNormal);
-
+			if (nick.equals(mc.nickname)) {
+				if(Chat.EMOJIS_EQUIVALENT.containsKey(nick)) {
+					String emo_name = EMOJIS_EQUIVALENT.get(nick);
+					textPane.setCaretPosition(doc.getLength());
+					textPane.insertIcon(new ImageIcon("emojis/"+emo_name+".png", nick));
+					doc.insertString(doc.getLength(), " # ", nickStyle);
+				} else
+					doc.insertString(doc.getLength(), nick + " # ", nickStyle);
+			}
+			else {
+				if(Chat.EMOJIS_EQUIVALENT.containsKey(nick)) {
+					String emo_name = EMOJIS_EQUIVALENT.get(nick);
+					textPane.setCaretPosition(doc.getLength());
+					textPane.insertIcon(new ImageIcon("emojis/"+emo_name+".png", nick));
+					doc.insertString(doc.getLength(), "(" + nick + ") > ",styleNormal);
+				} else
+					doc.insertString(doc.getLength(), nick + " > ", styleNormal);
+			}
 		} catch (BadLocationException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -243,7 +268,6 @@ public class Chat extends JFrame {
 				String emo_name = parts[i].replace(":", "");
 				textPane.setCaretPosition(doc.getLength());
 				textPane.insertIcon(new ImageIcon("emojis/"+emo_name+".png"));
-				show = false;
 			} 
 			else {
 
@@ -251,12 +275,10 @@ public class Chat extends JFrame {
 					String emo_name = EMOJIS_EQUIVALENT.get(parts[i]);
 					textPane.setCaretPosition(doc.getLength());
 					textPane.insertIcon(new ImageIcon("emojis/"+emo_name+".png"));
-					show = false;
 				} else {
 
-					// check if we have inserted a smiley before or no (because of the final ":" )
-					if (show && i != 0) {
-						message = " " + parts[i];
+					if (i != 0) {
+						message = " " + parts[i];//split all spaces
 					} else {
 						message = parts[i];
 					}
@@ -266,7 +288,6 @@ public class Chat extends JFrame {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-					show = true;
 				}
 			}
 			
@@ -424,4 +445,9 @@ public class Chat extends JFrame {
 	    }
 	}
 
+	
+	public void cleanDisplay() {
+		this.textPane.setText("");
+	}
+	
 }
