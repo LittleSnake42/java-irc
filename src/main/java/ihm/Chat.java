@@ -59,7 +59,7 @@ public class Chat extends JFrame {
 
 
 	
-	private static final String[] EMOJIS = {":grinning:", ":grin:", ":joy:", ":rofl:", ":sweat_smile:", ":laughing:", ":wink:", ":blush:", ":sunglasses:", ":heart_eyes:", ":kissing_heart:", ":thinking:", ":smirk:", ":sleeping:", ":big_thongue:", ":drooling_face:", ":little_thongue:", ":big_thongue:", ":reverse:", ":sad:", ":triumph:", ":cry:", ":dizzy_face:", ":smiling_imp:", ":face_palm:", ":monkey:", ":smiley_cat:", ":sad-cat:", ":scream_cat:", ":8ball:", ":money:", ":snake:", ":ghost:", ":wind:", ":poop:", ":muscle:", ":ok_hand:", ":thumbsup:", ":clap:"};
+	private static final String[] EMOJIS = {":grinning:", ":grin:", ":joy:", ":rofl:", ":sweat_smile:", ":laughing:", ":wink:", ":blush:", ":sunglasses:", ":heart_eyes:", ":kissing_heart:", ":thinking:", ":smirk:", ":sleeping:", ":big_thongue:", ":drooling_face:", ":little_thongue:", ":big_thongue:", ":reverse:", ":sad:", ":triumph:", ":cry:", ":dizzy_face:", ":smiling_imp:", ":face_palm:", ":monkey:", ":smiley_cat:", ":sad_cat:", ":scream_cat:", ":8ball:", ":money:", ":snake:", ":ghost:", ":wind:", ":poop:", ":muscle:", ":ok_hand:", ":thumbsup:", ":clap:"};
 	private static final ImageIcon[] EMOJIS_FILES = initEmojis();
 	private static final HashMap<String, String> EMOJIS_EQUIVALENT = initEquivalentList();
 	
