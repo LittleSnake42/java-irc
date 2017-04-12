@@ -204,6 +204,10 @@ public class Chat extends JFrame {
 	public void displayMessage(String message, String nick) {
 				
 		
+		// bug fix :smile::smile: not ok
+		if (message.contains("::"))
+			message = message.replace("::", ":2:");
+				
 		//check if need to be split
 		String[] parts = null;
 		if (message.contains(" ")) {
