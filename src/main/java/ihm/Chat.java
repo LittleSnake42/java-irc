@@ -28,6 +28,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.text.BadLocationException;
@@ -157,6 +158,7 @@ public class Chat extends JFrame {
 		// label for the nickname
 		JLabel lblChannel = new JLabel("Channel : ");
 		lblChannel.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblChannel.setHorizontalAlignment(SwingConstants.CENTER);
 		panelTopCenter.add(lblChannel, BorderLayout.CENTER);
 		
 		// button to logout
