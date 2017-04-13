@@ -2,6 +2,7 @@ package ihm;
 
 
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -48,7 +49,7 @@ public class Login extends JFrame {
 		this.setContentPane(contentPane);
 		
 		JButton btnLogin = new JButton("Login");
-		Icon imgOk = new ImageIcon("image/ok.png");
+		Icon imgOk = new ImageIcon(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/image/ok.png")));
 		btnLogin.setIcon(imgOk);
 		btnLogin.setFont(new Font("Tahoma", Font.BOLD, 14));
 		btnLogin.addActionListener(new ValidateConnectionListener());
@@ -80,7 +81,7 @@ public class Login extends JFrame {
 		
 		JLabel lblImage = new JLabel("");
 		lblImage.setBounds(23, 11, 146, 173);
-		Icon imgLogin = new ImageIcon("image/login.png");
+		Icon imgLogin = new ImageIcon(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/image/login.png")));
 		lblImage.setIcon(imgLogin);
 		contentPane.add(lblImage);
 		
@@ -121,7 +122,7 @@ public class Login extends JFrame {
 	
 	
 	public void closeFrame() {
-		ImageIcon imageQuestion = new ImageIcon("image/question.png");
+		ImageIcon imageQuestion = new ImageIcon(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/image/question.png")));
 		int answer = JOptionPane.showConfirmDialog(this,
                 "Are you sure you wish to close? ",
                 "Confirmation",

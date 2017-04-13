@@ -2,6 +2,7 @@ package ihm;
 
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -45,7 +46,7 @@ public class Channel extends JFrame {
 		contentPane.setLayout(null);
 		
 		JButton btnOk = new JButton("OK");
-		Icon imgOk = new ImageIcon("image/ok.png");
+		Icon imgOk = new ImageIcon(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/image/ok.png")));
 		btnOk.setIcon(imgOk);
 		btnOk.setFont(new Font("Tahoma", Font.BOLD, 14));
 		btnOk.addActionListener(new ChannelListener());
@@ -93,7 +94,7 @@ public class Channel extends JFrame {
 	
 	
 	public void closeFrame() {
-		ImageIcon imageQuestion = new ImageIcon("image/question.png");
+		ImageIcon imageQuestion = new ImageIcon(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/image/question.png")));
 		int answer = JOptionPane.showConfirmDialog(this,
                 "Are you sure you wish to close? ",
                 "Confirmation",

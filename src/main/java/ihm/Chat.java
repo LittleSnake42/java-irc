@@ -7,6 +7,7 @@ import java.awt.Event;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Panel;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -60,7 +61,7 @@ public class Chat extends JFrame {
 	private JLabel lblNickname;
 
 	
-	private static final String[] EMOJIS = {":grinning:", ":grin:", ":joy:", ":rofl:", ":sweat_smile:", ":laughing:", ":wink:", ":blush:", ":sunglasses:", ":heart_eyes:", ":kissing_heart:", ":thinking:", ":smirk:", ":sleeping:", ":big_thongue:", ":drooling_face:", ":little_thongue:", ":big_thongue:", ":reverse:", ":sad:", ":triumph:", ":cry:", ":dizzy_face:", ":smiling_imp:", ":face_palm:", ":monkey:", ":smiley_cat:", ":sad_cat:", ":scream_cat:", ":8ball:", ":money:", ":snake:", ":ghost:", ":wind:", ":poop:", ":muscle:", ":ok_hand:", ":thumbsup:", ":clap:"};
+	private static final String[] EMOJIS = {":grinning:", ":grin:", ":joy:", ":rofl:", ":sweat_smile:", ":laughing:", ":wink:", ":blush:", ":sunglasses:", ":heart_eyes:", ":kissing_heart:", ":thinking:", ":smirk:", ":sleeping:", ":big_thongue:", ":drooling_face:", ":little_thongue:", ":big_thongue:", ":reverse:", ":sad:", ":triumph:", ":cry:", ":dizzy_face:", ":smiling_imp:", ":face_palm:", ":monkey:", ":smiley_cat:", ":sad_cat:", ":scream_cat:", ":8ball:", ":money:", ":snake:", ":ghost:", ":wind:", ":poop:", ":muscle:", ":ok_hand:", ":thumbsup:", ":clap:", "sloth","cereal"};
 	private static final ImageIcon[] EMOJIS_FILES = initEmojis();
 	private static final HashMap<String, String> EMOJIS_EQUIVALENT = initEquivalentList();
 	
@@ -70,7 +71,7 @@ public class Chat extends JFrame {
 		
 		ImageIcon[] emos = new ImageIcon[EMOJIS.length];
 		for (int i=0; i < EMOJIS.length; i++) {
-			emos[i] = new ImageIcon("emojis/"+EMOJIS[i].replace(":", "")+".png");
+			emos[i] = new ImageIcon(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/emojis/"+EMOJIS[i].replace(":", "")+".png")));
 		}
 		
 		return emos;
@@ -98,9 +99,9 @@ public class Chat extends JFrame {
 		
 		// Joke
 		equiv.put("Guillaume", "monkey");
-		
+		equiv.put("Titanaum", "sloth");
 		equiv.put("LittleSnake", "snake");
-
+		equiv.put("Macklegan", "cereal");
 
 		return equiv;
 	}
@@ -137,7 +138,7 @@ public class Chat extends JFrame {
 		panelTopEast.add(btnChannel);
 		
 		JButton btnLogout = new JButton("Logout");
-		Icon imgLogout = new ImageIcon("image/logout.png");
+		Icon imgLogout = new ImageIcon(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/image/logout.png")));
 		btnLogout.setIcon(imgLogout);
 		btnLogout.setFont(new Font("Tahoma", Font.BOLD, 14));
 		btnLogout.addActionListener(new LogoutListener());
@@ -242,7 +243,7 @@ public class Chat extends JFrame {
 				if(Chat.EMOJIS_EQUIVALENT.containsKey(nick)) {
 					String emo_name = EMOJIS_EQUIVALENT.get(nick);
 					textPane.setCaretPosition(doc.getLength());
-					textPane.insertIcon(new ImageIcon("emojis/"+emo_name+".png", nick));
+					textPane.insertIcon(new ImageIcon(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/emojis/"+emo_name+".png")), nick));
 					doc.insertString(doc.getLength(), " # ", nickStyle);
 				} else
 					doc.insertString(doc.getLength(), nick + " # ", nickStyle);
@@ -251,7 +252,7 @@ public class Chat extends JFrame {
 				if(Chat.EMOJIS_EQUIVALENT.containsKey(nick)) {
 					String emo_name = EMOJIS_EQUIVALENT.get(nick);
 					textPane.setCaretPosition(doc.getLength());
-					textPane.insertIcon(new ImageIcon("emojis/"+emo_name+".png", nick));
+					textPane.insertIcon(new ImageIcon(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/emojis/"+emo_name+".png")), nick));
 					doc.insertString(doc.getLength(), "(" + nick + ") > ",styleNormal);
 				} else
 					doc.insertString(doc.getLength(), nick + " > ", styleNormal);
@@ -268,14 +269,14 @@ public class Chat extends JFrame {
 				// Il faut placer le curseur
 				String emo_name = parts[i].replace(":", "");
 				textPane.setCaretPosition(doc.getLength());
-				textPane.insertIcon(new ImageIcon("emojis/"+emo_name+".png"));
+				textPane.insertIcon(new ImageIcon(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/emojis/"+emo_name+".png"))));
 			} 
 			else {
 
 				if(Chat.EMOJIS_EQUIVALENT.containsKey(parts[i])) {
 					String emo_name = EMOJIS_EQUIVALENT.get(parts[i]);
 					textPane.setCaretPosition(doc.getLength());
-					textPane.insertIcon(new ImageIcon("emojis/"+emo_name+".png"));
+					textPane.insertIcon(new ImageIcon(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/emojis/"+emo_name+".png"))));
 				} else {
 
 					if (i != 0) {
@@ -321,7 +322,7 @@ public class Chat extends JFrame {
 	
 	// this method allow to request a confirmation before closing the application
 	public void closeFrame() {
-		ImageIcon imageQuestion = new ImageIcon("image/question.png");
+		ImageIcon imageQuestion = new ImageIcon(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/image/question.png")));
 		int answer = JOptionPane.showConfirmDialog(this,
                 "Are you sure you wish to close? ",
                 "Confirmation",
