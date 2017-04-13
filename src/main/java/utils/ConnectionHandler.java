@@ -126,7 +126,6 @@ public class ConnectionHandler {
 					//while checking for an eventual error
 					LOG.info("Message send to the server.");
 					LOG.info("Here is the message : " + s);
-					System.out.println("message send test: \"" + s + "\".");
 					// while checking for an error.
 				} catch (IOException e) {
 					// IO error, close everything
@@ -165,7 +164,6 @@ public class ConnectionHandler {
 			}
 			LOG.info("Message send by the server.");
 			LOG.info("Displaying the message received : "+msg);
-			System.out.println(msg);
 			
 			return msg;
 		// If we aren't connected then we tell the user there is no connection...

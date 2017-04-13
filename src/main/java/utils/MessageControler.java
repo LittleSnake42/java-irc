@@ -214,7 +214,6 @@ public class MessageControler {
 					this.handler.getLogger().error(message);
 					this.window.displayError(message);
 					this.handler.getLogger().error("Here is the error message : " + e.getMessage());
-					System.err.println(e.getMessage());
 					//throw new MessageControlerException(message, e);
 				}
 				// He didn't tell us which channel he wanted to join.
@@ -312,7 +311,6 @@ public class MessageControler {
 			// write msg
 			this.send(msg);
 			this.handler.getLogger().info("Sending : " + msg.toString());
-			System.out.println("sending : " + msg.toString());
 			// For this specifique case the server can send an error (nick
 			// already used)
 			// So we treat directly the message
@@ -407,7 +405,6 @@ public class MessageControler {
 	public MessageFromServer read() throws ConnectionHandlerException {
 		String s = this.handler.read();
 
-		System.out.println("Read string : " + s);
 		MessageFromServer msg = new MessageFromServer(s);
 		return msg;
 	}

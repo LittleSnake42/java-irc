@@ -81,7 +81,7 @@ public class Login extends JFrame {
 		
 		JLabel lblImage = new JLabel("");
 		lblImage.setBounds(23, 11, 146, 173);
-		Icon imgLogin = new ImageIcon(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/image/login.png")));
+		Icon imgLogin = new ImageIcon(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/image/login-msn.png")));
 		lblImage.setIcon(imgLogin);
 		contentPane.add(lblImage);
 		

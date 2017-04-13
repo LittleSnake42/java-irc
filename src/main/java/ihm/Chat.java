@@ -29,6 +29,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.text.BadLocationException;
@@ -163,11 +164,12 @@ public class Chat extends JFrame {
 		// label for the nickname
 		lblChannel = new JLabel("Channel : ");
 		lblChannel.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblChannel.setHorizontalAlignment(SwingConstants.CENTER);
 		panelTopCenter.add(lblChannel, BorderLayout.CENTER);
 		
 		// button to logout
 		JButton btnLogout = new JButton("Logout");
-		Icon imgLogout = new ImageIcon("image/logout.png");
+		Icon imgLogout = new ImageIcon(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/image/logout.png")));
 		btnLogout.setIcon(imgLogout);
 		btnLogout.setFont(new Font("Tahoma", Font.BOLD, 14));
 		btnLogout.addActionListener(new LogoutListener());
