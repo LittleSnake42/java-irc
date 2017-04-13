@@ -346,6 +346,7 @@ public class MessageControler {
 		this.send(msg);
 		this.currentChannel = msg.getArgs().get(0);
 
+		window.setChannelTop(this.currentChannel);
 		if (this.listener == null) {
 			this.listener = new ClientListener();
 			Thread t = new Thread(this.listener);
