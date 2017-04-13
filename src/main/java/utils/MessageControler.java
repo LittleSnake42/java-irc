@@ -375,7 +375,7 @@ public class MessageControler {
 		// this will cause the server to close the socket
 		this.send(msg);
 		
-		this.currentChannel = "";
+		this.currentChannel = null;
 		
 		// close connection
 		this.handler.closeConnection();
@@ -388,7 +388,6 @@ public class MessageControler {
 		// write msg
 		this.handler.getLogger().info("Disconnected from the channel cuz its bad. No fun.");
 		this.send(msg);
-		String channel = this.currentChannel;
 		// close connection
 		this.currentChannel = null;
 

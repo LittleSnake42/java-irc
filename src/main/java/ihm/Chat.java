@@ -7,6 +7,7 @@ import java.awt.Event;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Panel;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -32,11 +33,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
-import ihm.Channel;
 import utils.MessageControler;
 import utils.MessageControlerException;
 
@@ -46,6 +45,9 @@ import utils.MessageControlerException;
 
 public class Chat extends JFrame {
 
+	/*
+	 * 
+	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextPane textPane;
@@ -57,10 +59,8 @@ public class Chat extends JFrame {
 
 	private JLabel lblNickname;
 	private JLabel lblChannel;
-
 	
-	// List of emojis
-	private static final String[] EMOJIS = {":grinning:", ":grin:", ":joy:", ":rofl:", ":sweat_smile:", ":laughing:", ":wink:", ":blush:", ":sunglasses:", ":heart_eyes:", ":kissing_heart:", ":thinking:", ":smirk:", ":sleeping:", ":big_thongue:", ":drooling_face:", ":little_thongue:", ":big_thongue:", ":reverse:", ":sad:", ":triumph:", ":cry:", ":dizzy_face:", ":smiling_imp:", ":face_palm:", ":monkey:", ":smiley_cat:", ":sad_cat:", ":scream_cat:", ":8ball:", ":money:", ":snake:", ":ghost:", ":wind:", ":poop:", ":muscle:", ":ok_hand:", ":thumbsup:", ":clap:"};
+	private static final String[] EMOJIS = {":grinning:", ":grin:", ":joy:", ":rofl:", ":sweat_smile:", ":laughing:", ":wink:", ":blush:", ":sunglasses:", ":heart_eyes:", ":kissing_heart:", ":thinking:", ":smirk:", ":sleeping:", ":big_thongue:", ":drooling_face:", ":little_thongue:", ":big_thongue:", ":reverse:", ":sad:", ":triumph:", ":cry:", ":dizzy_face:", ":smiling_imp:", ":face_palm:", ":monkey:", ":smiley_cat:", ":sad_cat:", ":scream_cat:", ":8ball:", ":money:", ":snake:", ":ghost:", ":wind:", ":poop:", ":muscle:", ":ok_hand:", ":thumbsup:", ":clap:", "sloth","cereal"};
 	private static final ImageIcon[] EMOJIS_FILES = initEmojis();
 	private static final HashMap<String, String> EMOJIS_EQUIVALENT = initEquivalentList();
 	
@@ -70,7 +70,7 @@ public class Chat extends JFrame {
 		
 		ImageIcon[] emos = new ImageIcon[EMOJIS.length];
 		for (int i=0; i < EMOJIS.length; i++) {
-			emos[i] = new ImageIcon("emojis/"+EMOJIS[i].replace(":", "")+".png");
+			emos[i] = new ImageIcon(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/emojis/"+EMOJIS[i].replace(":", "")+".png")));
 		}
 		
 		return emos;
@@ -98,14 +98,16 @@ public class Chat extends JFrame {
 		
 		// Joke
 		equiv.put("Guillaume", "monkey");
-		
+		equiv.put("Titanaum", "sloth");
 		equiv.put("LittleSnake", "snake");
-
+		equiv.put("Macklegan", "cereal");
 
 		return equiv;
 	}
 
-	
+	/*
+	 * Create the frame.
+	 */
 	public Chat() {
 		// Define the title of the window
 		this.setTitle("Client IRC");
@@ -250,7 +252,7 @@ public class Chat extends JFrame {
 	 * Methods
 	 */
 	
-	// this method allows to display messages on the screen
+	// this method allow to display messages on the screen
 	public void displayMessage(String message, String nick) {
 				
 		
@@ -277,7 +279,7 @@ public class Chat extends JFrame {
 				if(Chat.EMOJIS_EQUIVALENT.containsKey(nick)) {
 					String emo_name = EMOJIS_EQUIVALENT.get(nick);
 					textPane.setCaretPosition(doc.getLength());
-					textPane.insertIcon(new ImageIcon("emojis/"+emo_name+".png", nick));
+					textPane.insertIcon(new ImageIcon(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/emojis/"+emo_name+".png")), nick));
 					doc.insertString(doc.getLength(), " # ", nickStyle);
 				} else
 					doc.insertString(doc.getLength(), nick + " # ", nickStyle);
@@ -286,7 +288,7 @@ public class Chat extends JFrame {
 				if(Chat.EMOJIS_EQUIVALENT.containsKey(nick)) {
 					String emo_name = EMOJIS_EQUIVALENT.get(nick);
 					textPane.setCaretPosition(doc.getLength());
-					textPane.insertIcon(new ImageIcon("emojis/"+emo_name+".png", nick));
+					textPane.insertIcon(new ImageIcon(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/emojis/"+emo_name+".png")), nick));
 					doc.insertString(doc.getLength(), "(" + nick + ") > ",styleNormal);
 				} else
 					doc.insertString(doc.getLength(), nick + " > ", styleNormal);
@@ -303,14 +305,14 @@ public class Chat extends JFrame {
 				// Il faut placer le curseur
 				String emo_name = parts[i].replace(":", "");
 				textPane.setCaretPosition(doc.getLength());
-				textPane.insertIcon(new ImageIcon("emojis/"+emo_name+".png"));
+				textPane.insertIcon(new ImageIcon(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/emojis/"+emo_name+".png"))));
 			} 
 			else {
 
 				if(Chat.EMOJIS_EQUIVALENT.containsKey(parts[i])) {
 					String emo_name = EMOJIS_EQUIVALENT.get(parts[i]);
 					textPane.setCaretPosition(doc.getLength());
-					textPane.insertIcon(new ImageIcon("emojis/"+emo_name+".png"));
+					textPane.insertIcon(new ImageIcon(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/emojis/"+emo_name+".png"))));
 				} else {
 
 					if (i != 0) {
@@ -339,25 +341,24 @@ public class Chat extends JFrame {
 		
 	}
 
-	// This method allows to get message sent
+	// this method allow to get message sent
 	public String getTextField() {
 		return textArea.getText();
 	}
 
-	// This method allows to display an error message
+	// this method allow to display an error message
 	public void displayError(String message) {
 		JOptionPane.showMessageDialog(null, message, "Erreur", JOptionPane.ERROR_MESSAGE);
 	}
 	
-	// This method allows to display an error message
 	public void displayInfo(String message) {
 		JOptionPane.showMessageDialog(null, message,
 				"Just to let you know ...", JOptionPane.INFORMATION_MESSAGE);
 	}
 	
-	// This method allows to request a confirmation before closing the application
+	// this method allow to request a confirmation before closing the application
 	public void closeFrame() {
-		ImageIcon imageQuestion = new ImageIcon("image/question.png");
+		ImageIcon imageQuestion = new ImageIcon(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/image/question.png")));
 		int answer = JOptionPane.showConfirmDialog(this,
                 "Are you sure you wish to close? ",
                 "Confirmation",
@@ -385,7 +386,7 @@ public class Chat extends JFrame {
 	 * Class Listener
 	 */
 	
-	// class listener button "Change channel", allows to change channel
+	// class listener button "Change channel"
 	public class ChannelListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			
@@ -399,7 +400,7 @@ public class Chat extends JFrame {
 
 	}
 	
-	// class listener button "Logout", allows to logout
+	// class listener button "Logout"
 	public class LogoutListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			
@@ -412,17 +413,17 @@ public class Chat extends JFrame {
 		}
 	}
 
-	// class listener dropdown list of emojis
+	// class listener smiley
 	class ItemAction implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
-			// display an emoji on the text area
+
 			textArea.setText(textArea.getText() + EMOJIS[comboBox.getSelectedIndex()]);
 			// focus
 			textArea.requestFocus();
 		}               
 	}
 
-	// class listener button "OK"
+	// class listener button SEND
 	class SendListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent arg0) {
