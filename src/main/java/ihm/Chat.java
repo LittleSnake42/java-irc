@@ -36,6 +36,7 @@ import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
+import ihm.Channel;
 import utils.MessageControler;
 import utils.MessageControlerException;
 
@@ -45,9 +46,6 @@ import utils.MessageControlerException;
 
 public class Chat extends JFrame {
 
-	/*
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextPane textPane;
@@ -57,8 +55,7 @@ public class Chat extends JFrame {
 	private SimpleAttributeSet styleNormal;
 	private SimpleAttributeSet nickStyle;
 
-
-	
+	// List of emojis
 	private static final String[] EMOJIS = {":grinning:", ":grin:", ":joy:", ":rofl:", ":sweat_smile:", ":laughing:", ":wink:", ":blush:", ":sunglasses:", ":heart_eyes:", ":kissing_heart:", ":thinking:", ":smirk:", ":sleeping:", ":big_thongue:", ":drooling_face:", ":little_thongue:", ":big_thongue:", ":reverse:", ":sad:", ":triumph:", ":cry:", ":dizzy_face:", ":smiling_imp:", ":face_palm:", ":monkey:", ":smiley_cat:", ":sad_cat:", ":scream_cat:", ":8ball:", ":money:", ":snake:", ":ghost:", ":wind:", ":poop:", ":muscle:", ":ok_hand:", ":thumbsup:", ":clap:"};
 	private static final ImageIcon[] EMOJIS_FILES = initEmojis();
 	private static final HashMap<String, String> EMOJIS_EQUIVALENT = initEquivalentList();
@@ -104,37 +101,55 @@ public class Chat extends JFrame {
 		return equiv;
 	}
 
-	/*
-	 * Create the frame.
-	 */
+	
 	public Chat() {
+		// Define the title of the window
 		this.setTitle("Client IRC");
+		// Define the minimum size of the window
 		this.setMinimumSize(new Dimension(300, 200));
+		// Define the size of the window
 		this.setSize(800, 500);
+		// Close process when clicking on the red cross
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		// Puts the window in the center of the screen
 		this.setLocationRelativeTo(null);
 		
+		/*
+		 * contentPane is the main container, it contains the other containers :
+		 * 		NORTH : panelTop
+		 * 			EAST : panelTopEast
+		 * 		CENTER : panelCenter
+		 * 		BOTTOM : panelBottom
+		 * 			CENTER : panelBottomCenter
+		 * 			EAST : panelBottomEast
+		 */
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
 		
+		
+		// panelTop is the top container, it contains the panel panelTopEast
 		JPanel panelTop = new JPanel();
 		contentPane.add(panelTop, BorderLayout.NORTH);
 		panelTop.setLayout(new BorderLayout(0, 0));
 		
+		// panelTopEast contains the button to change channel and the button to logout
 		JPanel panelTopEast = new JPanel();
 		panelTop.add(panelTopEast, BorderLayout.EAST);
 		
-		JLabel lblNickname = new JLabel("Nickname : ");
-		lblNickname.setFont(new Font("Tahoma", Font.BOLD, 14));
-		panelTop.add(lblNickname, BorderLayout.CENTER);
-		
+		// button to change the channel
 		JButton btnChannel = new JButton("Change channel");
 		btnChannel.setFont(new Font("Tahoma", Font.BOLD, 14));
 		btnChannel.addActionListener(new ChannelListener());
 		panelTopEast.add(btnChannel);
 		
+		// label for the nickname
+		JLabel lblNickname = new JLabel("Nickname : ");
+		lblNickname.setFont(new Font("Tahoma", Font.BOLD, 14));
+		panelTop.add(lblNickname, BorderLayout.CENTER);
+		
+		// button to logout
 		JButton btnLogout = new JButton("Logout");
 		Icon imgLogout = new ImageIcon("image/logout.png");
 		btnLogout.setIcon(imgLogout);
@@ -142,28 +157,31 @@ public class Chat extends JFrame {
 		btnLogout.addActionListener(new LogoutListener());
 		panelTopEast.add(btnLogout);
 		
+		
+		// panelBottom is the bottom container, it contains panelBottomEast and panelBottomCenter
 		JPanel panelBottom = new JPanel();
 		contentPane.add(panelBottom, BorderLayout.SOUTH);
 		panelBottom.setLayout(new BorderLayout(0, 0));
 		panelBottom.setBorder(BorderFactory.createEmptyBorder(10,0,5,0));
 		
+		// panelBottomEast contains the dropdown list of the emojis and the button to send message
 		JPanel panelBottomEast = new JPanel();
 		panelBottom.add(panelBottomEast, BorderLayout.EAST);
 		panelBottomEast.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 		
-		// components for smileys		
-		
-		
+		// dropdown list of the emojis
 		comboBox = new JComboBox<Object>(EMOJIS_FILES);
 		comboBox.setPreferredSize(new Dimension(60,30));
 		comboBox.addActionListener(new ItemAction());
 		panelBottomEast.add(comboBox);
 		
+		// button to send message
 		JButton btnOk = new JButton("OK");
 		btnOk.setFont(new Font("Tahoma", Font.BOLD, 14));
 		btnOk.addActionListener(new SendListener());
 		panelBottomEast.add(btnOk);
 		
+		// panelBottomCenter contains the text area to write a message
 		Panel panelBottomCenter = new Panel();
 		panelBottom.add(panelBottomCenter, BorderLayout.CENTER);
 		panelBottomCenter.setLayout(new BoxLayout(panelBottomCenter, BoxLayout.X_AXIS));
@@ -175,6 +193,8 @@ public class Chat extends JFrame {
 		textArea.setCaretPosition(textArea.getText().length());
 		panelBottomCenter.add(textArea);
 		
+		
+		// panelCenter is the center container, it contains the text pane where messages are displayed
 		JPanel panelCenter = new JPanel();
 		panelCenter.setBorder(new LineBorder(new Color(0, 0, 0)));
 		contentPane.add(panelCenter, BorderLayout.CENTER);
@@ -185,6 +205,7 @@ public class Chat extends JFrame {
 		JScrollPane sp = new JScrollPane(textPane);
 		panelCenter.add(sp);
 		
+		// styles
 		styleNormal = new SimpleAttributeSet();
 		StyleConstants.setFontFamily(styleNormal, "Calibri");
 		StyleConstants.setFontSize(styleNormal, 14);
@@ -195,9 +216,10 @@ public class Chat extends JFrame {
 	    StyleConstants.setBold(nickStyle, true);
 	    StyleConstants.setForeground(nickStyle, Color.red);
 
-		
+		// styled document
 		doc = textPane.getStyledDocument();
 		
+		// Add a listener to the window
 		this.addWindowListener( new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				closeFrame();
@@ -214,7 +236,7 @@ public class Chat extends JFrame {
 	 * Methods
 	 */
 	
-	// this method allow to display messages on the screen
+	// this method allows to display messages on the screen
 	public void displayMessage(String message, String nick) {
 				
 		
@@ -303,22 +325,23 @@ public class Chat extends JFrame {
 		
 	}
 
-	// this method allow to get message sent
+	// This method allows to get message sent
 	public String getTextField() {
 		return textArea.getText();
 	}
 
-	// this method allow to display an error message
+	// This method allows to display an error message
 	public void displayError(String message) {
 		JOptionPane.showMessageDialog(null, message, "Erreur", JOptionPane.ERROR_MESSAGE);
 	}
 	
+	// This method allows to display an error message
 	public void displayInfo(String message) {
 		JOptionPane.showMessageDialog(null, message,
 				"Just to let you know ...", JOptionPane.INFORMATION_MESSAGE);
 	}
 	
-	// this method allow to request a confirmation before closing the application
+	// This method allows to request a confirmation before closing the application
 	public void closeFrame() {
 		ImageIcon imageQuestion = new ImageIcon("image/question.png");
 		int answer = JOptionPane.showConfirmDialog(this,
@@ -348,7 +371,7 @@ public class Chat extends JFrame {
 	 * Class Listener
 	 */
 	
-	// class listener button "Change channel"
+	// class listener button "Change channel", allows to change channel
 	public class ChannelListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			
@@ -362,7 +385,7 @@ public class Chat extends JFrame {
 
 	}
 	
-	// class listener button "Logout"
+	// class listener button "Logout", allows to logout
 	public class LogoutListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			
@@ -375,17 +398,17 @@ public class Chat extends JFrame {
 		}
 	}
 
-	// class listener smiley
+	// class listener dropdown list of emojis
 	class ItemAction implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
-
+			// display an emoji on the text area
 			textArea.setText(textArea.getText() + EMOJIS[comboBox.getSelectedIndex()]);
 			// focus
 			textArea.requestFocus();
 		}               
 	}
 
-	// class listener button SEND
+	// class listener button "OK"
 	class SendListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent arg0) {
