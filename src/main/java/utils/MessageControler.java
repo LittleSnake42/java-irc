@@ -244,7 +244,7 @@ public class MessageControler {
 		else if (command.toUpperCase().equals("#EXIT")) {
 			// Trying to disconnect from the server while checking for error.
 			try {
-				this.handler.getLogger().info("We are trying to exité the server.");
+				this.handler.getLogger().info("We are trying to exitï¿½ the server.");
 				this.disconnectFromServer(msg);
 			} catch (ConnectionHandlerException e) {
 				
@@ -308,6 +308,7 @@ public class MessageControler {
 			handler.openConnection(serverIP);
 			msg.setNickName(nickname);// update the nickame
 			this.nickname = nickname;
+			window.setNicknameTop(nickname);
 			// write msg
 			this.send(msg);
 			this.handler.getLogger().info("Sending : " + msg.toString());

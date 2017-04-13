@@ -57,6 +57,7 @@ public class Chat extends JFrame {
 	private SimpleAttributeSet styleNormal;
 	private SimpleAttributeSet nickStyle;
 
+	private JLabel lblNickname;
 
 	
 	private static final String[] EMOJIS = {":grinning:", ":grin:", ":joy:", ":rofl:", ":sweat_smile:", ":laughing:", ":wink:", ":blush:", ":sunglasses:", ":heart_eyes:", ":kissing_heart:", ":thinking:", ":smirk:", ":sleeping:", ":big_thongue:", ":drooling_face:", ":little_thongue:", ":big_thongue:", ":reverse:", ":sad:", ":triumph:", ":cry:", ":dizzy_face:", ":smiling_imp:", ":face_palm:", ":monkey:", ":smiley_cat:", ":sad_cat:", ":scream_cat:", ":8ball:", ":money:", ":snake:", ":ghost:", ":wind:", ":poop:", ":muscle:", ":ok_hand:", ":thumbsup:", ":clap:"};
@@ -126,7 +127,7 @@ public class Chat extends JFrame {
 		JPanel panelTopEast = new JPanel();
 		panelTop.add(panelTopEast, BorderLayout.EAST);
 		
-		JLabel lblNickname = new JLabel("Nickname : ");
+		lblNickname = new JLabel("Nickname : ");
 		lblNickname.setFont(new Font("Tahoma", Font.BOLD, 14));
 		panelTop.add(lblNickname, BorderLayout.CENTER);
 		
@@ -449,5 +450,8 @@ public class Chat extends JFrame {
 	public void cleanDisplay() {
 		this.textPane.setText("");
 	}
-	
+
+	public void setNicknameTop(String nickname) {
+		this.lblNickname.setText("Nickname : " + nickname);
+	}
 }
