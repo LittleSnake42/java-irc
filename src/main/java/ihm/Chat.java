@@ -144,10 +144,20 @@ public class Chat extends JFrame {
 		btnChannel.addActionListener(new ChannelListener());
 		panelTopEast.add(btnChannel);
 		
+		// panelTopCenter contains the labels nickname et channel ***
+		JPanel panelTopCenter = new JPanel();
+		panelTop.add(panelTopCenter, BorderLayout.CENTER);
+		panelTopCenter.setLayout(new BorderLayout(0, 0));
+		
 		// label for the nickname
 		JLabel lblNickname = new JLabel("Nickname : ");
 		lblNickname.setFont(new Font("Tahoma", Font.BOLD, 14));
-		panelTop.add(lblNickname, BorderLayout.CENTER);
+		panelTopCenter.add(lblNickname, BorderLayout.WEST);
+		
+		// label for the nickname
+		JLabel lblChannel = new JLabel("Channel : ");
+		lblChannel.setFont(new Font("Tahoma", Font.BOLD, 14));
+		panelTopCenter.add(lblChannel, BorderLayout.CENTER);
 		
 		// button to logout
 		JButton btnLogout = new JButton("Logout");
@@ -156,7 +166,7 @@ public class Chat extends JFrame {
 		btnLogout.setFont(new Font("Tahoma", Font.BOLD, 14));
 		btnLogout.addActionListener(new LogoutListener());
 		panelTopEast.add(btnLogout);
-		
+			
 		
 		// panelBottom is the bottom container, it contains panelBottomEast and panelBottomCenter
 		JPanel panelBottom = new JPanel();
