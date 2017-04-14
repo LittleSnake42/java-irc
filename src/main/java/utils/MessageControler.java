@@ -141,6 +141,7 @@ public class MessageControler {
 		if (isFromServer) {
 			window.displayInfo(msg.getPost());
 		} else if (isError) {
+			this.window.displayError(msg.getPost());
 			//case 2 error, return a error to block processing (eg already connected to a channel or nick already in use)
 		}
 		// case 3 User
