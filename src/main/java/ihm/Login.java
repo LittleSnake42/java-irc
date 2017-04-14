@@ -42,7 +42,7 @@ public class Login extends JFrame {
 		this.setResizable(false);
 		this.setBounds(100, 100, 460, 261);
 		this.setLocationRelativeTo(null);
-		
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/image/swag.png")));
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(null);

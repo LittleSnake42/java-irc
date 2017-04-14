@@ -71,7 +71,7 @@ public class Chat extends JFrame {
 		
 		ImageIcon[] emos = new ImageIcon[EMOJIS.length];
 		for (int i=0; i < EMOJIS.length; i++) {
-			emos[i] = new ImageIcon(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/emojis/"+EMOJIS[i].replace(":", "")+".png")));
+			emos[i] = new ImageIcon(Toolkit.getDefaultToolkit().getImage(Chat.class.getResource("/emojis/"+EMOJIS[i].replace(":", "")+".png")));
 		}
 		
 		return emos;
@@ -120,7 +120,8 @@ public class Chat extends JFrame {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		// Puts the window in the center of the screen
 		this.setLocationRelativeTo(null);
-		
+		//Set the image to something coooooool
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Chat.class.getResource("/image/swag.png")));
 		/*
 		 * contentPane is the main container, it contains the other containers :
 		 * 		NORTH : panelTop
@@ -169,7 +170,7 @@ public class Chat extends JFrame {
 		
 		// button to logout
 		JButton btnLogout = new JButton("Logout");
-		Icon imgLogout = new ImageIcon(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/image/logout.png")));
+		Icon imgLogout = new ImageIcon(Toolkit.getDefaultToolkit().getImage(Chat.class.getResource("/image/logout.png")));
 		btnLogout.setIcon(imgLogout);
 		btnLogout.setFont(new Font("Tahoma", Font.BOLD, 14));
 		btnLogout.addActionListener(new LogoutListener());
@@ -281,7 +282,7 @@ public class Chat extends JFrame {
 				if(Chat.EMOJIS_EQUIVALENT.containsKey(nick)) {
 					String emo_name = EMOJIS_EQUIVALENT.get(nick);
 					textPane.setCaretPosition(doc.getLength());
-					textPane.insertIcon(new ImageIcon(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/emojis/"+emo_name+".png")), nick));
+					textPane.insertIcon(new ImageIcon(Toolkit.getDefaultToolkit().getImage(Chat.class.getResource("/emojis/"+emo_name+".png")), nick));
 					doc.insertString(doc.getLength(), " # ", nickStyle);
 				} else
 					doc.insertString(doc.getLength(), nick + " # ", nickStyle);
@@ -290,7 +291,7 @@ public class Chat extends JFrame {
 				if(Chat.EMOJIS_EQUIVALENT.containsKey(nick)) {
 					String emo_name = EMOJIS_EQUIVALENT.get(nick);
 					textPane.setCaretPosition(doc.getLength());
-					textPane.insertIcon(new ImageIcon(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/emojis/"+emo_name+".png")), nick));
+					textPane.insertIcon(new ImageIcon(Toolkit.getDefaultToolkit().getImage(Chat.class.getResource("/emojis/"+emo_name+".png")), nick));
 					doc.insertString(doc.getLength(), "(" + nick + ") > ",styleNormal);
 				} else
 					doc.insertString(doc.getLength(), nick + " > ", styleNormal);
@@ -307,14 +308,14 @@ public class Chat extends JFrame {
 				// Il faut placer le curseur
 				String emo_name = parts[i].replace(":", "");
 				textPane.setCaretPosition(doc.getLength());
-				textPane.insertIcon(new ImageIcon(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/emojis/"+emo_name+".png"))));
+				textPane.insertIcon(new ImageIcon(Toolkit.getDefaultToolkit().getImage(Chat.class.getResource("/emojis/"+emo_name+".png"))));
 			} 
 			else {
 
 				if(Chat.EMOJIS_EQUIVALENT.containsKey(parts[i])) {
 					String emo_name = EMOJIS_EQUIVALENT.get(parts[i]);
 					textPane.setCaretPosition(doc.getLength());
-					textPane.insertIcon(new ImageIcon(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/emojis/"+emo_name+".png"))));
+					textPane.insertIcon(new ImageIcon(Toolkit.getDefaultToolkit().getImage(Chat.class.getResource("/emojis/"+emo_name+".png"))));
 				} else {
 
 					if (i != 0) {
@@ -360,7 +361,7 @@ public class Chat extends JFrame {
 	
 	// this method allow to request a confirmation before closing the application
 	public void closeFrame() {
-		ImageIcon imageQuestion = new ImageIcon(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/image/question.png")));
+		ImageIcon imageQuestion = new ImageIcon(Toolkit.getDefaultToolkit().getImage(Chat.class.getResource("/image/question.png")));
 		int answer = JOptionPane.showConfirmDialog(this,
                 "Are you sure you wish to close? ",
                 "Confirmation",
