@@ -341,7 +341,7 @@ public class Chat extends JFrame {
 					e1.printStackTrace();
 				}
 		}
-		
+		textPane.setCaretPosition(doc.getLength());
 	}
 
 	// this method allow to get message sent
